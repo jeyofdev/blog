@@ -1,0 +1,22 @@
+{
+    "name": "jeyofdev/php-blog",
+    "description": "Personal project of a blog in php",
+    "keywords": ["php", "blog", "front-end", "back-end"],
+    "authors": [
+        {
+            "name": "jeyofdev",
+            "email": "jgregoire.pro@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "filp/whoops": "^2.5",
+        "symfony/var-dumper": "^4.3",
+        "phpunit/phpunit": "^8.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "jeyofdev\\php\\blog\\": "src/"
+        }
+    }
+}
