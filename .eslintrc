@@ -1,0 +1,7 @@
+{
+    "extends": "standard",
+    "rules": {
+        "no-unused-vars": "off",
+        "no-undef": "off"
+    }
+}

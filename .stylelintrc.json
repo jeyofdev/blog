@@ -1,0 +1,12 @@
+{
+    "extends": "stylelint-config-standard",
+    "rules": {
+        "at-rule-no-unknown": [true, {
+            "ignoreAtRules": ["function", "if", "else", "elseif", "for", "while", "each", "include", "mixin", "return", "content", "media", "import"]
+        }],
+        "number-leading-zero": "never",
+        "block-closing-brace-newline-after": ["always", {
+            "ignoreAtRules": ["if", "else", "elseif"]
+        }]
+    }
+}
