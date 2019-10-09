@@ -12,7 +12,8 @@
     "require-dev": {
         "filp/whoops": "^2.5",
         "symfony/var-dumper": "^4.3",
-        "phpunit/phpunit": "^8.3"
+        "phpunit/phpunit": "^8.3",
+        "fzaninotto/faker": "^1.8"
     },
     "autoload": {
         "psr-4": {

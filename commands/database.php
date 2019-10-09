@@ -2,6 +2,7 @@
 
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Fixtures\PostFixtures;
 
 
     // Autoload
@@ -22,3 +23,9 @@
     // add the 'post' table
     $post = new Post($database);
     $post->addTable();
+    $post->emptyTable();
+
+
+    // Add the fixtures on the 'post' table
+    $faker = new PostFixtures($database, "fr_FR");
+    $faker->add();

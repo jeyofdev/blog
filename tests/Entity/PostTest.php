@@ -11,14 +11,28 @@
     final class PostTest extends TestCase
     {
         /**
+         * @var Database
+         */
+        private $database;
+
+
+
+        public function getDatabase () : Database
+        {
+            $this->database = new Database("localhost", "root", "root", "php_blog");
+            $this->database->create();
+
+            return $this->database;
+        }
+
+
+
+        /**
          * @test
          */
         public function testAddTable() : void
         {
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $database->create();
-
-            $post = new Post($database);
+            $post = new Post($this->getDatabase());
 
             $this->assertNotEmpty($post);
             $this->assertInstanceOf(Post::class, $post->addTable());
@@ -31,11 +45,7 @@
          */
         public function testDropTable() : void
         {
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $database->create();
-
-            $post = new Post($database);
-
+            $post = new Post($this->getDatabase());
             $this->assertInstanceOf(Post::class, $post->addTable()->dropTable());
         }
 
@@ -46,11 +56,7 @@
          */
         public function testEmptyTable() : void
         {
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $database->create();
-
-            $post = new Post($database);
-
+            $post = new Post($this->getDatabase());
             $this->assertInstanceOf(Post::class, $post->addTable()->emptyTable());
         }
     }

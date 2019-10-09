@@ -239,7 +239,7 @@
          *
          * @return string
          */
-        private function getTableName () : string
+        public function getTableName () : string
         {
             $pos = strrpos(get_class($this), "\\") + 1;
             $name = substr(get_class($this), $pos);
