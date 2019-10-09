@@ -18,5 +18,10 @@
         "psr-4": {
             "jeyofdev\\php\\blog\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "jeyofdev\\php\\blog\\Tests\\": "tests/"
+        }
     }
 }

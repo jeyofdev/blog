@@ -3,9 +3,6 @@
     namespace jeyofdev\php\blog\Database;
 
 
-    use PDO;
-
-
     /**
      * Manage the creation and deletion of a database
      * 

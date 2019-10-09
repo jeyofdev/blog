@@ -1,6 +1,7 @@
 <?php
 
     use jeyofdev\php\blog\Database\Database;
+    use jeyofdev\php\blog\Entity\Post;
 
 
     // Autoload
@@ -16,3 +17,8 @@
     // initialize the database
     $database = new Database("localhost", "root", "root", "php_blog");
     $database->create();
+
+
+    // add the 'post' table
+    $post = new Post($database);
+    $post->addTable();

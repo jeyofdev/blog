@@ -78,4 +78,16 @@
                 $this->connection = new PDO("mysql:host=" . $this->db_host . ";dbname=" . $this->db_name . ";", $this->db_user, $this->db_password , self::PDO_OPTIONS);
             }
         }
+
+
+
+        /**
+         * Get the name of the database
+         * 
+         * @return string
+         */
+        public function getDb_name() : string
+        {
+            return $this->db_name;
+        }
     }
