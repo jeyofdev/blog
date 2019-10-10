@@ -4,7 +4,7 @@
 
 
     use Faker\Factory;
-    use jeyofdev\php\blog\Database\Database;
+    use jeyofdev\php\blog\Manager\EntityManager;
 
 
     /**
@@ -15,16 +15,9 @@
     class AbstractFixtures implements FixturesInterface
     {
         /**
-         * @var Database
+         * @var EntityManager
          */
-        protected $database;
-
-
-
-        /**
-         * @var PDO
-         */
-        protected $connection;
+        protected $manager;
 
 
 
@@ -36,13 +29,12 @@
 
 
         /**
-         * @param Database $database
+         * @param EntityManager $manager
          * @param string $locale
          */
-        public function __construct(Database $database, string $locale)
+        public function __construct(EntityManager $manager, string $locale)
         {
-            $this->database = $database;
-            $this->connection = $this->database->getConnection($this->database->getDb_name());
+            $this->manager = $manager;
             $this->faker = Factory::create($locale);
         }
 

@@ -5,6 +5,7 @@
 
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Manager\EntityManager;
     use PHPUnit\Framework\TestCase;
 
 
@@ -14,6 +15,20 @@
          * @var Database
          */
         private $database;
+
+
+
+        /**
+         * @var EntityManager
+         */
+        private $manager;
+
+
+
+        /**
+         * @var Post
+         */
+        private $post;
 
 
 
@@ -32,21 +47,11 @@
          */
         public function testAddTable() : void
         {
-            $post = new Post($this->getDatabase());
+            $this->manager = new EntityManager($this->getDatabase());
+            $this->post = new Post($this->manager);
 
-            $this->assertNotEmpty($post);
-            $this->assertInstanceOf(Post::class, $post->addTable());
-        }
-
-
-
-        /**
-         * @test
-         */
-        public function testDropTable() : void
-        {
-            $post = new Post($this->getDatabase());
-            $this->assertInstanceOf(Post::class, $post->addTable()->dropTable());
+            $this->assertNotEmpty($this->post);
+            $this->assertInstanceOf(Post::class, $this->post->addTable());
         }
 
 
@@ -56,8 +61,23 @@
          */
         public function testEmptyTable() : void
         {
-            $post = new Post($this->getDatabase());
-            $this->assertInstanceOf(Post::class, $post->addTable()->emptyTable());
+            $this->manager = new EntityManager($this->getDatabase());
+            $this->post = new Post($this->manager);
+
+            $this->assertInstanceOf(Post::class, $this->post->emptyTable());
+        }
+
+
+
+        /**
+         * @test
+         */
+        public function testDropTable() : void
+        {
+            $this->manager = new EntityManager($this->getDatabase());
+            $this->post = new Post($this->manager);
+
+            $this->assertInstanceOf(Post::class, $this->post->dropTable());
         }
     }
 

@@ -4,7 +4,7 @@
 
 
     use DateTime;
-    use jeyofdev\php\blog\Database\Database;
+    use jeyofdev\php\blog\Manager\EntityManager;
 
 
     /**
@@ -26,11 +26,11 @@
 
 
         /**
-         * @param Database $database
+         * @param EntityManager $manager
          */
-        public function __construct(Database $database)
+        public function __construct(EntityManager $manager)
         {
-            parent::__construct($database);
+            parent::__construct($manager);
 
             $this->columns = $this
                 ->setColumns($this)

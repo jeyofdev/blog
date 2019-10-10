@@ -33,20 +33,5 @@
 
             $this->assertInstanceOf(PDO::class, $connection);
         }
-
-
-
-        /**
-         * @test
-         */
-        public function testGetDatabaseName() : void
-        {
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $database->create();
-            $name = $database->getDb_name();
-
-
-            $this->assertEquals("php_blog", $name);
-        }
     }
 

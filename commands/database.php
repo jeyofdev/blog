@@ -3,6 +3,7 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Fixtures\PostFixtures;
+    use jeyofdev\php\blog\Manager\EntityManager;
 
 
     // Autoload
@@ -20,12 +21,17 @@
     $database->create();
 
 
+    // initialize the entity Manager
+    $manager = new EntityManager($database);
+
+
     // add the 'post' table
-    $post = new Post($database);
+    $post = new Post($manager);
     $post->addTable();
     $post->emptyTable();
+    // $post->dropTable();
 
 
     // Add the fixtures on the 'post' table
-    $faker = new PostFixtures($database, "fr_FR");
+    $faker = new PostFixtures($manager, "fr_FR");
     $faker->add();

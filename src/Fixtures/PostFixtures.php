@@ -4,6 +4,7 @@
 
 
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Manager\EntityManager;
 
 
     /**
@@ -18,15 +19,16 @@
          */
         public function add () : self
         {
-            $post = new Post($this->database);
+            $post = new Post($this->manager);
 
             for ($i = 0; $i < 20; $i++) { 
-                $this->connection->exec("INSERT INTO {$post->getTableName()} SET 
-                    name = '{$this->faker->sentence(4, true)}',
-                    slug = '{$this->faker->slug}',
-                    content = '{$this->faker->paragraphs(rand(5, 20), true)}',
-                    created_at = '{$this->faker->dateTimeBetween('-3 years', 'now')->format("Y-m-d H:i:s")}'
-                ");
+                $post
+                    ->setName($this->faker->sentence(4, true))
+                    ->setSlug($this->faker->slug)
+                    ->setContent($this->faker->paragraphs(rand(5, 20), true))
+                    ->setCreated_at($this->faker->dateTimeBetween('-3 years', 'now')->format("Y-m-d H:i:s"));
+
+                $this->manager->insert($post);
             }
 
             return $this;

@@ -4,9 +4,7 @@
 
 
     use Exception;
-    use jeyofdev\php\blog\Database\Database;
-    use jeyofdev\php\blog\Database\Query;
-    use PDO;
+    use jeyofdev\php\blog\Manager\EntityManager;
 
 
     /**
@@ -17,16 +15,9 @@
     abstract class AbstractEntity implements EntityInterface
     {
         /**
-         * @var Database
+         * @var EntityManager
          */
-        protected $database;
-
-
-
-        /**
-         * @var PDO
-         */
-        protected $connection;
+        private $manager;
 
 
 
@@ -65,12 +56,11 @@
 
 
         /**
-         * @param Database $database
+         * @param EntityManager $manager
          */
-        public function __construct (Database $database)
+        public function __construct (EntityManager $manager)
         {
-            $this->database = $database;
-            $this->connection = $this->database->getConnection($this->database->getDb_name());
+            $this->manager = $manager;
         }
 
 
@@ -86,7 +76,7 @@
             $sql .= ")" . "\n";
             $sql .= "ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
-            Query::prepareAndExecute($this->connection, $sql);
+            $this->manager->prepareAndExecute($this->manager->getConnection(), $sql);
 
             return $this;
         }
@@ -99,7 +89,7 @@
         public function dropTable () : self
         {
             $sql = "DROP TABLE " . $this->getTableName();
-            Query::prepareAndExecute($this->connection, $sql);
+            $this->manager->prepareAndExecute($this->manager->getConnection(), $sql);
 
             return $this;
         }
@@ -112,7 +102,7 @@
         public function emptyTable () : self
         {
             $sql = "TRUNCATE TABLE " . $this->getTableName();
-            Query::prepareAndExecute($this->connection, $sql);
+            $this->manager->prepareAndExecute($this->manager->getConnection(), $sql);
 
             return $this;
         }
@@ -140,7 +130,7 @@
             foreach ($this->columns as $k => $v) {
                 $items[] = $k;
             }
-            $this->columns = array_slice($items, 0, -4);
+            $this->columns = array_slice($items, 0, -3);
 
             return $this;
         }

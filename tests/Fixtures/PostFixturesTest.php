@@ -4,7 +4,9 @@
 
 
     use jeyofdev\php\blog\Database\Database;
+    use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Fixtures\PostFixtures;
+    use jeyofdev\php\blog\Manager\EntityManager;
     use PHPUnit\Framework\TestCase;
 
 
@@ -17,6 +19,13 @@
 
 
 
+        /**
+         * @var EntityManager
+         */
+        private $manager;
+
+
+
         public function getDatabase () : Database
         {
             $this->database = new Database("localhost", "root", "root", "php_blog");
@@ -26,12 +35,22 @@
 
 
 
+        public function createTable () : void
+        {
+            $this->manager = new EntityManager($this->getDatabase());
+            $this->post = new Post($this->manager);
+            $this->post->addTable();
+        }
+
+
+
         /**
          * @test
          */
         public function testAddFixtureInTablePost() : void
         {
-            $faker = new PostFixtures($this->getDatabase(), "fr_FR");
+            $this->createTable();
+            $faker = new PostFixtures($this->manager, "fr_FR");
 
             $this->assertInstanceOf(PostFixtures::class, $faker->add());
         }

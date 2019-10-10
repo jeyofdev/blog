@@ -3,6 +3,9 @@
     namespace jeyofdev\php\blog\Fixtures;
 
 
+    use jeyofdev\php\blog\Manager\EntityManager;
+
+
     /**
      * Manage the fixtures
      * 
