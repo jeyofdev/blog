@@ -8,7 +8,9 @@
             "email": "jgregoire.pro@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "altorouter/altorouter": "^1.2"
+    },
     "require-dev": {
         "filp/whoops": "^2.5",
         "symfony/var-dumper": "^4.3",
