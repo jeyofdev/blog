@@ -7,6 +7,7 @@
         "number-leading-zero": "never",
         "block-closing-brace-newline-after": ["always", {
             "ignoreAtRules": ["if", "else", "elseif"]
-        }]
+        }],
+        "indentation": 4
     }
 }

@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>My personal blog</title>
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://localhost:8080/assets/css/app.css">
     </head>
 
     <body class="d-flex flex-column vh-100">
@@ -20,5 +20,7 @@
                 <p class="text-white my-0">Page generated in <?= round(1000 * (microtime(true) - DEBUG_TIME)); ?> milliseconds.</p>
             </footer>
         <?php endif; ?>
+
+        <script src="http://localhost:8080/assets/js/app.js"></script>
     </body>
 </html>

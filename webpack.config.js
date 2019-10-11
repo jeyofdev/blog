@@ -37,28 +37,34 @@ module.exports = (env, argv) => {
     let config = {
         entry: {
             app: [
-                './public-dev/assets/js/app.js',
-                './public-dev/assets/scss/app.scss',
-                './public-dev/assets/css/app.css'
+                './assets/js/app.js',
+                './assets/scss/app.scss',
+                './assets/css/app.css'
             ]
         },
         output: {
-            path: path.resolve(__dirname, './public'),
+            path: path.resolve(__dirname, './public/assets/'),
+            publicPath: (dev ? 'http://localhost:8080' : '') + '/assets/',
             filename: (dev) ? 'js/[name].js' : 'js/[name]-[hash:8].js'
         },
         devtool: (dev) ? 'source-map' : 'cheap-module-eval-source-map',
         resolve: {
             alias: {
-                '@js': path.resolve(__dirname, './public-dev/assets/js/'),
-                '@scss': path.resolve(__dirname, './public-dev/assets/scss/'),
-                '@css': path.resolve(__dirname, './public-dev/assets/css/')
+                '@js': path.resolve(__dirname, './assets/js/'),
+                '@scss': path.resolve(__dirname, './assets/scss/'),
+                '@css': path.resolve(__dirname, './assets/css/')
             }
         },
         watch: dev,
         devServer: {
-            port: 8800,
+            port: 8080,
             overlay: true,
-            contentBase: path.resolve(__dirname, './public')
+            contentBase: path.resolve(__dirname, './public'),
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+            } 
         },
         module: {
             rules: [
@@ -149,16 +155,16 @@ module.exports = (env, argv) => {
                 verbose: true,
             }),
             new plugins.html({
-                template: './public-dev/index.html',
+                template: './public/index.html',
                 filename: 'index.html',
             }),
             new plugins.extractCss({
                 filename: (dev) ? 'css/[name].css' : 'css/[name]-[hash:8].css'
             }),
             new plugins.styleLint(),
-            new plugins.copy([
-                './public-dev/index.php',
-            ])
+            // new plugins.copy([
+            //     './public-dev/index.php',
+            // ])
         ]
     }
 
