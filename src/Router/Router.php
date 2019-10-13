@@ -11,24 +11,14 @@
     class Router
     {
         /**
-         * The path of views
-         * 
-         * @var string
-         */
-        private $viewPath;
-
-
-
-        /**
          * @var AltoRouter
          */
         private $router;
 
 
 
-        public function __construct (string $viewPath)
+        public function __construct ()
         {
-            $this->viewPath = $viewPath;
             $this->router = new AltoRouter();
         }
 
@@ -51,20 +41,12 @@
 
 
         /**
-         * Load the view that matches the requested URL
+         * Get the router
          *
-         * @return self
+         * @return void
          */
-        public function run () : self
+        public function getRouter() : AltoRouter
         {
-            $match = $this->router->match();
-            $view = $match['target'];
-
-            ob_start();
-            require $this->viewPath . DIRECTORY_SEPARATOR . $view . '.php';
-            $content = ob_get_clean();
-            require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/default.php';
-
-            return $this;
+            return $this->router;
         }
     }

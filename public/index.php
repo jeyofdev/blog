@@ -1,5 +1,6 @@
 <?php
 
+    use jeyofdev\php\blog\Controller\AppController;
     use jeyofdev\php\blog\Router\Router;
 
 
@@ -20,8 +21,11 @@
 
 
     // router
-    $router = new Router(VIEW_PATH);
+    $router = new Router();
     $router
         ->get('/', 'home/index', 'home')
-        ->get('/blog/', 'post/index', 'blog')
-        ->run();
+        ->get('/blog/', 'post/index', 'blog');
+
+
+    // controller
+    AppController::getInstance()->run($router);
