@@ -4,6 +4,7 @@
 
 
     use DateTime;
+    use jeyofdev\php\blog\Helpers\Text;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -119,6 +120,18 @@
         public function getContent() : ?string
         {
             return $this->content;
+        }
+
+
+
+        /**
+         * Get the excerpt of content
+         *
+         * @return string
+         */
+        public function getExcerpt () : string
+        {
+            return Text::excerpt($this->content, 250);
         }
 
 
