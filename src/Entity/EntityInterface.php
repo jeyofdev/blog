@@ -3,6 +3,9 @@
     namespace jeyofdev\php\blog\Entity;
 
 
+    use jeyofdev\php\blog\Manager\EntityManager;
+
+
     /**
      * Manage the tables in the database
      * 
@@ -34,6 +37,16 @@
          * @return self
          */
         public function emptyTable ();
+
+
+
+        /**
+         * Create the columns of the table
+         *
+         * @param EntityManager $manager
+         * @return void
+         */
+        public function createColumns(EntityManager $manager);
 
 
 

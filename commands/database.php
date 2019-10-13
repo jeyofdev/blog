@@ -1,7 +1,8 @@
 <?php
 
     use jeyofdev\php\blog\Database\Database;
-    use jeyofdev\php\blog\Entity\Post;
+use jeyofdev\php\blog\Entity\Entity;
+use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Fixtures\PostFixtures;
     use jeyofdev\php\blog\Manager\EntityManager;
 
@@ -26,12 +27,14 @@
 
 
     // add the 'post' table
-    $post = new Post($manager);
-    $post->addTable();
-    $post->emptyTable();
-    // $post->dropTable();
+    $post = new Post();
+    $post
+        ->createColumns($manager)
+        ->addTable()
+        ->emptyTable();
+        // ->dropTable();
 
 
     // Add the fixtures on the 'post' table
-    $faker = new PostFixtures($manager, "fr_FR");
+    $faker = new PostFixtures($manager, $post, "fr_FR");
     $faker->add();

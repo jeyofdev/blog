@@ -28,13 +28,9 @@
         /**
          * @param EntityManager $manager
          */
-        public function __construct(EntityManager $manager)
+        public function createColumns(EntityManager $manager) : self
         {
-            parent::__construct($manager);
-
-            $this->columns = $this
-                ->setColumns($this)
-                ->getColumns();
+            parent::createColumns($manager);
 
             // set the columns of the table
             $this->setColumnsWithOptions("id", "int", 10, false, true, true, false, true);
@@ -42,6 +38,8 @@
             $this->setColumnsWithOptions("slug", "varchar", 255);
             $this->setColumnsWithOptions("content", "text", 650000);
             $this->setColumnsWithOptions("created_at", "datetime", null, false, false, false, "DEFAULT CURRENT_TIMESTAMP");
+
+            return $this;
         }
 
 

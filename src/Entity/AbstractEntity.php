@@ -17,7 +17,7 @@
         /**
          * @var EntityManager
          */
-        private $manager;
+        protected $manager;
 
 
 
@@ -52,16 +52,6 @@
             "BINARY", "VARBINARY",
             "BLOB", "TINYBLOB", "MEDIUMBLOB", "LONGBLOB"
         ];
-
-
-
-        /**
-         * @param EntityManager $manager
-         */
-        public function __construct (EntityManager $manager)
-        {
-            $this->manager = $manager;
-        }
 
 
 
@@ -105,6 +95,20 @@
             $this->manager->prepareAndExecute($this->manager->getConnection(), $sql);
 
             return $this;
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
+        public function createColumns(EntityManager $manager)
+        {
+            $this->manager = $manager;
+
+            $this->columns = $this
+                ->setColumns($this)
+                ->getColumns();
         }
 
 
