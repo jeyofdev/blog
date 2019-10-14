@@ -28,7 +28,8 @@ use jeyofdev\php\blog\Url;
     $router = new Router();
     $router
         ->get('/', 'home/index', 'home')
-        ->get('/blog/', 'post/index', 'blog');
+        ->get('/blog/', 'post/index', 'blog')
+        ->get('/blog/[*:slug]-[i:id]/', 'post/show', 'post');
 
 
     // controller

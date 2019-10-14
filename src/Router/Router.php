@@ -44,11 +44,12 @@
          * Generate a route
          *
          * @param  string $name The name of the route
+         * @param  string $name The params of the route
          * @return void
          */
-        public function url (string $name)
+        public function url (string $name, array $params = [])
         {
-            return $this->router->generate($name);
+            return $this->router->generate($name, $params);
         }
 
 
