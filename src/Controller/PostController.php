@@ -5,10 +5,10 @@
 
     use Exception;
     use jeyofdev\php\blog\App;
+    use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Router\Router;
-    use jeyofdev\php\blog\Url;
     use PDO;
 
 
@@ -39,40 +39,33 @@
             $query = $connection->query("SELECT * FROM post ORDER BY created_at DESC");
             $posts = $query->fetchAll(PDO::FETCH_CLASS, Post::class);
 
-            // check that the current page is valid
-            $currentPage = Url::getInt("page", 1);
-            Url::getPositiveInt("page", $currentPage);
+            /**
+             * pagination
+             */
+            $sqlPostsCount = "SELECT COUNT(id) FROM post";
+            $sqlPostsPaginated = "SELECT * FROM post ORDER BY created_at DESC";
 
-            // get the total number of items
-            $count = (int)$connection
-                ->query("SELECT COUNT(id) FROM post")
-                ->fetch(PDO::FETCH_NUM)[0];
-
-            // set the number of posts per pages
-            $perPage = 6;
-
-            // set the total number of pages
-            $pages = ceil($count / $perPage);
-
-            // check that the current page exists
-            if($currentPage > $pages) {
-                throw new Exception("This page does not exist");
-            }
+            $pagination = new Pagination($connection, $sqlPostsPaginated, $sqlPostsCount, 6);
 
             /**
-             * get posts
-             * 
              * @var Post[]
              */
-            $offset = $perPage * ($currentPage -1);
-            $query = $connection->query("SELECT * FROM post ORDER BY created_at DESC LIMIT $perPage OFFSET $offset");
-            $posts = $query->fetchAll(PDO::FETCH_CLASS, Post::class);
+            $posts = $pagination->getItems(Post::class);
 
-            $this->render("post.index", compact("posts", "currentPage", "pages", "router"));
+            // the route of each article
+            $link = $router->url("blog");
+
+            $this->render("post.index", compact("posts", "pagination", "router", "link"));
         }
 
 
 
+        /**
+         * Set the data of the page that displays a post
+         *
+         * @param Router $router
+         * @return void
+         */
         public function show (Router $router) : void
         {
             $database = new Database("localhost", "root", "root", "php_blog");
