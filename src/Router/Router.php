@@ -41,6 +41,19 @@
 
 
         /**
+         * Generate a route
+         *
+         * @param  string $name The name of the route
+         * @return void
+         */
+        public function url (string $name)
+        {
+            return $this->router->generate($name);
+        }
+
+
+
+        /**
          * Get the router
          *
          * @return void

@@ -68,7 +68,7 @@
 
             $controller = new $this->controller();
             $method = $this->action;
-            $controller->$method();
+            $controller->$method($router);
         }
 
 
