@@ -63,4 +63,16 @@
         {
             return $this->router;
         }
+
+
+
+        /**
+         * Get the url parameters
+         *
+         * @return void
+         */
+        public function getParams()
+        {
+            return $this->router->match()["params"];
+        }
     }

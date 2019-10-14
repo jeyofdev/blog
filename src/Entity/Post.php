@@ -4,6 +4,7 @@
 
 
     use DateTime;
+    use jeyofdev\php\blog\Helpers\Helpers;
     use jeyofdev\php\blog\Helpers\Text;
     use jeyofdev\php\blog\Manager\EntityManager;
 
@@ -73,7 +74,7 @@
          */ 
         public function getName() : ?string
         {
-            return $this->name;
+            return Helpers::e($this->name);
         }
 
 
@@ -125,13 +126,25 @@
 
 
         /**
+         * Get the formatted content
+         *
+         * @return string|null
+         */
+        public function getFormattedContent (): ?string
+        {
+            return nl2br(Helpers::e($this->content));
+        }
+
+
+
+        /**
          * Get the excerpt of content
          *
          * @return string
          */
         public function getExcerpt () : string
         {
-            return Text::excerpt($this->content, 250);
+            return Helpers::e(Text::excerpt($this->content, 250));
         }
 
 

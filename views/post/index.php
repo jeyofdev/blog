@@ -1,14 +1,14 @@
 <h1>List of blog posts</h1>
 
 
-<!-- view the list of articles -->
+<!-- list of posts -->
 <div class="row mt-5">
     <?php foreach ($posts as $post) : ?>
         <div class="col-md-6 mb-5">
             <div class="card">
                 <div class="card-body">
                     <a href="<?= $router->url('post', ['id' => $post->getID(), 'slug' => $post->getSlug()]); ?>">
-                        <h5 class="card-title"><?= jeyofdev\php\blog\Helpers\Helpers::e($post->getName()); ?></h5>
+                        <h5 class="card-title"><?= $post->getName(); ?></h5>
                     </a>
                     <p class="card-text"><?= $post->getExcerpt(); ?></p>
                     <p class="card-muted">written on <?= $post->getCreated_at()->format("d F Y"); ?></p>
@@ -20,7 +20,7 @@
 </div>
 
 
-<!-- afficher la pagination -->
+<!-- pagination -->
 <div class="d-flex justify-content-between my-4">
     <?php if ($currentPage > 1) : ?>
         <?php $link = $router->url("blog"); ?>

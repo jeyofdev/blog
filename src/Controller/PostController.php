@@ -7,9 +7,9 @@
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
-use jeyofdev\php\blog\Router\Router;
-use jeyofdev\php\blog\Url;
-use PDO;
+    use jeyofdev\php\blog\Router\Router;
+    use jeyofdev\php\blog\Url;
+    use PDO;
 
 
     /**
@@ -24,7 +24,7 @@ use PDO;
          *
          * @return void
          */
-        public function index(Router $router) : void
+        public function index (Router $router) : void
         {
             App::getInstance()->setTitle("List of posts");
 
@@ -69,5 +69,43 @@ use PDO;
             $posts = $query->fetchAll(PDO::FETCH_CLASS, Post::class);
 
             $this->render("post.index", compact("posts", "currentPage", "pages", "router"));
+        }
+
+
+
+        public function show (Router $router) : void
+        {
+            $database = new Database("localhost", "root", "root", "php_blog");
+            $connection = $database->getConnection("php_blog");
+
+            // url settings of the current page
+            $params = $router->getParams();
+            $id = (int)$params["id"];
+            $slug = $params["slug"];
+
+            // get the article from the current page
+            $query = $connection->prepare("SELECT * FROM post WHERE id = :id");
+            $query->execute(['id' => $id]);
+            $query->setFetchMode(PDO::FETCH_CLASS, Post::class);
+
+            /**
+             * @var Post|false
+             */
+            $post = $query->fetch();
+
+            // check that the article exists
+            if ($post === false) {
+                throw new Exception("No article matches");
+            }
+        
+            // check that the slug of the url corresponds to the slug of the current article
+            if ($post->getSlug() !== $slug) {
+                $url = $router->url('post', ['slug' => $post->getSlug(), 'id' => $id]);
+                http_response_code(301);
+                header('Location: ' . $url);
+                exit();
+            }
+
+            $this->render("post.show", compact("post"));
         }
     }
