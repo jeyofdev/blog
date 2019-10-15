@@ -4,7 +4,7 @@
 
 
     use Exception;
-    use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Url;
     use PDO;
 
@@ -24,20 +24,9 @@
 
 
         /**
-         * Query that get the number of items
-         *
-         * @var string
+         * @var PostTable
          */
-        private $queryItemsCount;
-
-
-
-        /**
-         * Query that get the items of the current page
-         *
-         * @var string
-         */
-        private $queryItems;
+        private $table;
 
 
 
@@ -68,12 +57,11 @@
 
 
 
-        public function __construct (PDO $connection, string $queryItems, string $queryItemsCount, int $perPage = 6)
+        public function __construct (PDO $connection, PostTable $table, int $perPage = 6)
         {
             $this->connection = $connection;
-            $this->queryItemsCount = $queryItemsCount;
+            $this->table = $table;
             $this->perPage = $perPage;
-            $this->queryItems = $queryItems;
         }
 
 
@@ -83,19 +71,18 @@
          *
          * @return array
          */
-        public function getItems (string $classMapping) : array
+        public function getItemsPaginated () : array
         {
             if (empty($this->items))
             {
                 $currentPage = $this->getCurrentPage();
-                $nbPages = $this->getPages();
-                $exist = $this->checkIfPageExists($currentPage, $nbPages);
+                $nbPages = $this->getPages("id");
 
+                $this->checkIfPageExists($currentPage, $nbPages);
+                
                 $offset = $this->perPage * ($currentPage -1);
-                $this->queryItems .= " LIMIT {$this->perPage} OFFSET {$offset}";
 
-                $query = $this->connection->query($this->queryItems);
-                $this->items = $query->fetchAll(PDO::FETCH_CLASS, $classMapping);
+                $this->items = $this->table->findPaginated("created_at", "DESC", $this->perPage, $offset);
             }
 
             return $this->items;
@@ -131,7 +118,7 @@
         public function nextLink (string $link) : ?string
         {
             $currentPage = $this->getCurrentPage();
-            $nbPages = $this->getPages();
+            $nbPages = $this->getPages("id");
 
             if ($currentPage >= $nbPages) return null;
             $link .= "?page=" . ($currentPage + 1);
@@ -158,13 +145,10 @@
          *
          * @return integer
          */
-        private function getPages () : int
+        private function getPages ($column) : int
         {
-            if ($this->itemsCount === null)
-            {
-                $this->itemsCount = $this->connection
-                ->query($this->queryItemsCount)
-                ->fetch(PDO::FETCH_NUM)[0];
+            if ($this->itemsCount === null) {
+                $this->itemsCount = $this->table->countAll($column);
             }
         
             return (int)ceil($this->itemsCount / $this->perPage);

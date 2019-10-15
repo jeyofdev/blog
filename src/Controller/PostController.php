@@ -9,6 +9,7 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Router\Router;
+    use jeyofdev\php\blog\Table\PostTable;
     use PDO;
 
 
@@ -20,6 +21,19 @@
     class PostController extends Controller
     {
         /**
+         * @var PDO
+         */
+        private $connection;
+
+
+
+        public function __construct ()
+        {
+            $database = new Database("localhost", "root", "root", "php_blog");
+            $this->connection = $database->getConnection("php_blog");
+        }
+
+        /**
          * Set the datas of the page which lists the articles of the blog
          *
          * @return void
@@ -28,29 +42,15 @@
         {
             App::getInstance()->setTitle("List of posts");
 
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $connection = $database->getConnection("php_blog");
+            $tablePost = new PostTable($this->connection);
+            $pagination = new Pagination($this->connection, $tablePost, 6);
 
             /**
-             * get all posts
+             * Get the posts of the current page
              * 
              * @var Post[]
              */
-            $query = $connection->query("SELECT * FROM post ORDER BY created_at DESC");
-            $posts = $query->fetchAll(PDO::FETCH_CLASS, Post::class);
-
-            /**
-             * pagination
-             */
-            $sqlPostsCount = "SELECT COUNT(id) FROM post";
-            $sqlPostsPaginated = "SELECT * FROM post ORDER BY created_at DESC";
-
-            $pagination = new Pagination($connection, $sqlPostsPaginated, $sqlPostsCount, 6);
-
-            /**
-             * @var Post[]
-             */
-            $posts = $pagination->getItems(Post::class);
+            $posts = $pagination->getItemsPaginated();
 
             // the route of each article
             $link = $router->url("blog");
@@ -61,30 +61,26 @@
 
 
         /**
-         * Set the data of the page that displays a post
+         * Set the datas of the page that displays a post
          *
          * @param Router $router
          * @return void
          */
         public function show (Router $router) : void
         {
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $connection = $database->getConnection("php_blog");
+            $tablePost = new PostTable($this->connection);
 
             // url settings of the current page
             $params = $router->getParams();
             $id = (int)$params["id"];
             $slug = $params["slug"];
 
-            // get the article from the current page
-            $query = $connection->prepare("SELECT * FROM post WHERE id = :id");
-            $query->execute(['id' => $id]);
-            $query->setFetchMode(PDO::FETCH_CLASS, Post::class);
-
             /**
+             * get the post of the current page
+             * 
              * @var Post|false
              */
-            $post = $query->fetch();
+            $post = $tablePost->find(["id" => $id]);
 
             // check that the article exists
             if ($post === false) {
