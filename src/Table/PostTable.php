@@ -35,9 +35,9 @@
         /**
          * Get all the posts paginated of the current page
          *
-         * @return array
+         * @return Post[]
          */
-        public function findPaginated (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, ?int $fetchMode = PDO::FETCH_CLASS) : array
+        public function findPaginated (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, ?int $fetchMode = PDO::FETCH_CLASS)
         {
             return $this->findAllBy ($orderBy, $direction, $limit, $offset, $fetchMode);
         }

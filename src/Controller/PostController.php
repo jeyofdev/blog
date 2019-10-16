@@ -7,8 +7,10 @@
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Database\Database;
+    use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Router\Router;
+    use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
     use PDO;
 
@@ -69,6 +71,7 @@
         public function show (Router $router) : void
         {
             $tablePost = new PostTable($this->connection);
+            $tableCategorie = new CategoryTable($this->connection);
 
             // url settings of the current page
             $params = $router->getParams();
@@ -95,6 +98,13 @@
                 exit();
             }
 
-            $this->render("post.show", compact("post"));
+            /**
+             * get the categories of the current post
+             * 
+             * @var Category[]
+             */
+            $categories = $tableCategorie->findCategories(['id' => $post->getId()]);
+
+            $this->render("post.show", compact("post", "categories"));
         }
     }

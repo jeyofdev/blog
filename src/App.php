@@ -3,6 +3,9 @@
     namespace jeyofdev\php\blog;
 
 
+    use jeyofdev\php\blog\Helpers\Helpers;
+
+
     /**
      * Global class of the App
      * 
@@ -49,7 +52,7 @@
          */
         public function getTitle () : ?string
         {
-            return $this->title;
+            return (!is_null($this->title)) ? Helpers::e($this->title) : null;
         }
 
 
