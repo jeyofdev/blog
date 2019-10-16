@@ -73,6 +73,16 @@
         /**
          * {@inheritDoc}
          */
+        public function lastInsertId () : int
+        {
+            return (int)$this->connection->lastInsertId();
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function prepareAndExecute ($connection, string $query, array $params = []) : self
         {
             $connection->prepare($query)->execute($params);

@@ -17,4 +17,13 @@
          * @return void
          */
         public function insert($entity);
+
+
+
+        /**
+         * Get the ID of the last inserted row
+         *
+         * @return int
+         */
+        public function lastInsertId ();
     }

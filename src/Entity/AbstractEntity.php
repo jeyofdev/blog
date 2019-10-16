@@ -22,6 +22,15 @@
 
 
         /**
+         * The name of the table
+         *
+         * @var string
+         */
+        protected $tableName;
+
+
+
+        /**
          * The names of the columns
          *
          * @var array
@@ -61,8 +70,9 @@
         public function addTable () : self
         {
             $sql = "CREATE TABLE IF NOT EXISTS " . $this->getTableName() . " (" . "\n";
-            $sql .= $this->generateColumns($this->columnsWithOptions);
+            $sql .= $this->generateColumns();
             $sql .= $this->setPrimaryKey();
+            $sql .= $this->setConstraint();
             $sql .= ")" . "\n";
             $sql .= "ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
@@ -114,7 +124,9 @@
 
 
         /**
-         * {@inheritDoc}
+         * Get the columns
+         *
+         * @return array
          */
         public function getColumns() : array
         {
@@ -134,7 +146,8 @@
             foreach ($this->columns as $k => $v) {
                 $items[] = $k;
             }
-            $this->columns = array_slice($items, 0, -3);
+
+            $this->columns = array_slice($items, 0, -4);
 
             return $this;
         }
@@ -144,20 +157,53 @@
         /**
          * Set the primary key
          *
-         * @return void
+         * @return string
          */
-        private function setPrimaryKey () {
+        private function setPrimaryKey () : string
+        {
             foreach ($this->columnsWithOptions as $item) {
-                if (count($item) === 8) {
-                    if ($item[array_key_last($item)] === true) {
-                        $primaryKey = $item[array_key_first($item)];
-                    } else {
-                        $primaryKey = false;
+                if (count($item) >= 8) {
+                    if ($item[7] === true) {
+                        $primaryKey[] = $item[array_key_first($item)];
+                    }
+                }
+
+                $separator = (count($item) >= 8) ? "," : null;
+            }
+
+            $primaryKey = implode(", ", $primaryKey);
+
+            return "PRIMARY KEY ($primaryKey)$separator" . "\n";
+        }
+
+
+
+        /**
+         * Set the constraints
+         *
+         * @return string|null
+         */
+        private function setConstraint () : ?string
+        {
+            $constraints = [];
+
+            foreach ($this->columnsWithOptions as $item) {
+                if (count($item) === 9) {
+                    if (!empty($item[8])) {
+                        $columnParts = explode("_", $item[0]);
+
+                        $constraintPart["constraint"] = "CONSTRAINT fk_$columnParts[0]";
+                        $constraintPart["foreignKey"] = "FOREIGN KEY ($item[0])";
+                        $constraintPart["references"] = "REFERENCES $columnParts[0] ($columnParts[1])";
+                        $constraintPart["delete"] = "ON DELETE " . $item[8]["delete"];
+                        $constraintPart["update"] = "ON UPDATE " . $item[8]["update"];
+
+                        $constraints[] = implode(" ", $constraintPart);
                     }
                 }
             }
 
-            return "PRIMARY KEY ($primaryKey)" . "\n";
+            return !empty($constraints) ? implode(", " . "\n", $constraints) : null;
         }
 
 
@@ -167,10 +213,10 @@
          *
          * @return string
          */
-        private function generateColumns (array $columns) : string
+        private function generateColumns () : string
         {
             $items = [];
-            foreach ($columns as $v) {
+            foreach ($this->columnsWithOptions as $v) {
                 $items[] = trim($this->columns(
                     array_key_exists("0", $v) ? $v[0] : null,
                     array_key_exists("1", $v) ? $v[1] : null,
@@ -215,7 +261,7 @@
         /**
          * {@inheritDoc}
          */
-        public function setColumnsWithOptions(string $name, string $type, ?int $option = null, bool $isNull = false, bool $unsigned = false, bool $autoIncrement = false, $defaultValue = null, $primaryKey = false) : self
+        public function setColumnsWithOptions(string $name, string $type, ?int $option = null, bool $isNull = false, bool $unsigned = false, bool $autoIncrement = false, $defaultValue = null, $primaryKey = false, array $constraint = []) : self
         {
             if (in_array($name, $this->columns)) {
                 $this->columnsWithOptions[] = func_get_args();
@@ -235,9 +281,11 @@
          */
         public function getTableName () : string
         {
-            $pos = strrpos(get_class($this), "\\") + 1;
-            $name = substr(get_class($this), $pos);
+            if (is_null($this->tableName)) {
+                $pos = strrpos(get_class($this), "\\") + 1;
+                $this->tableName = substr(get_class($this), $pos);
+            }
 
-            return strtolower($name);
+            return strtolower($this->tableName);
         }
     }
