@@ -8,7 +8,7 @@
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */
-    class HomeController extends Controller
+    class HomeController extends AbstractController
     {
         /**
          * Set the datas of the home page

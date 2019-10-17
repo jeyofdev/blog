@@ -81,7 +81,7 @@
         /**
          * {@inheritDoc}
          */
-        public function findAllBy (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, ?int $fetchMode = PDO::FETCH_CLASS) : array
+        public function findAllBy (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, int $fetchMode = PDO::FETCH_CLASS) : array
         {
             $sql = "SELECT * FROM {$this->table}";
 
@@ -121,7 +121,7 @@
         /**
          * {@inheritDoc}
          */
-        public function query (string $sql, int $fetchMode) : PDOStatement
+        public function query (string $sql, int $fetchMode = PDO::FETCH_CLASS) : PDOStatement
         {
             $this->query = $this->connection->query($sql);
             $this->setFetchMode($fetchMode);
@@ -134,7 +134,7 @@
         /**
          * {@inheritDoc}
          */
-        public function prepare (string $sql, array $params = [], int $fetchMode) : PDOStatement
+        public function prepare (string $sql, array $params = [], int $fetchMode = PDO::FETCH_CLASS) : PDOStatement
         {
             $this->query = $this->connection->prepare($sql);
             $this->query->execute($params);

@@ -3,7 +3,6 @@
     namespace jeyofdev\php\blog\Controller;
 
 
-    use Exception;
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Database\Database;
@@ -16,11 +15,11 @@
 
 
     /**
-     * Manage the controller of the blog
+     * Manage the controller of the posts
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */
-    class PostController extends Controller
+    class PostController extends AbstractController
     {
         /**
          * @var PDO
@@ -35,27 +34,31 @@
             $this->connection = $database->getConnection("php_blog");
         }
 
+
+
         /**
-         * Set the datas of the page which lists the articles of the blog
+         * Set the datas of the page which lists the posts of the blog
          *
          * @return void
          */
         public function index (Router $router) : void
         {
-            App::getInstance()->setTitle("List of posts");
-
             $tablePost = new PostTable($this->connection);
-            $pagination = new Pagination($this->connection, $tablePost, 6);
 
             /**
-             * Get the posts of the current page
-             * 
              * @var Post[]
              */
-            $posts = $pagination->getItemsPaginated();
+            $posts = $tablePost->findAllPaginated();
 
-            // the route of each article
+            /**
+             * @var Pagination
+             */
+            $pagination = $tablePost->getPagination();
+
+            // the route of each posts
             $link = $router->url("blog");
+
+            App::getInstance()->setTitle("List of posts");
 
             $this->render("post.index", compact("posts", "pagination", "router", "link"));
         }
@@ -79,32 +82,21 @@
             $slug = $params["slug"];
 
             /**
-             * get the post of the current page
-             * 
              * @var Post|false
              */
             $post = $tablePost->find(["id" => $id]);
 
-            // check that the article exists
-            if ($post === false) {
-                throw new Exception("No article matches");
-            }
-        
-            // check that the slug of the url corresponds to the slug of the current article
-            if ($post->getSlug() !== $slug) {
-                $url = $router->url('post', ['slug' => $post->getSlug(), 'id' => $id]);
-                http_response_code(301);
-                header('Location: ' . $url);
-                exit();
-            }
+            // check the post
+            $this->exists($post, "No post matches");
+            $this->checkSlugMatch($router, $post, $slug, $id);
 
             /**
-             * get the categories of the current post
-             * 
              * @var Category[]
              */
             $categories = $tableCategorie->findCategories(['id' => $post->getId()]);
 
-            $this->render("post.show", compact("post", "categories"));
+            $title = App::getInstance()->setTitle($post->getName())->getTitle();
+
+            $this->render("post.show", compact("post", "categories", "router", "title"));
         }
     }

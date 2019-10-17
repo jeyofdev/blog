@@ -18,7 +18,7 @@
          *
          * @return PDOStatement
          */
-        public function query (string $sql, int $fetchMode);
+        public function query (string $sql, int $fetchMode = PDO::FETCH_CLASS);
 
 
 
@@ -27,7 +27,7 @@
          *
          * @return PDOStatement
          */
-        public function prepare (string $sql, array $params = [], int $fetchMode);
+        public function prepare (string $sql, array $params = [], int $fetchMode = PDO::FETCH_CLASS);
 
 
 

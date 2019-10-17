@@ -52,7 +52,7 @@
          */
         public function getTitle () : ?string
         {
-            return (!is_null($this->title)) ? Helpers::e($this->title) : null;
+            return (!is_null($this->title)) ? Helpers::e($this->title) : "Home";
         }
 
 
@@ -62,9 +62,9 @@
          *
          * @return self
          */
-        public function setTitle (string $title) : self
+        public function setTitle (string $title, ?string $prefix = null) : self
         {
-            $this->title = " | $title";
+            $this->title = (!is_null($prefix)) ? "$prefix $title" : $title;
             return $this;
         }
     }

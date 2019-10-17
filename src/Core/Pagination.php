@@ -24,6 +24,24 @@
 
 
         /**
+         * Query that retrieves the datas
+         *
+         * @var string
+         */
+        private $queryDatas;
+
+
+
+        /**
+         * Query that define the number of result to retrieve
+         *
+         * @var string
+         */
+        private $queryCount;
+
+
+
+        /**
          * @var PostTable
          */
         private $table;
@@ -40,7 +58,7 @@
 
 
         /**
-         * le nombre total d'items
+         * The total number of items
          *
          * @var int
          */
@@ -57,9 +75,11 @@
 
 
 
-        public function __construct (PDO $connection, PostTable $table, int $perPage = 6)
+        public function __construct (PDO $connection, string $queryDatas, string $queryCount, PostTable $table, int $perPage = 6)
         {
             $this->connection = $connection;
+            $this->queryDatas = $queryDatas;
+            $this->queryCount = $queryCount;
             $this->table = $table;
             $this->perPage = $perPage;
         }
@@ -76,13 +96,14 @@
             if (empty($this->items))
             {
                 $currentPage = $this->getCurrentPage();
-                $nbPages = $this->getPages("id");
+                $nbPages = $this->getPages();
 
                 $this->checkIfPageExists($currentPage, $nbPages);
                 
                 $offset = $this->perPage * ($currentPage -1);
 
-                $this->items = $this->table->findPaginated("created_at", "DESC", $this->perPage, $offset);
+                $query = $this->table->query($this->queryDatas . " LIMIT {$this->perPage} OFFSET $offset");
+                $this->items = $query->fetchAll();
             }
 
             return $this->items;
@@ -118,7 +139,7 @@
         public function nextLink (string $link) : ?string
         {
             $currentPage = $this->getCurrentPage();
-            $nbPages = $this->getPages("id");
+            $nbPages = $this->getPages();
 
             if ($currentPage >= $nbPages) return null;
             $link .= "?page=" . ($currentPage + 1);
@@ -145,10 +166,11 @@
          *
          * @return integer
          */
-        private function getPages ($column) : int
+        private function getPages () : int
         {
             if ($this->itemsCount === null) {
-                $this->itemsCount = $this->table->countAll($column);
+                $query = $this->table->query($this->queryCount, PDO::FETCH_NUM);
+                $this->itemsCount = $query->fetch()[0];
             }
         
             return (int)ceil($this->itemsCount / $this->perPage);

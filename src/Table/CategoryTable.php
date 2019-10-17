@@ -5,7 +5,6 @@
 
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\PostCategory;
-    use PDO;
 
 
     /**
@@ -39,17 +38,21 @@
          *
          * @return Category[]
          */
-        public function findCategories (array $params, int $fetchMode = PDO::FETCH_CLASS)
+        public function findCategories (array $params)
         {
-            $tableJoin = (new PostCategory())->getTableName();
+            $table = (new PostCategory())->getTableName();
+            $pos = strpos($table, "_") + 1;
+            $tableAlias = strtolower(substr($table, 0, 1) . substr($table, $pos, 1));
 
-            $sql = "SELECT c.*
-                FROM $tableJoin AS pc 
-                JOIN {$this->table} AS c ON pc.category_id = c.id
-                WHERE pc.post_id = :id
+            $joinAlias = strtolower(substr($this->table, 0, 1));
+
+            $sql = "SELECT {$joinAlias}.*
+                FROM $table AS $tableAlias 
+                JOIN {$this->table} AS $joinAlias ON $tableAlias.category_id = {$joinAlias}.id
+                WHERE $tableAlias.post_id = :id
             ";
 
-            $query = $this->prepare($sql, $params, $fetchMode);
+            $query = $this->prepare($sql, $params);
 
             return $this->fetchAll($query);
         }

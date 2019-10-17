@@ -24,7 +24,7 @@
          *
          * @return array
          */
-        public function findAllBy (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, ?int $fetchMode = PDO::FETCH_CLASS);
+        public function findAllBy (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, int $fetchMode = PDO::FETCH_CLASS);
 
 
 
