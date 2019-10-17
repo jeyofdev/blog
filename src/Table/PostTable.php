@@ -45,7 +45,7 @@
          *
          * @return Post[]
          */
-        public function findAllPaginated ()
+        public function findAllPostsPaginated ()
         {
             $sqlPosts = "SELECT * FROM {$this->table} ORDER BY created_at DESC";
             $sqlCount = "SELECT COUNT(id) FROM {$this->table}";

@@ -6,6 +6,7 @@
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Database\Database;
+    use jeyofdev\php\blog\Hydrate\Hydrate;
     use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
@@ -65,12 +66,15 @@
              */
             $posts = $tablePost->findPostsPaginatedByCategory($category);
 
+            // hydrate the posts
+            Hydrate::hydratePosts($tableCategory, $posts);
+
             /**
              * @var Pagination
              */
             $pagination = $tablePost->getPagination();
 
-            // set the route links to each article
+            // set the route links to each post
             $link = $router->url("category", ['id' => $category->getId(), "slug" => $category->getslug()]);
 
             $title = App::getInstance()

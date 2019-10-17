@@ -21,6 +21,23 @@
         protected $slug;
 
 
+        /**
+         * The id of the post associated with the current category
+         *
+         * @var int
+         */
+        private $post_id;
+
+
+
+        /**
+         * The post associated with the current category
+         *
+         * @var Post
+         */
+        private $post;
+
+
 
         /**
          * @param EntityManager $manager
@@ -103,6 +120,31 @@
         public function setSlug(string $slug) : self
         {
             $this->slug = $slug;
+            return $this;
+        }
+
+
+
+        /**
+         * Get the id of the post associated with the current category
+         *
+         * @return integer|null
+         */
+        public function getPost_Id () : ?int
+        {
+            return $this->post_id;
+        }
+
+
+        /**
+         * Set the post associated with the current category
+         *
+         * @param Post $post
+         * @return void
+         */
+        public function setPost (Post $post) : self
+        {
+            $this->post = $post;
             return $this;
         }
     }

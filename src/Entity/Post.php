@@ -26,6 +26,14 @@
         protected $created_at;
 
 
+        /**
+         * The associated categories of the post
+         *
+         * @var array
+         */
+        private $categories = [];
+
+
 
         /**
          * @param EntityManager $manager
@@ -180,6 +188,34 @@
         public function setCreated_at(string $created_at) : self
         {
             $this->created_at = $created_at;
+            return $this;
+        }
+
+
+
+        /**
+         * Get the associated categories of the post
+         *
+         * @return Category[]
+         */
+        public function getCategories ()
+        {
+            return $this->categories;
+        }
+
+
+
+        /**
+         * Add a category on the post
+         *
+         * @param Category $category
+         * @return self
+         */
+        public function addCategory (Category $category) : self
+        {
+            $this->categories[] = $category;
+            $category->setPost($this);
+
             return $this;
         }
     }

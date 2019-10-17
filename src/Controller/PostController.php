@@ -8,6 +8,7 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Hydrate\Hydrate;
     use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
@@ -44,18 +45,22 @@
         public function index (Router $router) : void
         {
             $tablePost = new PostTable($this->connection);
+            $tableCategory = new CategoryTable($this->connection);
 
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findAllPaginated();
+            $posts = $tablePost->findAllPostsPaginated();
+
+            // hydrate the posts
+            Hydrate::hydratePosts($tableCategory, $posts);
 
             /**
              * @var Pagination
              */
             $pagination = $tablePost->getPagination();
 
-            // the route of each posts
+            // the route of each post
             $link = $router->url("blog");
 
             App::getInstance()->setTitle("List of posts");
