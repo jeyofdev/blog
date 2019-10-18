@@ -126,7 +126,7 @@
                 $link .= "?page=" . ($currentPage - 1);
             }
 
-            return '<a class="btn btn-primary" href="' . $link . '">Previous page</a>';
+            return '<a class="btn btn-outline-primary" href="' . $link . '">Previous page</a>';
         }
 
 
@@ -144,7 +144,7 @@
             if ($currentPage >= $nbPages) return null;
             $link .= "?page=" . ($currentPage + 1);
 
-            return '<a class="btn btn-primary ml-auto" href="' . $link . '">Next page</a>';
+            return '<a class="btn btn-outline-primary ml-auto" href="' . $link . '">Next page</a>';
         }
 
 

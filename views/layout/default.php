@@ -9,8 +9,8 @@
         <link rel="stylesheet" href="http://localhost:8080/assets/css/app.css">
     </head>
 
-    <body class="d-flex flex-column vh-100">
-        <diV class="container text-center">
+    <body class="d-flex flex-column">
+        <diV class="container">
             <?= $content; ?>
         </diV>
 
