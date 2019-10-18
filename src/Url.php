@@ -3,7 +3,8 @@
     namespace jeyofdev\php\blog;
 
 
-    use InvalidArgumentException;
+    use jeyofdev\php\blog\Exception\InvalidArgumentException;
+    use jeyofdev\php\blog\Exception\RuntimeException;
 
 
     /**
@@ -54,7 +55,7 @@
             $param = self::getInt($name, $default);
 
             if ($param !== null && $param <= 0) {
-                throw new InvalidArgumentException("The $name parameter in the url must be a positive integer");
+                throw new RuntimeException("The parameter url '$name' must be a positive integer");
             }
 
             return $param;
@@ -75,7 +76,7 @@
             if ($_GET[$name] === '0') return 0;
 
             if (!filter_var($_GET[$name], FILTER_VALIDATE_INT)) {
-                throw new InvalidArgumentException("The $name parameter in the url must be an integer");
+                throw new InvalidArgumentException("The parameter url '$name' must be an integer");
             }
 
             return (int)$_GET[$name];

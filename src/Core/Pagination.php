@@ -3,7 +3,7 @@
     namespace jeyofdev\php\blog\Core;
 
 
-    use Exception;
+    use jeyofdev\php\blog\Exception\NotFoundException;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Url;
     use PDO;
@@ -186,7 +186,7 @@
         private function checkIfPageExists (int $currentPage, int $nbPages) : void
         {
             if($currentPage > $nbPages) {
-                throw new Exception("This page does not exist");
+                throw (new NotFoundException())->pageNotFound();
             }
         }
     }

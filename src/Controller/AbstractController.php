@@ -3,7 +3,7 @@
     namespace jeyofdev\php\blog\Controller;
 
 
-    use Exception;
+    use jeyofdev\php\blog\Exception\NotFoundException;
     use jeyofdev\php\blog\Router\Router;
 
 
@@ -50,10 +50,10 @@
         /**
          * {@inheritDoc}
          */
-        public function exists ($table, string $message) : void
+        public function exists ($table, string $tableName, int $id) : void
         {
             if ($table === false) {
-                throw new Exception($message);
+                throw (new NotFoundException())->itemNotFound($tableName, $id);
             }
         }
 

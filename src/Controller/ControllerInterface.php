@@ -39,7 +39,7 @@
          * @param Post|Category $table 
          * @return void
          */
-        public function exists ($table, string $message);
+        public function exists ($table, string $tableName, int $id);
 
 
 

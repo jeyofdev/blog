@@ -58,7 +58,7 @@
             $category = $tableCategory->find(["id" => $id]);
 
             // check the category
-            $this->exists($category, "No category matches");
+            $this->exists($category, "category", $id);
             $this->checkSlugMatch($router, $category, $slug, $id);
             
             /**

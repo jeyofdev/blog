@@ -92,7 +92,7 @@
             $post = $tablePost->find(["id" => $id]);
 
             // check the post
-            $this->exists($post, "No post matches");
+            $this->exists($post, "post", $id);
             $this->checkSlugMatch($router, $post, $slug, $id);
 
             /**

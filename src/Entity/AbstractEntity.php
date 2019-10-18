@@ -3,7 +3,7 @@
     namespace jeyofdev\php\blog\Entity;
 
 
-    use Exception;
+    use jeyofdev\php\blog\Exception\RuntimeException;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -266,7 +266,7 @@
             if (in_array($name, $this->columns)) {
                 $this->columnsWithOptions[] = func_get_args();
             } else {
-                throw new Exception("The value of the 1st parameter is not allowed. The allowed values are : " . implode(", ", $this->columns));
+                throw new RuntimeException("The value of the 1st parameter is not allowed. The allowed values are : " . implode(", ", $this->columns));
             }
             
             return $this;

@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Table;
 
 
+    use jeyofdev\php\blog\Exception\RuntimeException;
     use PDO;
     use PDOStatement;
 
@@ -51,6 +52,17 @@
         public function __construct (PDO $connection)
         {
             $this->connection = $connection;
+
+            if (is_null($this->table) || is_null($this->className)) {
+                $pos = strrpos(get_class($this), "\\") + 1;
+                $name = substr(get_class($this), $pos);
+
+                if (is_null($this->table)) {
+                    throw (new RuntimeException())->propertyValueIsNull($name, "table");
+                } else if (is_null($this->className)) {
+                    throw (new RuntimeException())->propertyValueIsNull($name, "className");
+                }
+            }
         }
 
 
