@@ -53,7 +53,7 @@
             $posts = $tablePost->findAllPostsPaginated();
 
             // hydrate the posts
-            Hydrate::hydratePosts($tableCategory, $posts);
+            Hydrate::hydrateAllPosts($tableCategory, $posts);
 
             /**
              * @var Pagination
@@ -79,7 +79,7 @@
         public function show (Router $router) : void
         {
             $tablePost = new PostTable($this->connection);
-            $tableCategorie = new CategoryTable($this->connection);
+            $tableCategory = new CategoryTable($this->connection);
 
             // url settings of the current page
             $params = $router->getParams();
@@ -95,13 +95,11 @@
             $this->exists($post, "post", $id);
             $this->checkSlugMatch($router, $post, $slug, $id);
 
-            /**
-             * @var Category[]
-             */
-            $categories = $tableCategorie->findCategories(['id' => $post->getId()]);
+            // hydrate the posts
+            Hydrate::hydratePost($tableCategory, $post);
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
-            $this->render("post.show", compact("post", "categories", "router", "title"));
+            $this->render("post.show", compact("post", "router", "title"));
         }
     }

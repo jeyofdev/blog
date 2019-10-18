@@ -66,8 +66,8 @@
              */
             $posts = $tablePost->findPostsPaginatedByCategory($category);
 
-            // hydrate the posts
-            Hydrate::hydratePosts($tableCategory, $posts);
+            // hydrate the post
+            Hydrate::hydrateAllPosts($tableCategory, $posts);
 
             /**
              * @var Pagination

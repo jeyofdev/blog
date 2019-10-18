@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Hydrate;
 
 
+    use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Table\CategoryTable;
 
@@ -15,12 +16,33 @@
     class Hydrate
     {
         /**
-         * Add the associated categories on posts
+         * Add the associated categories to a post
+         *
+         * @param CategoryTable $tableCategory
+         * @param Post $post
+         * @return void
+         */
+        public static function hydratePost (CategoryTable $tableCategory, Post $post) : void
+        {
+            /**
+             * @var Category[]
+             */
+            $categories = $tableCategory->findCategories(['id' => $post->getId()]);
+
+            foreach ($categories as $category) {
+                $post->addCategory($category);
+            }
+        }
+
+
+
+        /**
+         * Add the associated categories on each post
          *
          * @param CategoryTable $tableCategory
          * @return void
          */
-        public static function hydratePosts (CategoryTable $tableCategory, $posts) : void
+        public static function hydrateAllPosts (CategoryTable $tableCategory, $posts) : void
         {
             // get the ids of each items
             $postsById = [];
