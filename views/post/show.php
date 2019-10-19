@@ -1,3 +1,14 @@
+<?php
+    // get the categories of the current post
+    $categories = array_map(function ($category) use ($router) {
+        $url = $router->url('category', ['id' => $category->getId(), 'slug' => $category->getslug()]); 
+        return '<a href="' . $url . '">' . $category->getName() . '</a>';
+    }, $post->getCategories());
+
+    $categories = implode(", ", $categories);
+?>
+
+
 <!-- view the current post -->
 <div class="blog-single my-75">
     <div class="card">
@@ -6,12 +17,9 @@
         </div>
 
         <div class="card-body mx-80">
-            <div class="mb-30 categories">
-                <?php foreach ($post->getCategories() as $k => $category) : ?>
-                    <?php if ($k > 0) echo ','; ?>
-                    <a href="<?= $router->url('category', ["id" => $category->getId(), "slug" => $category->getSlug()]); ?>"><?= $category->getName(); ?></a>
-                <?php endforeach; ?>
-            </div>
+            <?php if ($categories !== "") : ?>
+                <p class="mb-30 categories"><?= $categories; ?></p>
+            <?php endif; ?>
             <h1 class="card-title mb-35"><?= $post->getName(); ?></h1>            
             <p class="card-text"><?= $post->getFormattedContent(); ?></p>
         </div>

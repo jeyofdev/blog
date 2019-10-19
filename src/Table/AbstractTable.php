@@ -27,15 +27,25 @@
          *
          * @var string
          */
-        protected $table;
+        protected $tableName;
+
 
 
         /**
-         * The name of the class
+         * The name of the current class
          *
-         * @var object Instance of type table (ex PostTable)
+         * @var string
          */
         protected $className;
+
+
+
+        /**
+         * The instance of the table (ex PostTable)
+         *
+         * @var object
+         */
+        protected $table;
 
 
 
@@ -53,15 +63,17 @@
         {
             $this->connection = $connection;
 
-            if (is_null($this->table) || is_null($this->className)) {
+            if (is_null($this->tableName) || is_null($this->className)) {
                 $pos = strrpos(get_class($this), "\\") + 1;
                 $name = substr(get_class($this), $pos);
 
-                if (is_null($this->table)) {
-                    throw (new RuntimeException())->propertyValueIsNull($name, "table");
+                if (is_null($this->tableName)) {
+                    throw (new RuntimeException())->propertyValueIsNull($name, "tableName");
                 } else if (is_null($this->className)) {
                     throw (new RuntimeException())->propertyValueIsNull($name, "className");
                 }
+            } else {
+                $this->table = new $this->className();
             }
         }
 
@@ -82,7 +94,7 @@
             $paramsKeys = implode(", ", $paramsKeys);
             $paramsValues = implode(", ", $paramsValues);
 
-            $sql = "SELECT * FROM {$this->table} WHERE $paramsKeys";
+            $sql = "SELECT * FROM {$this->tableName} WHERE $paramsKeys";
             $query = $this->prepare($sql, $params, $fetchMode);
 
             return $this->fetch($query);
@@ -95,7 +107,7 @@
          */
         public function findAllBy (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, int $fetchMode = PDO::FETCH_CLASS) : array
         {
-            $sql = "SELECT * FROM {$this->table}";
+            $sql = "SELECT * FROM {$this->tableName}";
 
             if (!is_null($orderBy)) {
                 $direction = strtoupper($direction);
@@ -122,7 +134,7 @@
          */
         public function countAll (string $column, int $fetchMode = PDO::FETCH_NUM) : int
         {
-            $sql = "SELECT COUNT($column) FROM {$this->table}";
+            $sql = "SELECT COUNT($column) FROM {$this->tableName}";
             $query = $this->query($sql, $fetchMode);
 
             return $this->fetch($query)[0];

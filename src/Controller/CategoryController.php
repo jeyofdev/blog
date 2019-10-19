@@ -64,7 +64,7 @@
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findPostsPaginatedByCategory($category);
+            $posts = $tablePost->findPostsPaginatedByCategory($category, 6, "created_at", "desc");
 
             // hydrate the post
             Hydrate::hydrateAllPosts($tableCategory, $posts);

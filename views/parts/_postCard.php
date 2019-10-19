@@ -1,5 +1,5 @@
 <?php
-   // get the categories of each posts
+    // get the categories of each posts
     $categories = array_map(function ($category) use ($router) {
         $url = $router->url('category', ['id' => $category->getId(), 'slug' => $category->getslug()]); 
         return '<a href="' . $url . '">' . $category->getName() . '</a>';

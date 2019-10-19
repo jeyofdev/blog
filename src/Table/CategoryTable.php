@@ -19,14 +19,14 @@
          *
          * @var string
          */
-        protected $table = "category";
+        protected $tableName = "category";
 
 
 
         /**
-         * The name of the class
+         * The name of the current class
          *
-         * @var object Instance of type table (ex CategoryTable)
+         * @var string
          */
         protected $className = Category::class;
 
@@ -40,15 +40,11 @@
          */
         public function findCategories (array $params)
         {
-            $table = (new PostCategory())->getTableName();
-            $pos = strpos($table, "_") + 1;
-            $tableAlias = strtolower(substr($table, 0, 1) . substr($table, $pos, 1));
-
-            $joinAlias = strtolower(substr($this->table, 0, 1));
+            extract($this->getTablesAndAlias()); // $table, $tableAlias, $joinAlias
 
             $sql = "SELECT {$joinAlias}.*
                 FROM $table AS $tableAlias 
-                JOIN {$this->table} AS $joinAlias ON $tableAlias.category_id = {$joinAlias}.id
+                JOIN {$this->tableName} AS $joinAlias ON $tableAlias.category_id = {$joinAlias}.id
                 WHERE $tableAlias.post_id = :id
             ";
 
@@ -67,12 +63,7 @@
          */
         public function findCategoriesByPosts (string $ids)
         {
-            $table = (new PostCategory())->getTableName();
-            $pos = strpos($table, "_") + 1;
-            $tableAlias = strtolower(substr($table, 0, 1) . substr($table, $pos, 1));
-
-            $joinAlias = strtolower(substr($this->table, 0, 1));
-
+            extract($this->getTablesAndAlias()); // $table, $tableAlias, $joinAlias
 
             $sql = "SELECT {$joinAlias}.*, {$tableAlias}.post_id
             FROM $table AS $tableAlias
@@ -84,5 +75,27 @@
             $query = $this->query($sql);
             
             return $this->fetchAll($query);
+        }
+
+
+
+        /**
+         * Set the names of the tables to use and their aliases for a join query
+         *
+         * @return array
+         */
+        private function getTablesAndAlias () : array
+        {
+            $table = (new PostCategory())->getTableName();
+            $pos = strpos($table, "_") + 1;
+            $tableAlias = strtolower(substr($table, 0, 1) . substr($table, $pos, 1));
+
+            $joinAlias = strtolower(substr($this->tableName, 0, 1));
+
+            return [
+                "table" => $table,
+                "tableAlias" => $tableAlias,
+                "joinAlias" => $joinAlias
+            ];
         }
     }
