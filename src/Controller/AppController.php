@@ -80,10 +80,17 @@
          */
         public function setController (array $match) : self
         {
-            $target = str_replace('/', '.', $match["target"]);
-            $page = explode('.', $target);
-            
-            $this->controller = '\jeyofdev\php\blog\Controller\\' . ucfirst($page[0]) . 'Controller';
+            $target = str_replace("/", ".", $match["target"]);
+            $page = explode(".", $target);
+
+            $this->controller = "\jeyofdev\php\blog\Controller\\";
+            if ($page[0] !== "admin") {
+                $this->controller .= ucfirst($page[0]);
+            } else {
+                $this->controller .= ucfirst($page[0]) . "\\" . ucfirst($page[1]);
+            }
+
+            $this->controller .= "Controller";
 
             return $this;
         }
@@ -101,7 +108,7 @@
             $target = str_replace('/', '.', $match["target"]);  // 'home.index';
             $page = explode('.', $target);
             
-            $this->action = $page[1];
+            $this->action = $page[array_key_last($page)];
 
             return $this;
         }

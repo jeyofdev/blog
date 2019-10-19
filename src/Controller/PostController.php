@@ -6,7 +6,6 @@
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Database\Database;
-    use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Hydrate\Hydrate;
     use jeyofdev\php\blog\Router\Router;
@@ -60,7 +59,7 @@
              */
             $pagination = $tablePost->getPagination();
 
-            // the route of each post
+            // Get the route of the current page
             $link = $router->url("blog");
 
             App::getInstance()->setTitle("List of posts");

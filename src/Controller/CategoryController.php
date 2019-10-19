@@ -74,7 +74,7 @@
              */
             $pagination = $tablePost->getPagination();
 
-            // set the route links to each post
+            // Get the route of the current page
             $link = $router->url("category", ['id' => $category->getId(), "slug" => $category->getslug()]);
 
             $title = App::getInstance()

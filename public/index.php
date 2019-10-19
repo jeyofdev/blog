@@ -27,10 +27,14 @@ use jeyofdev\php\blog\Url;
     // router
     $router = new Router();
     $router
+        // front
         ->get('/', 'home/index', 'home')
         ->get('/blog/', 'post/index', 'blog')
         ->get('/blog/[*:slug]-[i:id]/', 'post/show', 'post')
-        ->get('/category/[*:slug]-[i:id]/', 'category/show', 'category');
+        ->get('/category/[*:slug]-[i:id]/', 'category/show', 'category')
+
+        // back
+        ->get('/admin/', 'admin/post/index', 'admin_posts');
 
 
     // controller
