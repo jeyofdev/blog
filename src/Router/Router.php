@@ -57,6 +57,22 @@
 
 
         /**
+         * Get the indexed route by the GET or POST method
+         *
+         * @param  string      $url  The url called
+         * @param  string      $view The view corresponding to the url
+         * @param  string|null $name The name of the route
+         * @return self
+         */
+        public function match (string $url, string $view, ?string $name = null) : self
+        {
+            $this->router->map('get|post', $url, $view, $name);
+            return $this;
+        }
+
+
+
+        /**
          * Generate a route
          *
          * @param  string $name The name of the route

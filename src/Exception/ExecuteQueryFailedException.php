@@ -16,4 +16,15 @@
             $this->message = "An error occurred while deleting the record with the id $id in the table $tableName";
             return $this;
         }
+
+
+
+        /**
+         * @return self
+         */
+        public function updateHasFailed (string $id, string $tableName) : self
+        {
+            $this->message = "An error occurred while updating the record with the id $id in the table $tableName";
+            return $this;
+        }
     }

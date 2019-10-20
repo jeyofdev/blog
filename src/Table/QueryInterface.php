@@ -29,6 +29,15 @@
 
 
         /**
+         * Update a row from a table
+         *
+         * @return void
+         */
+        public function update (array $params, array $where);
+
+
+
+        /**
          * Delete a row from a table
          *
          * @return void

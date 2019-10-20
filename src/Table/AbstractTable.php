@@ -85,7 +85,7 @@
          */
         public function find (array $params, $fetchMode = PDO::FETCH_CLASS)
         {
-            $where = $this->generateWhere($params);
+            $where = $this->setWhere($params);
 
             $sql = "SELECT * FROM {$this->tableName} WHERE $where";
             $query = $this->prepare($sql, $params, $fetchMode);
@@ -125,9 +125,27 @@
         /**
          * {@inheritDoc}
          */
+        public function update (array $params, array $where) : void
+        {
+            $set = $this->setQueryParams($params);
+            $where = $this->setQueryParams($where);
+
+            $sql = "UPDATE {$this->tableName} SET $set[0] WHERE $where[0]";
+            $query = $this->prepare($sql, array_merge($set[1], $where[1]));
+
+            if (!$query) {
+                throw (new ExecuteQueryFailedException())->updateHasFailed("id", $this->tableName);
+            }
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function delete (array $params) : void
         {
-            $where = $this->generateWhere($params);
+            $where = $this->setWhere($params);
 
             $sql = "DELETE FROM {$this->tableName} WHERE $where";
             $query = $this->prepare($sql, $params);
@@ -153,11 +171,11 @@
 
 
         /**
-         * Generate the where clause of a query
+         * Set the parameters of where clause
          *
          * @return string|null
          */
-        private function generateWhere (array $params) : ?string
+        private function setWhere (array $params) : ?string
         {
             if (!is_null($params)) {
                 $items = [];
@@ -167,6 +185,28 @@
             }
 
             return isset($items) ? implode(", ", $items) : null;
+        }
+
+
+
+        /**
+         * Set the parameters of a prepare query
+         *
+         * @return array
+         */
+        private function setQueryParams (array $params) : array
+        {
+            $items = [];
+            $itemsValues = [];
+
+            foreach ($params as $k => $v) {
+                $items[] = "$k = :$k";
+                $itemsValues[$k] = $v;
+            }
+
+            $items = implode(", ", $items);
+
+            return [$items, $itemsValues];
         }
 
 

@@ -7,6 +7,7 @@
     use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Form\Validation;
     use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Table\PostTable;
     use PDO;
@@ -59,7 +60,7 @@
             // flash message
             $flash = null;
             if (isset($_GET["delete"])) {
-                $flash = '<div class="alert alert-success my-5">L\'article a bien été supprimé</div>';
+                $flash = '<div class="alert alert-success my-5">The post has been deleted</div>';
             }
 
             $title = App::getInstance()
@@ -72,7 +73,7 @@
 
 
         /**
-         * delete a post
+         * Delete a post
          *
          * @return void
          */
@@ -91,5 +92,60 @@
             http_response_code(301);
             header("Location: " . $url);
             exit();
+        }
+
+
+
+        /**
+         * Edit a post
+         *
+         * @return void
+         */
+        public function edit (Router $router) : void
+        {
+            $tablePost = new PostTable($this->connection);
+
+            // url settings of the current page
+            $params = $router->getParams();
+            $id = (int)$params["id"];
+
+            /**
+             * @var Post|null
+             */
+            $post = $tablePost->find(["id" => $id]);
+
+            $success = false; // query success
+
+            // update the post
+            $checkForm = new Validation();
+            if ($checkForm->checkFormIsSubmit()) {
+                $post->setName($_POST["name"]);
+
+                $checkForm->checkNotEmpty("name");
+                $checkForm->checkMin("name", 3);
+
+                if ($checkForm->checkFormIsValid()) {
+                    $tablePost->updatePost($post);
+                    $success = true;
+                }
+            }
+
+            $errors = $checkForm->getErrors();
+
+            // flash message
+            $flash = null;
+            if ($success) {
+                $flash = '<div class="alert alert-success my-5">The post has been updated</div>';
+            }
+
+            if (!empty($errors)) {
+                $flash = '<div class="alert alert-danger my-5">The post could not be updated</div>';
+            }
+
+            $title = App::getInstance()
+                ->setTitle("Edit the post with the id : $id")
+                ->getTitle();
+
+            $this->render("admin.post.edit", compact("post", "title", "success", "errors", "flash"));
         }
     }

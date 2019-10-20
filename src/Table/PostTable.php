@@ -126,6 +126,24 @@
 
 
         /**
+         * Update a post
+         *
+         * @param Post $post
+         * @return self
+         */
+        public function updatePost (Post $post) : self
+        {
+            $this->update([
+                "name" => $post->getName(),
+                "content" => $post->getContent()
+            ], ["id" => $post->getId()]);
+
+            return $this;
+        }
+
+
+
+        /**
          * Get the value of pagination
          *
          * @return Pagination

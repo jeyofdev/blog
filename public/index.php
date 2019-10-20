@@ -35,6 +35,7 @@ use jeyofdev\php\blog\Url;
 
         // back
         ->get('/admin/', 'admin/post/index', 'admin_posts')
+        ->match('/admin/post/[i:id]/', 'admin/post/edit', 'admin_post')
         ->post('/admin/post/delete/[i:id]/', 'admin/post/delete', 'admin_post_delete');
 
 
