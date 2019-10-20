@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Entity;
 
 
+    use jeyofdev\php\blog\Helpers\Helpers;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -84,7 +85,7 @@
          */ 
         public function getName() : ?string
         {
-            return $this->name;
+            return Helpers::e($this->name);
         }
 
 
@@ -107,7 +108,7 @@
          */ 
         public function getSlug() : ?string
         {
-            return $this->slug;
+            return Helpers::e($this->slug);
         }
 
 

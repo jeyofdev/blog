@@ -34,7 +34,8 @@ use jeyofdev\php\blog\Url;
         ->get('/category/[*:slug]-[i:id]/', 'category/show', 'category')
 
         // back
-        ->get('/admin/', 'admin/post/index', 'admin_posts');
+        ->get('/admin/', 'admin/post/index', 'admin_posts')
+        ->post('/admin/post/delete/[i:id]/', 'admin/post/delete', 'admin_post_delete');
 
 
     // controller

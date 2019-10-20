@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Table;
 
 
+    use jeyofdev\php\blog\Exception\ExecuteQueryFailedException;
     use jeyofdev\php\blog\Exception\RuntimeException;
     use PDO;
     use PDOStatement;
@@ -84,17 +85,9 @@
          */
         public function find (array $params, $fetchMode = PDO::FETCH_CLASS)
         {
-            $paramsKeys = [];
-            $paramsValues = [];
-            foreach ($params as $k => $v) {
-                $paramsKeys[] = "$k = :$k";
-                $paramsValues[] = "$k = $v";
-            }
+            $where = $this->generateWhere($params);
 
-            $paramsKeys = implode(", ", $paramsKeys);
-            $paramsValues = implode(", ", $paramsValues);
-
-            $sql = "SELECT * FROM {$this->tableName} WHERE $paramsKeys";
+            $sql = "SELECT * FROM {$this->tableName} WHERE $where";
             $query = $this->prepare($sql, $params, $fetchMode);
 
             return $this->fetch($query);
@@ -132,12 +125,48 @@
         /**
          * {@inheritDoc}
          */
+        public function delete (array $params) : void
+        {
+            $where = $this->generateWhere($params);
+
+            $sql = "DELETE FROM {$this->tableName} WHERE $where";
+            $query = $this->prepare($sql, $params);
+
+            if (!$query) {
+                throw (new ExecuteQueryFailedException())->deleteHasFailed("id", $this->tableName);
+            }
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function countAll (string $column, int $fetchMode = PDO::FETCH_NUM) : int
         {
             $sql = "SELECT COUNT($column) FROM {$this->tableName}";
             $query = $this->query($sql, $fetchMode);
 
             return $this->fetch($query)[0];
+        }
+
+
+
+        /**
+         * Generate the where clause of a query
+         *
+         * @return string|null
+         */
+        private function generateWhere (array $params) : ?string
+        {
+            if (!is_null($params)) {
+                $items = [];
+                foreach ($params as $k => $v) {
+                    $items[] = "$k = :$k";
+                }
+            }
+
+            return isset($items) ? implode(", ", $items) : null;
         }
 
 

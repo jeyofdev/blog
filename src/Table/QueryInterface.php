@@ -29,6 +29,15 @@
 
 
         /**
+         * Delete a row from a table
+         *
+         * @return void
+         */
+        public function delete (array $params);
+
+
+
+        /**
          * Get the total number of rows in a table
          *
          * @return int

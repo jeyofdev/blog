@@ -53,13 +53,43 @@
              */
             $pagination = $tablePost->getPagination();
 
-            // Get the route of the current page
+            // get the route of the current page
             $link = $router->url("admin_posts");
+
+            // flash message
+            $flash = null;
+            if (isset($_GET["delete"])) {
+                $flash = '<div class="alert alert-success my-5">L\'article a bien été supprimé</div>';
+            }
 
             $title = App::getInstance()
                 ->setTitle("Administration of posts")
                 ->getTitle();
 
-            $this->render("admin.post.index", compact("posts", "pagination", "link", "title"));
+            $this->render("admin.post.index", compact("posts", "pagination", "router", "link", "title", "flash"));
+        }
+
+
+
+        /**
+         * delete a post
+         *
+         * @return void
+         */
+        public function delete (Router $router) : void
+        {
+            $tablePost = new PostTable($this->connection);
+
+            // url settings of the current page
+            $params = $router->getParams();
+            $id = (int)$params["id"];
+
+            $tablePost->delete(["id" => $id]);
+
+            // redirect to the home of the admin
+            $url = $router->url("admin_posts") . "?delete=1";
+            http_response_code(301);
+            header("Location: " . $url);
+            exit();
         }
     }

@@ -105,7 +105,7 @@
          */ 
         public function getSlug() : ?string
         {
-            return $this->slug;
+            return Helpers::e($this->slug);
         }
 
 
@@ -128,7 +128,7 @@
          */ 
         public function getContent() : ?string
         {
-            return $this->content;
+            return Helpers::e($this->content);
         }
 
 
