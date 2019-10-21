@@ -14,6 +14,10 @@
         outline: $outline !important;
     }
 
+    body {
+        min-height: 100vh;
+    }
+
     ul,
     li,
     ol {

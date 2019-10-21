@@ -7,6 +7,7 @@
     use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validation;
     use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Table\PostTable;
@@ -120,9 +121,16 @@
             $checkForm = new Validation();
             if ($checkForm->checkFormIsSubmit()) {
                 $post->setName($_POST["name"]);
+                $post->setSlug($_POST["slug"]);
+                $post->setContent($_POST["content"]);
 
                 $checkForm->checkNotEmpty("name");
                 $checkForm->checkMin("name", 3);
+
+                $checkForm->checkNotEmpty("slug");
+
+                $checkForm->checkNotEmpty("content");
+                $checkForm->checkMin("content", 20);
 
                 if ($checkForm->checkFormIsValid()) {
                     $tablePost->updatePost($post);
@@ -130,7 +138,10 @@
                 }
             }
 
-            $errors = $checkForm->getErrors();
+            $errors = $checkForm->getErrors(); // form errors
+
+            // form
+            $form = new PostForm($post, $errors);
 
             // flash message
             $flash = null;
@@ -146,6 +157,6 @@
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", compact("post", "title", "success", "errors", "flash"));
+            $this->render("admin.post.edit", compact("post", "form", "title", "success", "errors", "flash"));
         }
     }
