@@ -127,7 +127,7 @@
                 $post->setContent($_POST["content"]);
 
                 if ($validator->isValid()) {
-                    $tablePost->updatePost($post);
+                    $tablePost->updatePost($post, "Europe/Paris");
                     $success = true;
                 } else {
                     $errors = $validator->getErrors();

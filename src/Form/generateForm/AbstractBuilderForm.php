@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Form\generateForm;
 
 
+    use DateTimeInterface;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Exception\NotAllowedException;
@@ -249,6 +250,10 @@
             } else {
                 $method = "get" . ucfirst($key);
                 $value = $this->datas->$method() ?? null;
+            }
+
+            if ($value instanceof DateTimeInterface) {
+                return $value->format("Y-m-d H:i:s");
             }
 
             return ($value !== "") ? $value : null;

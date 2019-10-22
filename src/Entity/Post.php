@@ -24,6 +24,7 @@
         protected $slug;
         protected $content;
         protected $created_at;
+        protected $updated_at;
 
 
         /**
@@ -48,6 +49,7 @@
             $this->setColumnsWithOptions("slug", "varchar", 255);
             $this->setColumnsWithOptions("content", "text", 650000);
             $this->setColumnsWithOptions("created_at", "datetime", null, false, false, false, "DEFAULT CURRENT_TIMESTAMP");
+            $this->setColumnsWithOptions("updated_at", "datetime", null, false, false, false, "DEFAULT CURRENT_TIMESTAMP");
 
             return $this;
         }
@@ -188,6 +190,29 @@
         public function setCreated_at(string $created_at) : self
         {
             $this->created_at = $created_at;
+            return $this;
+        }
+
+
+
+        /**
+         * Get the value of updated_at
+         */ 
+        public function getUpdated_at() : DateTime
+        {
+            return new DateTime($this->updated_at);
+        }
+
+
+
+        /**
+         * Set the value of updated_at
+         *
+         * @return  self
+         */ 
+        public function setUpdated_at(string $updated_at) : self
+        {
+            $this->updated_at = $updated_at;
             return $this;
         }
 

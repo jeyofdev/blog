@@ -12,6 +12,7 @@
             <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Created_at</th>
+            <th scope="col">Updated_at</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -23,7 +24,8 @@
                 <td>
                     <a href="<?= $router->url('post', ["id" => $post->getId()]); ?>"><?= $post->getName(); ?></a>
                 </td>
-                <td><?= $post->getCreated_at()->format("d F Y"); ?></td>
+                <td><?= $post->getCreated_at()->format("d F Y \a\\t H:i:s"); ?></td>
+                <td><?= $post->getUpdated_at()->format("d F Y \a\\t H:i:s"); ?></td>
                 <td>
                     <a class="btn btn-outline-info rounded" href="<?= $router->url('post', ['id' => $post->getId()]); ?>">View</a>
                     <a class="btn btn-outline-success rounded" href="<?= $router->url('admin_post', ['id' => $post->getId()]); ?>">Edit</a>

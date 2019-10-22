@@ -3,6 +3,8 @@
     namespace jeyofdev\php\blog\Table;
 
 
+    use DateTime;
+    use DateTimeZone;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
@@ -48,6 +50,13 @@
          * @var array
          */
         private $columns = [];
+
+
+
+        /**
+         * @var DateTimeZone
+         */
+        private $timeZone;
 
 
 
@@ -131,11 +140,20 @@
          * @param Post $post
          * @return self
          */
-        public function updatePost (Post $post) : self
+        public function updatePost (Post $post, string $timeZone = "Europe/Paris") : self
         {
+            $this->timeZone = new DateTimeZone($timeZone);
+            $currentDate = (new DateTime("now", $this->timeZone))->format("Y-m-d H:i:s");
+
+            $updatedAt = $post
+                ->setUpdated_at($currentDate)
+                ->getUpdated_at()
+                ->format("Y-m-d H:i:s");
+
             $this->update([
                 "name" => $post->getName(),
-                "content" => $post->getContent()
+                "content" => $post->getContent(),
+                "updated_at" => $updatedAt
             ], ["id" => $post->getId()]);
 
             return $this;

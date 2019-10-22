@@ -24,6 +24,8 @@
                 ->input("text", "name", "Title :", [], ["tag" => "div"])
                 ->input("text", "slug", "Slug :", [], ["tag" => "div"])
                 ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"])
+                ->input("text", "created_at", "Creation date :", ["disabled" => true], ["tag" => "div"])
+                ->input("text", "updated_at", "Last modified date :", ["disabled" => true], ["tag" => "div"])
                 ->submit("Update")
                 ->reset("Reset")
                 ->formEnd();
