@@ -47,6 +47,16 @@
 
 
         /**
+         * Check that a value is already present in a column of a table
+         *
+         * @param integer|null $except The rows to be exluded from the verification
+         * @return bool
+         */
+        public function exists (array $params, ?int $except = null);
+
+
+
+        /**
          * Get the total number of rows in a table
          *
          * @return int

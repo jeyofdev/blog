@@ -4,11 +4,20 @@
 
 
     use jeyofdev\php\blog\Form\generateForm\AbstractBuilderBootstrapForm;
-use jeyofdev\php\blog\Form\generateForm\AbstractBuilderForm;
+    use jeyofdev\php\blog\Form\generateForm\FormInterface;
 
-class PostForm extends AbstractBuilderBootstrapForm
+
+    /**
+     * Build the form related to posts
+     * 
+     * @author jeyofdev <jgregoire.pro@gmail.com>
+     */
+    class PostForm extends AbstractBuilderBootstrapForm implements FormInterface
     {
-        public function generate ()
+        /**
+         * {@inheritDoc}
+         */
+        public function build () : string
         {
             $this
                 ->formStart("#", "post", "my-5")
@@ -19,23 +28,14 @@ class PostForm extends AbstractBuilderBootstrapForm
                 ->reset("Reset")
                 ->formEnd();
 
-            // $this
-            //     ->formStart("#", "post", "my-5")
-            //     ->input("text", "name", "Title :", ["required" => true], ["div", "form-group"], "invalid-feedback")
-            //     ->input("text", "slug", "Slug :", ["class" => "form-control"], ["div", "form-group"], "invalid-feedback")
-            //     ->textarea("content", "Content :", ["class" => "form-control", "rows" => 8], ["div", "form-group"], "invalid-feedback")
-            //     ->submit("Update")
-            //     ->reset("Reset")
-            //     ->formEnd();
-        
-
-            // dd($this->form);
-
             return implode("\n", $this->extract());
         }
 
 
 
+        /**
+         * {@inheritDoc}
+         */
         public function extract () : array
         {
             extract($this->form);

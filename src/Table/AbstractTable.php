@@ -160,6 +160,26 @@
         /**
          * {@inheritDoc}
          */
+        public function exists (array $params, ?int $except = null) : bool
+        {
+            $where = $this->setWhere($params);
+
+            if (!is_null($except)) {
+                $where .= " AND id != :id";
+                $params["id"] = $except;
+            }
+
+            $sql = "SELECT COUNT(id) FROM {$this->tableName} WHERE $where";
+            $query = $this->prepare($sql, $params, PDO::FETCH_NUM);
+            
+            return (int)$this->fetch($query)[0] > 0;
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function countAll (string $column, int $fetchMode = PDO::FETCH_NUM) : int
         {
             $sql = "SELECT COUNT($column) FROM {$this->tableName}";

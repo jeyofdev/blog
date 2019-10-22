@@ -6,4 +6,4 @@
 
 
 <!-- the form to update a post -->
-<?= $form->generate(); ?>
+<?= $form->build(); ?>

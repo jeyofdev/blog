@@ -8,7 +8,7 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Form\PostForm;
-    use jeyofdev\php\blog\Form\Validation;
+    use jeyofdev\php\blog\Form\Validator\PostValidator;
     use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Table\PostTable;
     use PDO;
@@ -116,29 +116,23 @@
             $post = $tablePost->find(["id" => $id]);
 
             $success = false; // query success
+            $errors = []; // form errors
 
-            // update the post
-            $checkForm = new Validation();
-            if ($checkForm->checkFormIsSubmit()) {
+            // check that the form is valid and update the post
+            $validator = new PostValidator("en", $_POST, $tablePost, $post->getId());
+
+            if ($validator->isSubmit()) {
                 $post->setName($_POST["name"]);
                 $post->setSlug($_POST["slug"]);
                 $post->setContent($_POST["content"]);
 
-                $checkForm->checkNotEmpty("name");
-                $checkForm->checkMin("name", 3);
-
-                $checkForm->checkNotEmpty("slug");
-
-                $checkForm->checkNotEmpty("content");
-                $checkForm->checkMin("content", 20);
-
-                if ($checkForm->checkFormIsValid()) {
+                if ($validator->isValid()) {
                     $tablePost->updatePost($post);
                     $success = true;
+                } else {
+                    $errors = $validator->getErrors();
                 }
             }
-
-            $errors = $checkForm->getErrors(); // form errors
 
             // form
             $form = new PostForm($post, $errors);
