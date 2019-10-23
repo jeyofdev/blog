@@ -58,11 +58,14 @@
          */
         public function render (string $view, Router $router, array $datas = []) : void
         {
+            $isAdmin = strpos($view, "admin") !== false;
+            $layout = !$isAdmin ? "layout/default.php" : "layout/admin_default.php";
+
             ob_start();
             extract($datas);
             require $this->getViewPath() . DIRECTORY_SEPARATOR . str_replace(".", "/", $view) . '.php';
             $content = ob_get_clean();
-            require $this->getViewPath() . DIRECTORY_SEPARATOR . 'layout/default.php';
+            require $this->getViewPath() . DIRECTORY_SEPARATOR . $layout;
         }
 
 

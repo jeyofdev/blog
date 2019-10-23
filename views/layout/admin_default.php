@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>My personal blog <?= isset($title) ? "| $title" : null; ?></title>
+        <title>My personal blog | Admin - <?= isset($title) ? "$title" : null; ?></title>
 
         <link rel="stylesheet" href="http://localhost:8080/assets/css/app.css">
     </head>
@@ -17,14 +17,14 @@
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
+                <li class="nav-item">
                         <a class="nav-link" href="<?= $router->url("home"); ?>">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->url("blog"); ?>">Blog</a>
+                        <a class="nav-link" href="<?= $router->url("admin"); ?>">Admin Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->url("admin"); ?>">Admin</a>
+                        <a class="nav-link" href="<?= $router->url("admin_posts"); ?>">Posts</a>
                     </li>
                 </ul>
             </div>
