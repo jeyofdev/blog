@@ -4,15 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>My personal blog | <?= \jeyofdev\php\blog\App::getInstance()->getTitle(); ?></title>
+        <title>My personal blog <?= isset($title) ? "| $title" : null; ?></title>
 
         <link rel="stylesheet" href="http://localhost:8080/assets/css/app.css">
     </head>
 
     <body class="d-flex flex-column">
-        <diV class="container">
+        <div class="container">
             <?= $content; ?>
-        </diV>
+        </div>
 
         <!-- loading time of the page -->
         <?php if (defined("DEBUG_TIME")) : ?>

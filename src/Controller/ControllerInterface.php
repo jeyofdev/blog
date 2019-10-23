@@ -20,7 +20,7 @@
          *
          * @return void
          */
-        public function render (string $view, array $datas = []);
+        public function render (string $view, Router $router, array $datas = []);
 
 
 

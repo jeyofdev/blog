@@ -3,6 +3,9 @@
     namespace jeyofdev\php\blog\Controller;
 
 
+    use jeyofdev\php\blog\App;
+
+
     /**
      * Manage the controller of the home page
      * 
@@ -17,7 +20,7 @@
          */
         public function index () : void
         {
-            $content = "ceci est le controller de la home page";
-            $this->render('home.index', compact('content'));
+            $title = App::getInstance()->setTitle("Home")->getTitle();
+            $this->render('home.index', $this->router, compact("title"));
         }
     }

@@ -88,9 +88,10 @@
          * Execute a redirection
          *
          * @param int $code http response code (301, 404, 200...)
+         * @param string|void $url The redirection url
          * @return void
          */
-        public static function redirect (int $code, string $url) : void
+        public static function redirect (int $code, $url) : void
         {
             http_response_code($code);
             header("Location: " . $url);

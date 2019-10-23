@@ -5,11 +5,9 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Controller\AbstractController;
-    use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validator\PostValidator;
-    use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Url;
     use PDO;
@@ -23,26 +21,11 @@
     class PostController extends AbstractController
     {
         /**
-         * @var PDO
-         */
-        private $connection;
-
-
-
-        public function __construct ()
-        {
-            $database = new Database("localhost", "root", "root", "php_blog");
-            $this->connection = $database->getConnection("php_blog");
-        }
-
-
-
-        /**
          * Set the datas of the page which lists the posts of the blog in the admin
          *
          * @return void
          */
-        public function index (Router $router) : void
+        public function index () : void
         {
             $tablePost = new PostTable($this->connection);
 
@@ -57,7 +40,7 @@
             $pagination = $tablePost->getPagination();
 
             // get the route of the current page
-            $link = $router->url("admin_posts");
+            $link = $this->router->url("admin_posts");
 
             // flash message
             $flash = null;
@@ -71,7 +54,7 @@
                 ->setTitle("Administration of posts")
                 ->getTitle();
 
-            $this->render("admin.post.index", compact("posts", "pagination", "router", "link", "title", "flash"));
+            $this->render("admin.post.index", $this->router, compact("posts", "pagination", "link", "title", "flash"));
         }
 
 
@@ -81,18 +64,18 @@
          *
          * @return void
          */
-        public function delete (Router $router) : void
+        public function delete () : void
         {
             $tablePost = new PostTable($this->connection);
 
             // url settings of the current page
-            $params = $router->getParams();
+            $params = $this->router->getParams();
             $id = (int)$params["id"];
 
             $tablePost->delete(["id" => $id]);
 
             // redirect to the home of the admin
-            $url = $router->url("admin_posts") . "?delete=1";
+            $url = $this->router->url("admin_posts") . "?delete=1";
             Url::redirect(301, $url);
         }
 
@@ -103,12 +86,12 @@
          *
          * @return void
          */
-        public function edit (Router $router) : void
+        public function edit () : void
         {
             $tablePost = new PostTable($this->connection);
 
             // url settings of the current page
-            $params = $router->getParams();
+            $params = $this->router->getParams();
             $id = (int)$params["id"];
 
             /**
@@ -153,7 +136,7 @@
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", compact("post", "form", "title", "flash"));
+            $this->render("admin.post.edit", $this->router, compact("post", "form", "title", "flash"));
         }
 
 
@@ -163,7 +146,7 @@
          *
          * @return void
          */
-        public function new (Router $router) : void
+        public function new () : void
         {
             $tablePost = new PostTable($this->connection);
 
@@ -182,7 +165,7 @@
                 if ($validator->isValid()) {
                     $tablePost->createPost($post, "Europe/Paris");
 
-                    $url = $router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
+                    $url = $this->router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
                     Url::redirect(301, $url);
                 } else {
                     $errors = $validator->getErrors();
@@ -202,6 +185,6 @@
                 ->setTitle("Add a new post")
                 ->getTitle();
 
-            $this->render("admin.post.new", compact("form", "title", "flash"));
+            $this->render("admin.post.new", $this->router, compact("form", "title", "flash"));
         }
     }

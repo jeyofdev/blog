@@ -66,9 +66,9 @@
             $this->setController($match);
             $this->setAction($match);
 
-            $controller = new $this->controller();
+            $controller = new $this->controller($router);
             $method = $this->action;
-            $controller->$method($router);
+            $controller->$method();
         }
 
 
