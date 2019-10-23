@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Table;
 
 
+    use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Exception\ExecuteQueryFailedException;
     use jeyofdev\php\blog\Exception\RuntimeException;
     use PDO;
@@ -42,11 +43,18 @@
 
 
         /**
-         * The instance of the table (ex PostTable)
-         *
-         * @var object
+         * @var PostTable|CategoryTable
          */
         protected $table;
+
+
+
+        /**
+         * The columns of the table
+         *
+         * @var array
+         */
+        protected $columns = [];
 
 
 
@@ -54,6 +62,20 @@
          * @var PDOStatement
          */
         protected $query;
+
+
+
+        /**
+         * @var Pagination
+         */
+        protected $pagination;
+
+
+
+        /**
+         * The allowed values ​​for the clause 'order by'
+         */
+        const DIRECTION_ALLOWED = ["ASC", "DESC"];
 
 
 
@@ -76,6 +98,10 @@
             } else {
                 $this->table = new $this->className();
             }
+
+            $this->columns = $this->table
+                ->setColumns($this->table)
+                ->getColumns();
         }
 
 
@@ -304,6 +330,39 @@
                 $this->query->setFetchMode($fetchMode, $this->className);
             } else {
                 $this->query->setFetchMode($fetchMode);
+            }
+        }
+
+
+
+        /**
+         * Get the value of pagination
+         *
+         * @return Pagination
+         */
+        public function getPagination () : Pagination
+        {
+            return $this->pagination;
+        }
+
+
+
+        /**
+         * Check that a value is allowed in a clause of a query
+         *
+         * @param mixed $value
+         * @return bool|void
+         */
+        protected function checkIfValueIsAllowed (string $clause, $value, array $allowed)
+        {
+            if (in_array($value, $allowed)) {
+                return true;
+            } else {
+                if ($clause === "orderBy") {
+                    throw (new RuntimeException())->columnNotExistInDatabase($value);
+                } else if ($clause === "direction") {
+                    throw (new RuntimeException())->valueNotAllowed($value, $clause);
+                }
             }
         }
     }

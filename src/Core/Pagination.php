@@ -4,6 +4,7 @@
 
 
     use jeyofdev\php\blog\Exception\NotFoundException;
+    use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Url;
     use PDO;
@@ -42,7 +43,7 @@
 
 
         /**
-         * @var PostTable
+         * @var PostTable|CategoryTable
          */
         private $table;
 
@@ -75,7 +76,11 @@
 
 
 
-        public function __construct (PDO $connection, string $queryDatas, string $queryCount, PostTable $table, int $perPage = 6)
+        /**
+         * @param PostTable|CategoryTable $table
+         * @param integer $perPage
+         */
+        public function __construct (PDO $connection, string $queryDatas, string $queryCount, $table, int $perPage = 6)
         {
             $this->connection = $connection;
             $this->queryDatas = $queryDatas;

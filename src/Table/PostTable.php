@@ -8,8 +8,6 @@
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
-    use jeyofdev\php\blog\Exception\RuntimeException;
-    use PDO;
 
 
     /**
@@ -38,42 +36,9 @@
 
 
         /**
-         * @var Pagination
-         */
-        private $pagination;
-
-
-
-        /**
-         * The columns of the current entity
-         *
-         * @var array
-         */
-        private $columns = [];
-
-
-
-        /**
          * @var DateTimeZone
          */
         private $timeZone;
-
-
-
-        /**
-         * The allowed values ​​for the results direction of a query
-         */
-        const DIRECTION_ALLOWED = ["ASC", "DESC"];
-
-
-
-        public function __construct (PDO $connection)
-        {
-            parent::__construct($connection);
-            $this->columns = $this->table
-                ->setColumns($this->table)
-                ->getColumns();
-        }
 
 
 
@@ -176,39 +141,6 @@
             ], ["id" => $post->getId()]);
 
             return $this;
-        }
-
-
-
-        /**
-         * Get the value of pagination
-         *
-         * @return Pagination
-         */
-        public function getPagination () : Pagination
-        {
-            return $this->pagination;
-        }
-
-
-
-        /**
-         * Check that a value is allowed in a clause of a query
-         *
-         * @param mixed $value
-         * @return bool|void
-         */
-        private function checkIfValueIsAllowed (string $clause, $value, array $allowed)
-        {
-            if (in_array($value, $allowed)) {
-                return true;
-            } else {
-                if ($clause === "orderBy") {
-                    throw (new RuntimeException())->columnNotExistInDatabase($value);
-                } else if ($clause === "direction") {
-                    throw (new RuntimeException())->valueNotAllowed($value, $clause);
-                }
-            }
         }
 
 

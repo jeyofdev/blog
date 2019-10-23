@@ -40,7 +40,10 @@ use jeyofdev\php\blog\Url;
         ->get('/admin/post/', 'admin/post/index', 'admin_posts')
         ->match('/admin/post/new/', 'admin/post/new', 'admin_post_new')
         ->match('/admin/post/[i:id]/', 'admin/post/edit', 'admin_post')
-        ->post('/admin/post/delete/[i:id]/', 'admin/post/delete', 'admin_post_delete');
+        ->post('/admin/post/delete/[i:id]/', 'admin/post/delete', 'admin_post_delete')
+
+        // categories
+        ->get('/admin/category/', 'admin/category/index', 'admin_categories');
 
 
     // controller

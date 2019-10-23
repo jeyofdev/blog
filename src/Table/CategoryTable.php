@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Table;
 
 
+    use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\PostCategory;
 
@@ -29,7 +30,6 @@
          * @var string
          */
         protected $className = Category::class;
-
 
 
 
@@ -75,6 +75,28 @@
             $query = $this->query($sql);
             
             return $this->fetchAll($query);
+        }
+
+
+
+        /**
+         * Get all the categories paginated
+         *
+         * @return Category[]
+         */
+        public function findAllCategoriesPaginated (int $perPage, string $orderBy = "id", string $direction = "ASC")
+        {
+            $direction = strtoupper($direction);
+
+            if ($this->checkIfValueIsAllowed("orderBy", $orderBy, $this->columns)) {
+                if ($this->checkIfValueIsAllowed("direction", $direction, self::DIRECTION_ALLOWED)) {
+                    $sqlPosts = "SELECT * FROM {$this->tableName} ORDER BY $orderBy $direction";
+                    $sqlCount = "SELECT COUNT(id) FROM {$this->tableName}";
+                    $this->pagination = new Pagination($this->connection, $sqlPosts, $sqlCount, $this, $perPage);
+
+                    return $this->pagination->getItemsPaginated();
+                }
+            }
         }
 
 

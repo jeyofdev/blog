@@ -21,7 +21,7 @@
     class PostController extends AbstractController
     {
         /**
-         * Set the datas of the page which lists the posts of the blog in the admin
+         * List the posts
          *
          * @return void
          */
