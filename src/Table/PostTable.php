@@ -135,6 +135,30 @@
 
 
         /**
+         * Create a new post
+         *
+         * @param Post $post
+         * @return self
+         */
+        public function createPost (Post $post, string $timeZone = "Europe/Paris") : self
+        {
+            $createdAt = $this->getCurrentDate($post, $timeZone);
+
+            $this->create([
+                "name" => $post->getName(),
+                "slug" => $post->getSlug(),
+                "content" => $post->getContent(),
+                "created_at" => $createdAt
+            ]);
+
+            $post->setId((int)$this->connection->lastInsertId());
+
+            return $this;
+        }
+
+
+
+        /**
          * Update a post
          *
          * @param Post $post
@@ -142,16 +166,11 @@
          */
         public function updatePost (Post $post, string $timeZone = "Europe/Paris") : self
         {
-            $this->timeZone = new DateTimeZone($timeZone);
-            $currentDate = (new DateTime("now", $this->timeZone))->format("Y-m-d H:i:s");
-
-            $updatedAt = $post
-                ->setUpdated_at($currentDate)
-                ->getUpdated_at()
-                ->format("Y-m-d H:i:s");
+            $updatedAt = $this->getCurrentDate($post, $timeZone);
 
             $this->update([
                 "name" => $post->getName(),
+                "slug" => $post->getSlug(),
                 "content" => $post->getContent(),
                 "updated_at" => $updatedAt
             ], ["id" => $post->getId()]);
@@ -190,5 +209,24 @@
                     throw (new RuntimeException())->valueNotAllowed($value, $clause);
                 }
             }
+        }
+
+
+
+        /**
+         * Initialize a date with the current date
+         *
+         * @param Post $post
+         * @return string
+         */
+        private function getCurrentDate (Post $post, $timeZone = "Europe/Paris") : string
+        {
+            $this->timeZone = new DateTimeZone($timeZone);
+            $currentDate = (new DateTime("now", $this->timeZone))->format("Y-m-d H:i:s");
+
+            return $post
+                ->setUpdated_at($currentDate)
+                ->getUpdated_at()
+                ->format("Y-m-d H:i:s");
         }
     }

@@ -13,7 +13,7 @@
      */
     class PostValidator extends AbstractValidator
     {
-        public function __construct(string $lang, array $datas, PostTable $tablePost, int $postID)
+        public function __construct(string $lang, array $datas, PostTable $tablePost, ?int $postID = null)
         {
             parent::__construct($datas);
 

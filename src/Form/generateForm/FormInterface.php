@@ -15,7 +15,7 @@
          *
          * @return string
          */
-        public function build ();
+        public function build (string $labelSubmit, $createdAt = false, $updatedAt = false);
 
 
 

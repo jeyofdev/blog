@@ -125,6 +125,23 @@
         /**
          * {@inheritDoc}
          */
+        public function create (array $params) : void
+        {
+            $set = $this->setQueryParams($params);
+
+            $sql = "INSERT INTO {$this->tableName} SET $set[0]";
+            $query = $this->prepare($sql, $set[1]);
+
+            if (!$query) {
+                throw (new ExecuteQueryFailedException())->createHasFailed("id", $this->tableName);
+            }
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function update (array $params, array $where) : void
         {
             $set = $this->setQueryParams($params);

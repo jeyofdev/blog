@@ -5,6 +5,9 @@
 <?= $flash; ?>
 
 
+<a class="btn btn-outline-primary my-5" href="<?= $router->url('admin_post_new'); ?>">Add a new post</a>
+
+
 <!-- list of posts -->
 <table class="table">
     <thead class="thead-dark">

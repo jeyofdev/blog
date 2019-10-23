@@ -19,7 +19,7 @@
          *
          * @return void
          */
-        public static function redirect () : void
+        public static function redirectToHome () : void
         {
             if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] === "/blog/") {
                 if (isset($_GET["page"]) && $_GET["page"] === "1") {
@@ -80,5 +80,20 @@
             }
 
             return (int)$_GET[$name];
+        }
+
+
+
+        /**
+         * Execute a redirection
+         *
+         * @param int $code http response code (301, 404, 200...)
+         * @return void
+         */
+        public static function redirect (int $code, string $url) : void
+        {
+            http_response_code($code);
+            header("Location: " . $url);
+            exit();
         }
     }

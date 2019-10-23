@@ -17,16 +17,24 @@
         /**
          * {@inheritDoc}
          */
-        public function build () : string
+        public function build (string $labelSubmit, $createdAt = false, $updatedAt = false) : string
         {
             $this
                 ->formStart("#", "post", "my-5")
                 ->input("text", "name", "Title :", [], ["tag" => "div"])
                 ->input("text", "slug", "Slug :", [], ["tag" => "div"])
-                ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"])
-                ->input("text", "created_at", "Creation date :", ["disabled" => true], ["tag" => "div"])
-                ->input("text", "updated_at", "Last modified date :", ["disabled" => true], ["tag" => "div"])
-                ->submit("Update")
+                ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"]);
+
+            if ($createdAt) {
+                $this->input("text", "created_at", "Creation date :", ["disabled" => true], ["tag" => "div"]);
+            }
+
+            if ($updatedAt) {
+                $this->input("text", "updated_at", "Last modified date :", ["disabled" => true], ["tag" => "div"]);
+            }
+
+            $this
+                ->submit($labelSubmit)
                 ->reset("Reset")
                 ->formEnd();
 

@@ -29,6 +29,15 @@
 
 
         /**
+         * Add a new row in the table
+         *
+         * @return void
+         */
+        public function create (array $params);
+
+
+
+        /**
          * Update a row from a table
          *
          * @return void
