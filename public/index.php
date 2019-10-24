@@ -2,9 +2,10 @@
 
     use jeyofdev\php\blog\Controller\AppController;
     use jeyofdev\php\blog\Router\Router;
-use jeyofdev\php\blog\Url;
+    use jeyofdev\php\blog\Url;
 
-// Autoload
+
+    // Autoload
     require dirname(__DIR__) . '/vendor/autoload.php';
 
 
@@ -43,7 +44,8 @@ use jeyofdev\php\blog\Url;
         ->post('/admin/post/delete/[i:id]/', 'admin/post/delete', 'admin_post_delete')
 
         // categories
-        ->get('/admin/category/', 'admin/category/index', 'admin_categories');
+        ->get('/admin/category/', 'admin/category/index', 'admin_categories')
+        ->post('/admin/category/delete/[i:id]/', 'admin/category/delete', 'admin_category_delete');
 
 
     // controller

@@ -1,6 +1,10 @@
 <h1 class="text-center"><?= $title; ?></h1>
 
 
+<!-- flash message -->
+<?= $flash; ?>
+
+
 <!-- list of categories -->
 <table class="table">
     <thead class="thead-dark">
@@ -20,6 +24,9 @@
                 </td>
                 <td>
                     <a class="btn btn-outline-info rounded" href="<?= $router->url('category', ['id' => $category->getId()]); ?>">View</a>
+                    <form style="display:inline;" action="<?= $router->url('admin_category_delete', ['id' => $category->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this category')">
+                        <button type="submit" class="btn btn-outline-danger rounded">delete</button>
+                    </form>
                 </td>
             </tr>
         <?php endforeach; ?>

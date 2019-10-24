@@ -32,7 +32,7 @@
                 <td>
                     <a class="btn btn-outline-info rounded" href="<?= $router->url('post', ['id' => $post->getId()]); ?>">View</a>
                     <a class="btn btn-outline-success rounded" href="<?= $router->url('admin_post', ['id' => $post->getId()]); ?>">Edit</a>
-                    <form style="display:inline;" action="<?= $router->url('admin_post_delete', ['id' => $post->getId()]); ?>" method="post" onsubmit="return confirm('Voulez vous vraiment supprimer cet article')">
+                    <form style="display:inline;" action="<?= $router->url('admin_post_delete', ['id' => $post->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this post')">
                         <button type="submit" class="btn btn-outline-danger rounded">delete</button>
                     </form>
                 </td>
