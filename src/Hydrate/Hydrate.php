@@ -37,6 +37,29 @@
 
 
         /**
+         * Add the associated categories to a post and 
+         * get the value of a column of each associated category
+         *
+         * @param CategoryTable $tableCategory
+         * @param Post $post
+         * @param string $column A column of the table Category
+         * @return void
+         */
+        public static function hydratePostBy (CategoryTable $tableCategory, Post $post, string $column) : void
+        {
+            self::hydratePost($tableCategory, $post);
+
+            $method = "get" . ucfirst($column);
+
+            $postCategories = [];
+            foreach ($post->getCategories() as $category) {
+                $postCategories[] = $category->$method();
+            }
+        }
+
+
+
+        /**
          * Add the associated categories on each post
          *
          * @param CategoryTable $tableCategory

@@ -20,7 +20,16 @@
 
 
         /**
-         * Get all the rows from a table
+         * Get all rows from a table
+         *
+         * @return array
+         */
+        public function findAll (int $fetchMode = PDO::FETCH_CLASS);
+
+
+
+        /**
+         * Get all the rows of a table and sort the results
          *
          * @return array
          */

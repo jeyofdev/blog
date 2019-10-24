@@ -67,7 +67,7 @@
         /**
          * The authorized Boolean attributes
          */
-        const ATTRIBUTE_BOOL_ALLOWED = ["autofocus", "disabled", "readonly", "required"];
+        const ATTRIBUTE_BOOL_ALLOWED = ["autofocus", "disabled", "readonly", "required", "multiple"];
 
 
 
@@ -152,6 +152,30 @@
             $textarea = $this->generateFormElement($textarea, $surround);
 
             $this->form["fields"][$name] = $textarea;
+
+            return $this;
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
+        public function select (string $name, string $label, array $options = [], array $optionsSelect, array $surround = [])
+        {
+            $value = !is_null($this->getValue($name)) ? $this->getValue($name) : null;
+            $class = array_key_exists("class", $options) ? $this->getClass($name, $options["class"]) : $this->getClass($name);
+
+            $options = $this->getOptions($options);
+            $optionSelect = $this->generateSelectOptions($optionsSelect, $value);
+
+            $select = '<label for="' . $name . '">' . $label . '</label>';
+            $select .= '<select class="' . $class . '" id="' . $name . '" name="' . $name . '" ' . $options . '>' . $optionSelect . '</select>';
+            $select .= $this->getErrorFeddback($name);
+
+            $select = $this->generateFormElement($select, $surround);
+
+            $this->form["fields"][$name] = $select;
 
             return $this;
         }
@@ -282,6 +306,31 @@
             }
 
             return isset($items) ? implode(" ", $items) : null;
+        }
+
+
+
+        /**
+         * Set the options tags of a select field
+         * 
+         * @param array $options The options of a select field
+         * @param array|null $value The values of the selected fields
+         * @return string
+         */
+        private function generateSelectOptions (array $options, ?array $value) : string
+        {
+            $optionsSelect = [];
+
+            foreach ($options as $k => $v) {
+                if (!is_null($value)) {
+                    $selected = in_array($k, $value) ? " selected" : null;
+                } else {
+                    $selected = null;
+                }
+                $optionsSelect[] = '<option value="' . $k . '"' . $selected . '>' . $v . '</option>';
+            }
+
+            return implode('', $optionsSelect);
         }
 
 

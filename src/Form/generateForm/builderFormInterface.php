@@ -47,6 +47,17 @@
 
 
         /**
+         * Set the select field
+         *
+        * @param array $options The optional attributes of the fields
+        * @param array $optionsSelect The options tags of the field
+        * @return self
+         */
+        public function select (string $name, string $label, array $options = [], array $optionsSelect, array $surround = []);
+
+
+
+        /**
          * Set a submit button
          *
          * @return self

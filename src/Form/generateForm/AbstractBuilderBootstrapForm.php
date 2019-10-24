@@ -41,6 +41,20 @@
         /**
          * {@inheritDoc}
          */
+        public function select (string $name, string $label, array $options = [], array $optionsSelect, array $surround = []) : self
+        {
+            $bootstrapClass = $this->SetBootstrapClass($options, $surround);
+            $options = $bootstrapClass[0];
+            $surround = $bootstrapClass[1];
+
+            return parent::select ($name, $label, $options, $optionsSelect, $surround);
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function submit (string $label, ?string $class = "btn btn-primary") : self
         {
             return parent::submit($label, $class);

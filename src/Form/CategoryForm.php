@@ -17,7 +17,7 @@
         /**
          * {@inheritDoc}
          */
-        public function build (string $labelSubmit, $createdAt = false, $updatedAt = false) : string
+        public function build (string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false) : string
         {
             $this
                 ->formStart("#", "post", "my-5")

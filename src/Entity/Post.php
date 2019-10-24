@@ -243,4 +243,22 @@
 
             return $this;
         }
+
+
+
+        /**
+         * Get the ids of the categories
+         *
+         * @return array
+         */
+        public function getCategoriesIds () : array
+        {
+            $ids =[];
+
+            foreach ($this->categories as $category) {
+                $ids[] = $category->getID() - 1;
+            }
+
+            return $ids;
+        }
     }

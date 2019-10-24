@@ -124,6 +124,19 @@
         /**
          * {@inheritDoc}
          */
+        public function findAll (int $fetchMode = PDO::FETCH_CLASS) : array
+        {
+            $sql = "SELECT * FROM {$this->tableName}";
+            $query = $this->query($sql, $fetchMode);
+
+            return $this->fetchAll($query);
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function findAllBy (?string $orderBy = null, string $direction = "ASC", ?int $limit = null, ?int $offset = null, int $fetchMode = PDO::FETCH_CLASS) : array
         {
             $sql = "SELECT * FROM {$this->tableName}";

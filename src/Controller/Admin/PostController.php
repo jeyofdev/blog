@@ -8,6 +8,8 @@
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validator\PostValidator;
+    use jeyofdev\php\blog\Hydrate\Hydrate;
+    use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Url;
     use PDO;
@@ -89,6 +91,7 @@
         public function edit () : void
         {
             $tablePost = new PostTable($this->connection);
+            $tableCategory = new CategoryTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -98,6 +101,12 @@
              * @var Post|null
              */
             $post = $tablePost->find(["id" => $id]);
+
+            // the names of all categories
+            $categories = $tableCategory->list("name");
+
+            // the categories associated with the current post
+            Hydrate::hydratePostBy($tableCategory, $post, "name");
 
             $success = false; // query success
             $errors = []; // form errors
@@ -136,7 +145,7 @@
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", $this->router, compact("form", "title", "flash"));
+            $this->render("admin.post.edit", $this->router, compact("categories", "form", "title", "flash"));
         }
 
 
@@ -149,6 +158,10 @@
         public function new () : void
         {
             $tablePost = new PostTable($this->connection);
+            $tableCategory = new CategoryTable($this->connection);
+
+            // the names of all categories
+            $categories = $tableCategory->list("name");
 
             $errors = []; // form errors
 
@@ -185,6 +198,6 @@
                 ->setTitle("Add a new post")
                 ->getTitle();
 
-            $this->render("admin.post.new", $this->router, compact("form", "title", "flash"));
+            $this->render("admin.post.new", $this->router, compact("categories", "form", "title", "flash"));
         }
     }

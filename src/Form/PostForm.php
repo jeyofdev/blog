@@ -17,12 +17,13 @@
         /**
          * {@inheritDoc}
          */
-        public function build (string $labelSubmit, $createdAt = false, $updatedAt = false) : string
+        public function build (string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false) : string
         {
             $this
                 ->formStart("#", "post", "my-5")
                 ->input("text", "name", "Title :", [], ["tag" => "div"])
                 ->input("text", "slug", "Slug :", [], ["tag" => "div"])
+                ->select("categoriesIds", "Categories :", ["multiple" => true], $categories, ["tag" => "div"])
                 ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"]);
 
             if ($createdAt) {

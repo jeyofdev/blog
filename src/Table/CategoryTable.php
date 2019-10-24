@@ -140,6 +140,30 @@
 
 
         /**
+         * Get the value of a column on all categories
+         *
+         * @return array
+         */
+        public function list (string $column) : array
+        {
+            /**
+             * @var Category[]
+             */
+            $categories = $this->findAll();
+
+            $method = "get" . ucfirst($column);
+
+            $allCategories = [];
+            foreach ($categories as $category) {
+                $allCategories[] = $category->$method();
+            }
+
+            return $allCategories;
+        }
+
+
+
+        /**
          * Set the names of the tables to use and their aliases for a join query
          *
          * @return array
