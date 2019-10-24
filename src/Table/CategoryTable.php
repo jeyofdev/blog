@@ -102,6 +102,26 @@
 
 
         /**
+         * Create a new category
+         *
+         * @param Category $category
+         * @return self
+         */
+        public function createCategory (Category $category) : self
+        {
+            $this->create([
+                "name" => $category->getName(),
+                "slug" => $category->getSlug()
+            ]);
+
+            $category->setId((int)$this->connection->lastInsertId());
+
+            return $this;
+        }
+
+
+
+        /**
          * Update a category
          *
          * @param Category $category

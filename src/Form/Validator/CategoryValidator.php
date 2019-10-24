@@ -20,7 +20,7 @@
             $this->validator::lang($lang);
 
             $this->validator->rule("required", ["name", "slug"]);
-            $this->validator->rule("lengthBetween", 'name', 3, 200);
+            $this->validator->rule("lengthBetween", ["name", "slug"], 3, 200);
             $this->validator->rule(function ($field, $value) use ($tableCategory, $categoryID) {
                 $params = [$field => $value];
                 return !$tableCategory->exists($params, $categoryID);

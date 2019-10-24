@@ -46,6 +46,8 @@
             $flash = null;
             if (isset($_GET["delete"])) {
                 $flash = '<div class="alert alert-success my-5">The category has been deleted</div>';
+            } else if (isset($_GET["create"])) {
+                $flash = '<div class="alert alert-success my-5">The post has been created</div>';
             }
 
             $title = App::getInstance()
@@ -53,6 +55,54 @@
                 ->getTitle();
 
             $this->render("admin.category.index", $this->router, compact("categories", "pagination", "link", "title", "flash"));
+        }
+
+
+
+        /**
+         * Add a new category
+         *
+         * @return void
+         */
+        public function new () : void
+        {
+            $tableCategory = new CategoryTable($this->connection);
+
+            $errors = []; // form errors
+
+            // check that the form is valid and update the post
+            $validator = new CategoryValidator("en", $_POST, $tableCategory);
+
+            if ($validator->isSubmit()) {
+                $category = new Category();
+                $category
+                    ->setName($_POST["name"])
+                    ->setSlug($_POST["slug"]);
+
+                if ($validator->isValid()) {
+                    $tableCategory->createCategory($category);
+
+                    $url = $this->router->url("admin_categories", ["id" => $category->getId()]) . "?create=1";
+                    Url::redirect(301, $url);
+                } else {
+                    $errors = $validator->getErrors();
+                }
+            }
+
+            // form
+            $form = new CategoryForm($_POST, $errors);
+
+            // flash message
+            $flash = null;
+            if (!empty($errors)) {
+                $flash = '<div class="alert alert-danger my-5">The catégorie could not be created</div>';
+            }
+
+            $title = App::getInstance()
+                ->setTitle("Add a new category")
+                ->getTitle();
+
+            $this->render("admin.category.new", $this->router, compact("form", "title", "flash"));
         }
 
 

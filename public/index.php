@@ -45,6 +45,7 @@
 
         // categories
         ->get('/admin/category/', 'admin/category/index', 'admin_categories')
+        ->match('/admin/category/new/', 'admin/category/new', 'admin_category_new')
         ->match('/admin/category/[i:id]/', 'admin/category/edit', 'admin_category')
         ->post('/admin/category/delete/[i:id]/', 'admin/category/delete', 'admin_category_delete');
 

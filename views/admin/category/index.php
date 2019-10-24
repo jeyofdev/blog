@@ -5,6 +5,9 @@
 <?= $flash; ?>
 
 
+<a class="btn btn-outline-primary my-5" href="<?= $router->url('admin_category_new'); ?>">Add a new category</a>
+
+
 <!-- list of categories -->
 <table class="table">
     <thead class="thead-dark">
