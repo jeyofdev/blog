@@ -7,6 +7,8 @@
     use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Category;
+    use jeyofdev\php\blog\Form\CategoryForm;
+    use jeyofdev\php\blog\Form\Validator\CategoryValidator;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Url;
 
@@ -43,7 +45,7 @@
             // flash message
             $flash = null;
             if (isset($_GET["delete"])) {
-                $flash = '<div class="alert alert-success my-5">The post has been deleted</div>';
+                $flash = '<div class="alert alert-success my-5">The category has been deleted</div>';
             }
 
             $title = App::getInstance()
@@ -51,6 +53,66 @@
                 ->getTitle();
 
             $this->render("admin.category.index", $this->router, compact("categories", "pagination", "link", "title", "flash"));
+        }
+
+
+
+        /**
+         * Update a category
+         *
+         * @return void
+         */
+        
+        public function edit () : void
+        {
+            $tableCategory = new CategoryTable($this->connection);
+
+            // url settings of the current page
+            $params = $this->router->getParams();
+            $id = (int)$params["id"];
+
+            /**
+             * @var Category|null
+             */
+            $category = $tableCategory->find(["id" => $id]);
+
+            $success = false; // query success
+            $errors = []; // form errors
+
+            // check that the form is valid and update the category
+            $validator = new CategoryValidator("en", $_POST, $tableCategory, $category->getId());
+
+            if ($validator->isSubmit()) {
+                $category
+                    ->setName($_POST["name"])
+                    ->setSlug($_POST["slug"]);
+
+                if ($validator->isValid()) {
+                    $tableCategory->updateCategory($category);
+                    $success = true;
+                } else {
+                    $errors = $validator->getErrors();
+                }
+            }
+
+            // form
+            $form = new CategoryForm($category, $errors);
+
+            // flash message
+            $flash = null;
+            if ($success) {
+                $flash = '<div class="alert alert-success my-5">The category has been updated</div>';
+            }
+
+            if (!empty($errors)) {
+                $flash = '<div class="alert alert-danger my-5">The category could not be updated</div>';
+            }
+
+            $title = App::getInstance()
+                ->setTitle("Edit the category with the id : $id")
+                ->getTitle();
+
+            $this->render("admin.category.edit", $this->router, compact("form", "title", "flash"));
         }
 
 

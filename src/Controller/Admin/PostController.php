@@ -82,7 +82,7 @@
 
 
         /**
-         * Edit a post
+         * Update a post
          *
          * @return void
          */
@@ -136,7 +136,7 @@
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", $this->router, compact("post", "form", "title", "flash"));
+            $this->render("admin.post.edit", $this->router, compact("form", "title", "flash"));
         }
 
 

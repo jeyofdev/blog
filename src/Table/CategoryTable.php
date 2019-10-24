@@ -102,6 +102,24 @@
 
 
         /**
+         * Update a category
+         *
+         * @param Category $category
+         * @return self
+         */
+        public function updateCategory (Category $category) : self
+        {
+            $this->update([
+                "name" => $category->getName(),
+                "slug" => $category->getSlug()
+            ], ["id" => $category->getId()]);
+
+            return $this;
+        }
+
+
+
+        /**
          * Set the names of the tables to use and their aliases for a join query
          *
          * @return array

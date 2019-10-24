@@ -24,6 +24,7 @@
                 </td>
                 <td>
                     <a class="btn btn-outline-info rounded" href="<?= $router->url('category', ['id' => $category->getId()]); ?>">View</a>
+                    <a class="btn btn-outline-success rounded" href="<?= $router->url('admin_category', ['id' => $category->getId()]); ?>">Edit</a>
                     <form style="display:inline;" action="<?= $router->url('admin_category_delete', ['id' => $category->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this category')">
                         <button type="submit" class="btn btn-outline-danger rounded">delete</button>
                     </form>
