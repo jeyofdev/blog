@@ -112,6 +112,26 @@
         /**
          * {@inheritDoc}
          */
+        public function emptyAllTable (...$tablesName) : self
+        {
+            $this->manager->prepareAndExecute($this->manager->getConnection(), "SET FOREIGN_KEY_CHECKS = 0");
+
+            foreach ($tablesName as $table) {
+                $this->manager->prepareAndExecute($this->manager->getConnection(), "TRUNCATE TABLE " . $table->getTableName());
+            }
+
+            $this->manager
+                ->prepareAndExecute($this->manager->getConnection(), "TRUNCATE TABLE " . $this->getTableName())
+                ->prepareAndExecute($this->manager->getConnection(), "SET FOREIGN_KEY_CHECKS = 1");
+
+            return $this;
+        }
+
+
+
+        /**
+         * {@inheritDoc}
+         */
         public function createColumns(EntityManager $manager)
         {
             $this->manager = $manager;

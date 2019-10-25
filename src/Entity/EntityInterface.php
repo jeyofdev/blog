@@ -41,6 +41,15 @@
 
 
         /**
+         * Empty all tables
+         *
+         * @return self
+         */
+        public function emptyAllTable (...$tablesName);
+
+
+
+        /**
          * Create the columns of the table
          *
          * @param EntityManager $manager

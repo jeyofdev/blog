@@ -4,9 +4,11 @@
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostCategory;
+    use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Fixtures\CategoryFixtures;
     use jeyofdev\php\blog\Fixtures\PostCategoryFixtures;
     use jeyofdev\php\blog\Fixtures\PostFixtures;
+    use jeyofdev\php\blog\Fixtures\UserFixtures;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -50,14 +52,26 @@
         ->addTable();
 
 
+    // add the 'user' table
+    $user = new User();
+    $user
+        ->createColumns($manager)
+        ->addTable()
+        ->emptyAllTable($post, $category, $post_category);
+
+
     // Add the fixtures on the 'post' table
-    $postFixture = new PostFixtures($manager, $post, "fr_FR");
+    $postFixture = new PostFixtures($manager, $post, "en_US");
     $postFixture->add();
 
     // Add the fixtures on the 'category' table
-    $categoryFixture = new CategoryFixtures($manager, $category, "fr_FR");
+    $categoryFixture = new CategoryFixtures($manager, $category, "en_US");
     $categoryFixture->add();
 
     // Add the fixtures on the 'post_category' table
-    $post_categoryFixture = new PostCategoryFixtures($manager, $post_category, "fr_FR", $postFixture, $categoryFixture);
+    $post_categoryFixture = new PostCategoryFixtures($manager, $post_category, "en_US", $postFixture, $categoryFixture);
     $post_categoryFixture->add();
+
+    // Add the fixtures on the 'user' table
+    $userFixture = new UserFixtures($manager, $user, "en_US", $postFixture);
+    $userFixture->add();
