@@ -84,7 +84,8 @@
             $page = explode(".", $target);
 
             $this->controller = "\jeyofdev\php\blog\Controller\\";
-            if ($page[0] !== "admin") {
+
+            if (count($page) === 2) {
                 $this->controller .= ucfirst($page[0]);
             } else {
                 $this->controller .= ucfirst($page[0]) . "\\" . ucfirst($page[1]);
