@@ -70,6 +70,7 @@
             // get the ids of each items
             $postsById = [];
             foreach ($posts as $post) {
+                $post->setCategories();
                 $postsById[$post->getId()] = $post;
             }
             $ids = implode(", ", array_keys($postsById));

@@ -112,7 +112,7 @@
             $errors = []; // form errors
 
             // check that the form is valid and update the post
-            $validator = new PostValidator("en", $_POST, $tablePost, $post->getId());
+            $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
 
             if ($validator->isSubmit()) {
                 $post
@@ -121,7 +121,8 @@
                     ->setContent($_POST["content"]);
 
                 if ($validator->isValid()) {
-                    $tablePost->updatePost($post, "Europe/Paris");
+                    $tablePost->updatePost($post, "Europe/Paris", "post_category");
+                    Hydrate::hydrateAllPosts($tableCategory, [$post]);
                     $success = true;
                 } else {
                     $errors = $validator->getErrors();
@@ -165,8 +166,8 @@
 
             $errors = []; // form errors
 
-            // check that the form is valid and update the post
-            $validator = new PostValidator("en", $_POST, $tablePost);
+            // check that the form is valid and create the post
+            $validator = new PostValidator("en", $_POST, $tablePost, $categories);
 
             if ($validator->isSubmit()) {
                 $post = new Post();
@@ -177,6 +178,7 @@
 
                 if ($validator->isValid()) {
                     $tablePost->createPost($post, "Europe/Paris");
+                    Hydrate::hydrateAllPosts($tableCategory, [$post]);
 
                     $url = $this->router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
                     Url::redirect(301, $url);

@@ -40,7 +40,7 @@
         /**
          * Add a new row in the table
          *
-         * @return void
+         * @return self
          */
         public function create (array $params);
 
@@ -49,7 +49,7 @@
         /**
          * Update a row from a table
          *
-         * @return void
+         * @return self
          */
         public function update (array $params, array $where);
 
@@ -58,7 +58,7 @@
         /**
          * Delete a row from a table
          *
-         * @return void
+         * @return self
          */
         public function delete (array $params);
 

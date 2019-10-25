@@ -8,6 +8,8 @@
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Entity\PostCategory;
+    use PDO;
 
 
     /**
@@ -118,6 +120,9 @@
 
             $post->setId((int)$this->connection->lastInsertId());
 
+            $this->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
+
+
             return $this;
         }
 
@@ -133,12 +138,44 @@
         {
             $updatedAt = $this->getCurrentDate($post, $timeZone);
 
-            $this->update([
-                "name" => $post->getName(),
-                "slug" => $post->getSlug(),
-                "content" => $post->getContent(),
-                "updated_at" => $updatedAt
-            ], ["id" => $post->getId()]);
+            $this
+                ->update([
+                    "name" => $post->getName(),
+                    "slug" => $post->getSlug(),
+                    "content" => $post->getContent(),
+                    "updated_at" => $updatedAt
+                ], ["id" => $post->getId()]);
+
+            $this->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
+
+            return $this;
+        }
+
+
+
+        /**
+         * Delete the categories related to the current article
+         * and add the new categories to the current article
+         *
+         * @return self
+         */
+        public function attachCategories (int $postId, array $params, int $fetchMode = PDO::FETCH_CLASS) : self
+        {
+            $tableName = (new PostCategory)->getTableName();
+
+            $this->delete(["post_id" => $postId], $tableName);
+
+            $set = $this->setQueryParams($params);
+
+            $sql = "INSERT INTO $tableName SET $set[0]";
+            $query = $this->connection->prepare($sql);
+            foreach ($params["category_id"] as $category) {
+                $query->execute([
+                    "post_id" => $postId,
+                    "category_id" => $category + 1
+                ]);
+                $this->setFetchMode($fetchMode);
+            }
 
             return $this;
         }

@@ -164,7 +164,7 @@
         /**
          * {@inheritDoc}
          */
-        public function create (array $params) : void
+        public function create (array $params) : self
         {
             $set = $this->setQueryParams($params);
 
@@ -174,6 +174,8 @@
             if (!$query) {
                 throw (new ExecuteQueryFailedException())->createHasFailed("id", $this->tableName);
             }
+
+            return $this;
         }
 
 
@@ -181,7 +183,7 @@
         /**
          * {@inheritDoc}
          */
-        public function update (array $params, array $where) : void
+        public function update (array $params, array $where) : self
         {
             $set = $this->setQueryParams($params);
             $where = $this->setQueryParams($where);
@@ -192,6 +194,8 @@
             if (!$query) {
                 throw (new ExecuteQueryFailedException())->updateHasFailed("id", $this->tableName);
             }
+
+            return $this;
         }
 
 
@@ -199,16 +203,19 @@
         /**
          * {@inheritDoc}
          */
-        public function delete (array $params) : void
+        public function delete (array $params, ?string $tableName = null) : self
         {
+            $tableName = is_null($tableName) ? $this->tableName : $tableName;
             $where = $this->setWhere($params);
 
-            $sql = "DELETE FROM {$this->tableName} WHERE $where";
+            $sql = "DELETE FROM $tableName WHERE $where";
             $query = $this->prepare($sql, $params);
 
             if (!$query) {
                 throw (new ExecuteQueryFailedException())->deleteHasFailed("id", $this->tableName);
             }
+
+            return $this;
         }
 
 
@@ -270,7 +277,7 @@
          *
          * @return array
          */
-        private function setQueryParams (array $params) : array
+        protected function setQueryParams (array $params) : array
         {
             $items = [];
             $itemsValues = [];

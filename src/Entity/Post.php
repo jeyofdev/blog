@@ -231,6 +231,19 @@
 
 
         /**
+         * Set the associated categories of the post
+         *
+         * @return self
+         */
+        public function setCategories (array $categories = []) : self
+        {
+            $this->categories = $categories;
+            return $this;
+        }
+
+
+
+        /**
          * Add a category on the post
          *
          * @param Category $category

@@ -170,7 +170,7 @@
             $optionSelect = $this->generateSelectOptions($optionsSelect, $value);
 
             $select = '<label for="' . $name . '">' . $label . '</label>';
-            $select .= '<select class="' . $class . '" id="' . $name . '" name="' . $name . '" ' . $options . '>' . $optionSelect . '</select>';
+            $select .= '<select class="' . $class . '" id="' . $name . '" name="' . $name . '[]" ' . $options . '>' . $optionSelect . '</select>';
             $select .= $this->getErrorFeddback($name);
 
             $select = $this->generateFormElement($select, $surround);
