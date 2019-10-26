@@ -8,11 +8,11 @@
 
 
     /**
-     * Build the form related to categories
+     * Build the form related to the connection to the database
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */
-    class CategoryForm extends AbstractBuilderBootstrapForm implements FormInterface
+    class LoginForm extends AbstractBuilderBootstrapForm implements FormInterface
     {
         /**
          * {@inheritDoc}
@@ -21,10 +21,9 @@
         {
             $this
                 ->formStart($url, "post", "my-5")
-                ->input("text", "name", "Title :", [], ["tag" => "div"])
-                ->input("text", "slug", "Slug :", [], ["tag" => "div"])
+                ->input("text", "username", "Username :", [], ["tag" => "div"])
+                ->input("password", "password", "Password :", [], ["tag" => "div"])
                 ->submit($labelSubmit)
-                ->reset("Reset")
                 ->formEnd();
 
             return implode("\n", $this->extract());

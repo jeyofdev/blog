@@ -5,5 +5,5 @@
 <?= $flash; ?>
 
 
-<!-- the form to update a category -->
-<?= $form->build($url, "Update"); ?>
+<!-- the form to connect to the database -->
+<?= $form->build($url, "Log in"); ?>

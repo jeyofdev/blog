@@ -15,7 +15,7 @@
          *
          * @return string
          */
-        public function build (string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false);
+        public function build (string $url, string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false);
 
 
 

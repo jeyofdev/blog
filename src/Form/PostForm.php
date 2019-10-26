@@ -17,10 +17,10 @@
         /**
          * {@inheritDoc}
          */
-        public function build (string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false) : string
+        public function build (string $url, string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false) : string
         {
             $this
-                ->formStart("#", "post", "my-5")
+                ->formStart($url, "post", "my-5")
                 ->input("text", "name", "Title :", [], ["tag" => "div"])
                 ->input("text", "slug", "Slug :", [], ["tag" => "div"])
                 ->select("categoriesIds", "Categories :", ["multiple" => true], $categories, ["tag" => "div"])

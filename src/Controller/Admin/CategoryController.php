@@ -92,6 +92,9 @@
             // form
             $form = new CategoryForm($_POST, $errors);
 
+            // url of the current page
+            $url = $this->router->url("admin_category_new");
+
             // flash message
             $flash = null;
             if (!empty($errors)) {
@@ -102,7 +105,7 @@
                 ->setTitle("Add a new category")
                 ->getTitle();
 
-            $this->render("admin.category.new", $this->router, compact("form", "title", "flash"));
+            $this->render("admin.category.new", $this->router, compact("form", "url", "title", "flash"));
         }
 
 
@@ -148,6 +151,9 @@
             // form
             $form = new CategoryForm($category, $errors);
 
+            // url of the current page
+            $url = $this->router->url("admin_category", ["id" => $id]);
+
             // flash message
             $flash = null;
             if ($success) {
@@ -162,7 +168,7 @@
                 ->setTitle("Edit the category with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.category.edit", $this->router, compact("form", "title", "flash"));
+            $this->render("admin.category.edit", $this->router, compact("form", "url", "title", "flash"));
         }
 
 

@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Entity;
 
 
+    use jeyofdev\php\blog\Helpers\Helpers;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -41,6 +42,8 @@
 
         /**
          * Get the value of id
+         * 
+         * @return int|null
          */ 
         public function getId () : ?int
         {
@@ -64,10 +67,12 @@
 
         /**
          * Get the value of username
+         * 
+         * @return string|null
          */ 
         public function getUsername () : ?string
         {
-            return $this->username;
+            return Helpers::e($this->username);
         }
 
 
@@ -75,9 +80,9 @@
         /**
          * Set the value of username
          *
-         * @return  self
+         * @return self
          */ 
-        public function setUsername ($username) : self
+        public function setUsername (string $username) : self
         {
             $this->username = $username;
             return $this;
@@ -87,6 +92,8 @@
 
         /**
          * Get the value of password
+         * 
+         * @return string|null
          */ 
         public function getPassword () : ?string
         {
@@ -98,9 +105,9 @@
         /**
          * Set the value of password
          *
-         * @return  self
+         * @return self
          */ 
-        public function setPassword($password) : self
+        public function setPassword(string $password) : self
         {
             $this->password = password_hash($password, PASSWORD_BCRYPT);
             return $this;

@@ -6,4 +6,4 @@
 
 
 <!-- the form to update a post -->
-<?= $form->build("Update", $categories, true, true); ?>
+<?= $form->build($url, "Update", $categories, true, true); ?>

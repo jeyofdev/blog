@@ -132,6 +132,9 @@
             // form
             $form = new PostForm($post, $errors);
 
+            // url of the current page
+            $url = $this->router->url("admin_post", ["id" => $id]);
+
             // flash message
             $flash = null;
             if ($success) {
@@ -146,7 +149,7 @@
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", $this->router, compact("categories", "form", "title", "flash"));
+            $this->render("admin.post.edit", $this->router, compact("categories", "form", "url", "title", "flash"));
         }
 
 
@@ -190,6 +193,9 @@
             // form
             $form = new PostForm($_POST, $errors);
 
+            // url of the current page
+            $url = $this->router->url("admin_post_new");
+
             // flash message
             $flash = null;
             if (!empty($errors)) {
@@ -200,6 +206,6 @@
                 ->setTitle("Add a new post")
                 ->getTitle();
 
-            $this->render("admin.post.new", $this->router, compact("categories", "form", "title", "flash"));
+            $this->render("admin.post.new", $this->router, compact("categories", "form", "url", "title", "flash"));
         }
     }

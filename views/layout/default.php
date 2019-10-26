@@ -27,6 +27,12 @@
                         <a class="nav-link" href="<?= $router->url("admin"); ?>">Admin</a>
                     </li>
                 </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $router->url("login"); ?>">Log in</a>
+                    </li>
+                </ul>
             </div>
         </nav>
 

@@ -6,4 +6,4 @@
 
 
 <!-- the form to add a new category -->
-<?= $form->build("Add"); ?>
+<?= $form->build($url, "Add"); ?>

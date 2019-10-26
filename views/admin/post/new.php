@@ -6,4 +6,4 @@
 
 
 <!-- the form to add a new post -->
-<?= $form->build("Add", $categories); ?>
+<?= $form->build($url, "Add", $categories); ?>
