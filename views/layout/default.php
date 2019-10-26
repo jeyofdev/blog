@@ -30,7 +30,11 @@
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->url("login"); ?>">Log in</a>
+                        <?php if (isset($_SESSION["auth"])) : ?>
+                            <a class="nav-link" href="<?= $router->url("logout"); ?>">Log out</a>
+                        <?php else : ?>
+                            <a class="nav-link" href="<?= $router->url("login"); ?>">Log in</a>
+                        <?php endif; ?>
                     </li>
                 </ul>
             </div>

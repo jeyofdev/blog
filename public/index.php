@@ -34,6 +34,7 @@
         ->get('/blog/[*:slug]-[i:id]/', 'post/show', 'post')
         ->get('/category/[*:slug]-[i:id]/', 'category/show', 'category')
         ->match('/login/', 'security/auth/login', 'login')
+        ->match('/logout/', 'security/auth/logout', 'logout')
 
         // back
         ->get('/admin/', 'admin/home/index', 'admin')

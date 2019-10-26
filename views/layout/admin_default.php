@@ -30,6 +30,12 @@
                         <a class="nav-link" href="<?= $router->url("admin_categories"); ?>">Categories</a>
                     </li>
                 </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $router->url("logout"); ?>">Log out</a>
+                    </li>
+                </ul>
             </div>
         </nav>
 

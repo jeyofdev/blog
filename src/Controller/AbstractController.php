@@ -45,6 +45,10 @@
          */
         public function __construct (Router $router)
         {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $this->router = $router;
 
             $database = new Database("localhost", "root", "root", "php_blog");

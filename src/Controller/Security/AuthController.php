@@ -20,7 +20,7 @@
     class AuthController extends AbstractController
     {
         /**
-         * Login to the admin
+         * Log in
          *
          * @return void
          */
@@ -42,7 +42,6 @@
 
                     // check that the password is the same as the password of the database
                     if ($currentUser && (password_verify($_POST["password"], $currentUser->getPassword()))) {
-                        session_start();
                         $_SESSION["auth"] = $currentUser->getID();
 
                         $url = $this->router->url("admin");
@@ -79,5 +78,20 @@
                 ->getTitle();
 
             $this->render("security.auth.login", $this->router, compact("form", "url", "title", "flash"));
+        }
+
+
+
+        /**
+         * Log out
+         *
+         * @return void
+         */
+        public function logout () : void
+        {
+            session_destroy();
+
+            $url = $this->router->url("home");
+            Url::redirect(301, $url);
         }
     }
