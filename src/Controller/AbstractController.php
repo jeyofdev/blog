@@ -49,6 +49,12 @@
                 session_start();
             }
 
+            // if the user wants to access the login page while already logged in, 
+            // save the uri of the current page
+            if ($_SERVER["REQUEST_URI"] !== "/login/" && $_SERVER["REQUEST_URI"] !== "/login") {
+                $_SESSION["URI"] = $_SERVER["REQUEST_URI"];
+            }
+
             $this->router = $router;
 
             $database = new Database("localhost", "root", "root", "php_blog");

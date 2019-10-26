@@ -26,6 +26,15 @@
          */
         public function login () : void
         {
+            $this->getHttpReferer();
+
+            // if the user is already logged in,
+            // redirection to the previous page
+            if (isset($_SESSION["auth"])) {
+                $url = $_SESSION["URI"];
+                Url::redirect(301, $url);
+            }
+
             $tableUser = new UserTable($this->connection);
 
             $errors = []; // form errors
@@ -44,7 +53,13 @@
                     if ($currentUser && (password_verify($_POST["password"], $currentUser->getPassword()))) {
                         $_SESSION["auth"] = $currentUser->getID();
 
-                        $url = $this->router->url("admin");
+                        // redirection to the previous page
+                        $url = $this->getHttpRefererRouteName();
+
+                        if ($url === "/login/?forbidden=1") {
+                            $url = $this->router->url("admin");
+                        }
+
                         Url::redirect(301, $url);
                     } else {
                         $errors["connection"] = true;
@@ -91,7 +106,50 @@
         {
             session_destroy();
 
-            $url = $this->router->url("home");
+            $url = $this->getHttpRefererRouteName();
+
+            if ($url === "/admin/") {
+                $url = $this->router->url("home");
+            }
+
             Url::redirect(301, $url);
+        }
+
+
+
+        /**
+         * Save the url of the redirected page
+         *
+         * @return void
+         */
+        private function getHttpReferer () : void
+        {
+            $url = $this->getHttpRefererRouteName();
+
+            if ($url !== "/login/") {
+                $_SESSION["HTTP_REFERER"] = $url;
+            } else if ($url === "/login/") {
+                $urlLength = strlen($url);
+                $_SERVER["HTTP_REFERER"] = substr($_SERVER["HTTP_REFERER"], 0, -$urlLength) . $_SESSION["HTTP_REFERER"];
+            }
+        }
+
+
+
+        /**
+         * Get the name of the route corresponding to the redirected page
+         *
+         * @return string
+         */
+        private function getHttpRefererRouteName () : string
+        {
+            if (isset($_SERVER["HTTP_REFERER"])) {
+                $posFirstSlash = strpos($_SERVER["HTTP_REFERER"], "/", 8);
+                $url = substr($_SERVER["HTTP_REFERER"], $posFirstSlash);
+            } else {
+                $url = "/admin/";
+            }
+
+            return $url;
         }
     }
