@@ -5,6 +5,7 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Controller\AbstractController;
+    use jeyofdev\php\blog\Core\Auth;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validator\PostValidator;
@@ -29,6 +30,9 @@
          */
         public function index () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tablePost = new PostTable($this->connection);
 
             /**
@@ -68,6 +72,9 @@
          */
         public function delete () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tablePost = new PostTable($this->connection);
 
             // url settings of the current page
@@ -90,6 +97,9 @@
          */
         public function edit () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tablePost = new PostTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
 
@@ -161,6 +171,9 @@
          */
         public function new () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tablePost = new PostTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
 

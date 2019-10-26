@@ -5,6 +5,7 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Controller\AbstractController;
+    use jeyofdev\php\blog\Core\Auth;
 
 
     /**
@@ -16,6 +17,9 @@
     {
         public function index () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $title = App::getInstance()
                 ->setTitle("Administration of the blog")
                 ->getTitle();

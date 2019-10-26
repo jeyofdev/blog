@@ -42,6 +42,9 @@
 
                     // check that the password is the same as the password of the database
                     if ($currentUser && (password_verify($_POST["password"], $currentUser->getPassword()))) {
+                        session_start();
+                        $_SESSION["auth"] = $currentUser->getID();
+
                         $url = $this->router->url("admin");
                         Url::redirect(301, $url);
                     } else {
@@ -59,12 +62,16 @@
             // url of the current page
             $url = $this->router->url("login");
 
-            // // flash message
+            // flash message
             $flash = null;
             if (array_key_exists("form", $errors)) {
                 $flash = '<div class="alert alert-danger my-5">The form contains errors</div>';
             } else if (array_key_exists("connection", $errors)) {
                 $flash = '<div class="alert alert-danger my-5">Username or password is incorrect</div>';
+            }
+
+            if (isset($_GET["forbidden"])) {
+                $flash = '<div class="alert alert-danger my-5">To access the pages of the admin, you must identify yourself</div>';
             }
 
             $title = App::getInstance()

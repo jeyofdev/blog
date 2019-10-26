@@ -5,6 +5,7 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Controller\AbstractController;
+    use jeyofdev\php\blog\Core\Auth;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Form\CategoryForm;
@@ -27,6 +28,9 @@
          */
         public function index () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tableCategory = new CategoryTable($this->connection);
 
             /**
@@ -66,6 +70,9 @@
          */
         public function new () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tableCategory = new CategoryTable($this->connection);
 
             $errors = []; // form errors
@@ -118,6 +125,9 @@
         
         public function edit () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tableCategory = new CategoryTable($this->connection);
 
             // url settings of the current page
@@ -180,6 +190,9 @@
          */
         public function delete () : void
         {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
             $tableCategory = new CategoryTable($this->connection);
 
             // url settings of the current page
