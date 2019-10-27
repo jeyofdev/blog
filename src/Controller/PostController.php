@@ -46,7 +46,7 @@
 
             App::getInstance()->setTitle("List of posts");
 
-            $this->render("post.index", $this->router, compact("posts", "pagination", "link"));
+            $this->render("post.index", $this->router, $this->session, compact("posts", "pagination", "link"));
         }
 
 
@@ -80,6 +80,6 @@
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
-            $this->render("post.show", $this->router, compact("post", "title"));
+            $this->render("post.show", $this->router, $this->session, compact("post", "title"));
         }
     }

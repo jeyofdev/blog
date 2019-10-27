@@ -63,6 +63,6 @@
                 ->setTitle($category->getName(), "List of posts of the category : ")
                 ->getTitle();
 
-            $this->render("category.show", $this->router, compact("posts", "pagination", "link", "title"));
+            $this->render("category.show", $this->router, $this->session, compact("posts", "pagination", "link", "title"));
         }
     }

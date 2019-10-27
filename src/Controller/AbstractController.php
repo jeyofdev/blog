@@ -6,6 +6,7 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Exception\NotFoundException;
     use jeyofdev\php\blog\Router\Router;
+    use jeyofdev\php\blog\Session\Session;
     use jeyofdev\php\blog\Url;
     use PDO;
 
@@ -17,6 +18,13 @@
      */
     abstract class AbstractController implements ControllerInterface
     {
+        /**
+         * @var Session
+         */
+        protected $session;
+
+
+
         /**
          * @var Router
          */
@@ -45,14 +53,12 @@
          */
         public function __construct (Router $router)
         {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+            $this->session = new Session();
 
             // if the user wants to access the login page while already logged in, 
             // save the uri of the current page
             if ($_SERVER["REQUEST_URI"] !== "/login/" && $_SERVER["REQUEST_URI"] !== "/login") {
-                $_SESSION["URI"] = $_SERVER["REQUEST_URI"];
+                $this->session->write("URI", $_SERVER["REQUEST_URI"]);
             }
 
             $this->router = $router;
@@ -66,7 +72,7 @@
         /**
          * {@inheritDoc}
          */
-        public function render (string $view, Router $router, array $datas = []) : void
+        public function render (string $view, Router $router, Session $session, array $datas = []) : void
         {
             $isAdmin = strpos($view, "admin") !== false;
             $layout = !$isAdmin ? "layout/default.php" : "layout/admin_default.php";

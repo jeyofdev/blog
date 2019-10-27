@@ -4,6 +4,7 @@
 
 
     use jeyofdev\php\blog\Router\Router;
+    use jeyofdev\php\blog\Session\Session;
     use jeyofdev\php\blog\Url;
 
 
@@ -22,11 +23,9 @@
          */
         public static function isConnect (Router $router) : void
         {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+            $session = new Session();
 
-            if (!isset($_SESSION["auth"])) {
+            if (!$session->exist("auth")) {
                 $url = $router->url("login") . "?forbidden=1";
                 Url::redirect(301, $url);
             }

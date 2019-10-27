@@ -30,7 +30,7 @@
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <?php if (isset($_SESSION["auth"])) : ?>
+                        <?php if ($session->exist("auth")) : ?>
                             <a class="nav-link" href="<?= $router->url("logout"); ?>">Log out</a>
                         <?php else : ?>
                             <a class="nav-link" href="<?= $router->url("login"); ?>">Log in</a>

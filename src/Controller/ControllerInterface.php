@@ -6,6 +6,7 @@
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Router\Router;
+    use jeyofdev\php\blog\Session\Session;
 
 
     /**
@@ -20,7 +21,7 @@
          *
          * @return void
          */
-        public function render (string $view, Router $router, array $datas = []);
+        public function render (string $view, Router $router, Session $session, array $datas = []);
 
 
 

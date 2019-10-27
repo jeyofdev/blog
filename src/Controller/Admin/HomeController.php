@@ -24,6 +24,6 @@
                 ->setTitle("Administration of the blog")
                 ->getTitle();
 
-            $this->render("admin.home.index", $this->router, compact("title"));
+            $this->render("admin.home.index", $this->router, $this->session, compact("title"));
         }
     }

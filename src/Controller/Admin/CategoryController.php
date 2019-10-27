@@ -47,18 +47,13 @@
             $link = $this->router->url("admin_categories");
 
             // flash message
-            $flash = null;
-            if (isset($_GET["delete"])) {
-                $flash = '<div class="alert alert-success my-5">The category has been deleted</div>';
-            } else if (isset($_GET["create"])) {
-                $flash = '<div class="alert alert-success my-5">The post has been created</div>';
-            }
+            $flash = $this->session->generateFlash();
 
             $title = App::getInstance()
                 ->setTitle("Administration of categories")
                 ->getTitle();
 
-            $this->render("admin.category.index", $this->router, compact("categories", "pagination", "link", "title", "flash"));
+            $this->render("admin.category.index", $this->router, $this->session, compact("categories", "pagination", "link", "title", "flash"));
         }
 
 
@@ -70,12 +65,13 @@
          */
         public function new () : void
         {
+            $errors = []; // form errors
+            $flash = null; // flash message
+
             // check that the user is logged in
             Auth::isConnect($this->router);
 
             $tableCategory = new CategoryTable($this->connection);
-
-            $errors = []; // form errors
 
             // check that the form is valid and update the post
             $validator = new CategoryValidator("en", $_POST, $tableCategory);
@@ -88,6 +84,8 @@
 
                 if ($validator->isValid()) {
                     $tableCategory->createCategory($category);
+
+                    $this->session->setFlash("The category has been created", "success", "my-5"); // flash message
 
                     $url = $this->router->url("admin_categories", ["id" => $category->getId()]) . "?create=1";
                     Url::redirect(301, $url);
@@ -103,16 +101,16 @@
             $url = $this->router->url("admin_category_new");
 
             // flash message
-            $flash = null;
             if (!empty($errors)) {
-                $flash = '<div class="alert alert-danger my-5">The catégorie could not be created</div>';
+                $this->session->setFlash("The category could not be created", "danger", "my-5");
+                $flash = $this->session->generateFlash();
             }
 
             $title = App::getInstance()
                 ->setTitle("Add a new category")
                 ->getTitle();
 
-            $this->render("admin.category.new", $this->router, compact("form", "url", "title", "flash"));
+            $this->render("admin.category.new", $this->router, $this->session, compact("form", "url", "title", "flash"));
         }
 
 
@@ -125,6 +123,10 @@
         
         public function edit () : void
         {
+            $success = false; // query success
+            $errors = []; // form errors
+            $flash = null; // flash message
+
             // check that the user is logged in
             Auth::isConnect($this->router);
 
@@ -138,9 +140,6 @@
              * @var Category|null
              */
             $category = $tableCategory->find(["id" => $id]);
-
-            $success = false; // query success
-            $errors = []; // form errors
 
             // check that the form is valid and update the category
             $validator = new CategoryValidator("en", $_POST, $tableCategory, $category->getId());
@@ -164,27 +163,28 @@
             // url of the current page
             $url = $this->router->url("admin_category", ["id" => $id]);
 
-            // flash message
-            $flash = null;
+            // flash messages
             if ($success) {
-                $flash = '<div class="alert alert-success my-5">The category has been updated</div>';
+                $this->session->setFlash("The category has been updated", "success", "my-5");
+                $flash = $this->session->generateFlash();
             }
 
             if (!empty($errors)) {
-                $flash = '<div class="alert alert-danger my-5">The category could not be updated</div>';
+                $this->session->setFlash("The category could not be updated", "danger", "my-5");
+                $flash = $this->session->generateFlash();
             }
 
             $title = App::getInstance()
                 ->setTitle("Edit the category with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.category.edit", $this->router, compact("form", "url", "title", "flash"));
+            $this->render("admin.category.edit", $this->router, $this->session, compact("form", "url", "title", "flash"));
         }
 
 
 
         /**
-         * Delete a post
+         * Delete a category
          *
          * @return void
          */
@@ -200,6 +200,9 @@
             $id = (int)$params["id"];
 
             $tableCategory->delete(["id" => $id]);
+
+            // flash message
+            $this->session->setFlash("The category has been deleted", "success", "my-5");
 
             // redirect to the home of the admin
             $url = $this->router->url("admin_categories") . "?delete=1";

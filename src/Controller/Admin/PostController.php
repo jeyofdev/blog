@@ -23,6 +23,7 @@
      */
     class PostController extends AbstractController
     {
+
         /**
          * List the posts
          *
@@ -49,18 +50,13 @@
             $link = $this->router->url("admin_posts");
 
             // flash message
-            $flash = null;
-            if (isset($_GET["delete"])) {
-                $flash = '<div class="alert alert-success my-5">The post has been deleted</div>';
-            } else if (isset($_GET["create"])) {
-                $flash = '<div class="alert alert-success my-5">The post has been created</div>';
-            }
+            $flash = $this->session->generateFlash();
 
             $title = App::getInstance()
                 ->setTitle("Administration of posts")
                 ->getTitle();
 
-            $this->render("admin.post.index", $this->router, compact("posts", "pagination", "link", "title", "flash"));
+            $this->render("admin.post.index", $this->router, $this->session, compact("posts", "pagination", "link", "title", "flash"));
         }
 
 
@@ -83,6 +79,9 @@
 
             $tablePost->delete(["id" => $id]);
 
+            // flash message
+            $this->session->setFlash("The post has been deleted", "success", "my-5");
+
             // redirect to the home of the admin
             $url = $this->router->url("admin_posts") . "?delete=1";
             Url::redirect(301, $url);
@@ -97,6 +96,10 @@
          */
         public function edit () : void
         {
+            $success = false; // query success
+            $errors = []; // form errors
+            $flash = null; // flash message
+
             // check that the user is logged in
             Auth::isConnect($this->router);
 
@@ -117,9 +120,6 @@
 
             // the categories associated with the current post
             Hydrate::hydratePostBy($tableCategory, $post, "name");
-
-            $success = false; // query success
-            $errors = []; // form errors
 
             // check that the form is valid and update the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
@@ -145,21 +145,22 @@
             // url of the current page
             $url = $this->router->url("admin_post", ["id" => $id]);
 
-            // flash message
-            $flash = null;
+            // flash messages
             if ($success) {
-                $flash = '<div class="alert alert-success my-5">The post has been updated</div>';
+                $this->session->setFlash("The post has been updated", "success", "my-5");
+                $flash = $this->session->generateFlash();
             }
 
             if (!empty($errors)) {
-                $flash = '<div class="alert alert-danger my-5">The post could not be updated</div>';
+                $this->session->setFlash("The post could not be updated", "danger", "my-5");
+                $flash = $this->session->generateFlash();
             }
 
             $title = App::getInstance()
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", $this->router, compact("categories", "form", "url", "title", "flash"));
+            $this->render("admin.post.edit", $this->router, $this->session, compact("categories", "form", "url", "title", "flash"));
         }
 
 
@@ -171,6 +172,9 @@
          */
         public function new () : void
         {
+            $errors = []; // form errors
+            $flash = null; // flash message
+
             // check that the user is logged in
             Auth::isConnect($this->router);
 
@@ -179,8 +183,6 @@
 
             // the names of all categories
             $categories = $tableCategory->list("name");
-
-            $errors = []; // form errors
 
             // check that the form is valid and create the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories);
@@ -195,6 +197,8 @@
                 if ($validator->isValid()) {
                     $tablePost->createPost($post, "Europe/Paris");
                     Hydrate::hydrateAllPosts($tableCategory, [$post]);
+                    
+                    $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
 
                     $url = $this->router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
                     Url::redirect(301, $url);
@@ -210,15 +214,15 @@
             $url = $this->router->url("admin_post_new");
 
             // flash message
-            $flash = null;
             if (!empty($errors)) {
-                $flash = '<div class="alert alert-danger my-5">The post could not be created</div>';
+                $this->session->setFlash("The post could not be created", "danger", "my-5");
+                $flash = $this->session->generateFlash();
             }
 
             $title = App::getInstance()
                 ->setTitle("Add a new post")
                 ->getTitle();
 
-            $this->render("admin.post.new", $this->router, compact("categories", "form", "url", "title", "flash"));
+            $this->render("admin.post.new", $this->router, $this->session, compact("categories", "form", "url", "title", "flash"));
         }
     }

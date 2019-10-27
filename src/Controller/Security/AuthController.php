@@ -35,9 +35,10 @@
                 Url::redirect(301, $url);
             }
 
-            $tableUser = new UserTable($this->connection);
-
             $errors = []; // form errors
+            $flash = null; // flash message
+
+            $tableUser = new UserTable($this->connection);
 
             // check that the form is valid and connect the user
             $validator = new UserValidator("en", $_POST);
@@ -77,22 +78,21 @@
             $url = $this->router->url("login");
 
             // flash message
-            $flash = null;
             if (array_key_exists("form", $errors)) {
-                $flash = '<div class="alert alert-danger my-5">The form contains errors</div>';
+                $this->session->setFlash("The form contains errors", "danger", "my-5");
             } else if (array_key_exists("connection", $errors)) {
-                $flash = '<div class="alert alert-danger my-5">Username or password is incorrect</div>';
+                $this->session->setFlash("Username or password is incorrect", "danger", "my-5");
+            } else if (isset($_GET["forbidden"])) {
+                $this->session->setFlash("To access the pages of the admin, you must identify yourself", "danger", "my-5");
             }
 
-            if (isset($_GET["forbidden"])) {
-                $flash = '<div class="alert alert-danger my-5">To access the pages of the admin, you must identify yourself</div>';
-            }
+            $flash = $this->session->generateFlash();
 
             $title = App::getInstance()
                 ->setTitle("Connection to the administration")
                 ->getTitle();
 
-            $this->render("security.auth.login", $this->router, compact("form", "url", "title", "flash"));
+            $this->render("security.auth.login", $this->router, $this->session, compact("form", "url", "title", "flash"));
         }
 
 
