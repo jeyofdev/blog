@@ -21,6 +21,14 @@
         protected $password;
 
 
+        /**
+         * The role of the user
+         *
+         * @var string
+         */
+        private $role;
+
+
 
         /**
          * @param EntityManager $manager
@@ -109,6 +117,32 @@
         public function setPassword(string $password) : self
         {
             $this->password = password_hash($password, PASSWORD_BCRYPT);
+            return $this;
+        }
+
+
+
+        /**
+         * Get the value of role
+         *
+         * @return string|null
+         */
+        public function getRole () : ?string
+        {
+            return $this->role;
+        }
+
+
+
+        /**
+         * Set the value of role
+         *
+         * @param Role $role
+         * @return self
+         */
+        public function setRole (Role $role) : self
+        {
+            $this->role = $role->getName();
             return $this;
         }
     }

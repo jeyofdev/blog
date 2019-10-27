@@ -13,7 +13,7 @@
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */
-    class Hydrate
+    class PostHydrate
     {
         /**
          * Add the associated categories to a post

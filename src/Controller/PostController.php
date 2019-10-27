@@ -6,7 +6,7 @@
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Entity\Post;
-    use jeyofdev\php\blog\Hydrate\Hydrate;
+    use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
 
@@ -34,7 +34,7 @@
             $posts = $tablePost->findAllPostsPaginated(6, "created_at", "asc");
 
             // hydrate the posts
-            Hydrate::hydrateAllPosts($tableCategory, $posts);
+            PostHydrate::hydrateAllPosts($tableCategory, $posts);
 
             /**
              * @var Pagination
@@ -76,7 +76,7 @@
             $this->checkSlugMatch($this->router, $post, $slug, $id);
 
             // hydrate the posts
-            Hydrate::hydratePost($tableCategory, $post);
+            PostHydrate::hydratePost($tableCategory, $post);
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 

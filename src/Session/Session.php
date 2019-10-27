@@ -46,9 +46,9 @@
         /**
          * Set the flash message
          *
-         * @return void
+         * @return self
          */
-        public function setFlash (string $message, string $type = "success", ?string $class = null) : void
+        public function setFlash (string $message, string $type = "success", ?string $class = null) : self
         {
             $class = !is_null($class) ? " $class" : null;
 
@@ -57,6 +57,8 @@
                 "type" => $type,
                 "class" => $class
             ]);
+
+            return $this;
         }
 
 
@@ -84,11 +86,12 @@
         /**
          * Set the value of a session variable
          *
-         * @return void
+         * @return self
          */
-        public function write (string $key, $value) : void
+        public function write (string $key, $value) : self
         {
             $_SESSION[$key] = $value;
+            return $this;
         }
 
 
@@ -96,11 +99,12 @@
         /**
          * Empty the value of a session variable
          *
-         * @return void
+         * @return self
          */
-        public function empty (string $key) : void
+        public function empty (string $key) : self
         {
             $_SESSION[$key] = [];
+            return $this;
         }
 
 

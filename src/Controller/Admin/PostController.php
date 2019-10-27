@@ -9,11 +9,10 @@
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validator\PostValidator;
-    use jeyofdev\php\blog\Hydrate\Hydrate;
+    use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Url;
-    use PDO;
 
 
     /**
@@ -119,7 +118,7 @@
             $categories = $tableCategory->list("name");
 
             // the categories associated with the current post
-            Hydrate::hydratePostBy($tableCategory, $post, "name");
+            PostHydrate::hydratePostBy($tableCategory, $post, "name");
 
             // check that the form is valid and update the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
@@ -132,7 +131,7 @@
 
                 if ($validator->isValid()) {
                     $tablePost->updatePost($post, "Europe/Paris", "post_category");
-                    Hydrate::hydrateAllPosts($tableCategory, [$post]);
+                    PostHydrate::hydrateAllPosts($tableCategory, [$post]);
                     $success = true;
                 } else {
                     $errors = $validator->getErrors();
@@ -196,7 +195,7 @@
 
                 if ($validator->isValid()) {
                     $tablePost->createPost($post, "Europe/Paris");
-                    Hydrate::hydrateAllPosts($tableCategory, [$post]);
+                    PostHydrate::hydrateAllPosts($tableCategory, [$post]);
                     
                     $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
 

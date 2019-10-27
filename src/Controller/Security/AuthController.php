@@ -8,6 +8,8 @@
     use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Form\LoginForm;
     use jeyofdev\php\blog\Form\Validator\UserValidator;
+    use jeyofdev\php\blog\Hydrate\UserHydrate;
+    use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
     use jeyofdev\php\blog\Url;
 
@@ -39,6 +41,7 @@
             $flash = null; // flash message
 
             $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // check that the form is valid and connect the user
             $validator = new UserValidator("en", $_POST);
@@ -52,7 +55,10 @@
 
                     // check that the password is the same as the password of the database
                     if ($currentUser && (password_verify($_POST["password"], $currentUser->getPassword()))) {
-                        $_SESSION["auth"] = $currentUser->getID();
+                        UserHydrate::AddRole($tableRole, $currentUser);
+                        $this->session
+                            ->write("auth", $currentUser->getId())
+                            ->write("role", $currentUser->getRole());
 
                         // redirection to the previous page
                         $url = $this->getHttpRefererRouteName();

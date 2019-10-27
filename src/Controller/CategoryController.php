@@ -5,10 +5,9 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Core\Pagination;
-    use jeyofdev\php\blog\Hydrate\Hydrate;
+    use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
-    use PDO;
 
 
     /**
@@ -49,7 +48,7 @@
             $posts = $tablePost->findPostsPaginatedByCategory($category, 6, "created_at", "desc");
 
             // hydrate the post
-            Hydrate::hydrateAllPosts($tableCategory, $posts);
+            PostHydrate::hydrateAllPosts($tableCategory, $posts);
 
             /**
              * @var Pagination
