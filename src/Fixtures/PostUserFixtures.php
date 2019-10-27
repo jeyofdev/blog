@@ -7,11 +7,11 @@
 
 
     /**
-     * Add the fixtures in the 'post_category' table
+     * Add the fixtures in the 'post_user' table
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */
-    class PostCategoryFixtures extends AbstractFixtures
+    class PostUserFixtures extends AbstractFixtures
     {
         /**
          * @var PostFixtures
@@ -21,18 +21,18 @@
 
 
         /**
-         * @var CategoryFixtures
+         * @var UserFixtures
          */
-        private $categoryFixtures;
+        private $userFixtures;
 
 
 
-        public function __construct (EntityManager $manager, object $entity, string $locale, PostFixtures $postFixtures, CategoryFixtures $categoryFixtures)
+        public function __construct (EntityManager $manager, object $entity, string $locale, PostFixtures $postFixtures, UserFixtures $userFixtures)
         {
             parent::__construct($manager, $entity, $locale);
 
             $this->postFixtures = $postFixtures;
-            $this->categoryFixtures = $categoryFixtures;
+            $this->userFixtures = $userFixtures;
         }
 
 
@@ -43,15 +43,15 @@
         public function add () : self
         {
             $posts = $this->postFixtures->getPostsIds();
-            $categories = $this->categoryFixtures->getCategoriesIds();
+            $users = $this->userFixtures->getUsersIds();
 
             foreach ($posts as $post) {
-                $randomCategories = $this->faker->randomElements($categories, rand(0, count($categories)));
+                $randomUsers = $this->faker->randomElements($users);
 
-                foreach ($randomCategories as $category) {
+                foreach ($randomUsers as $user) {
                     $this->entity
                         ->setPost_id($post)
-                        ->setCategory_id($category);
+                        ->setUser_id($user);
 
                     $this->manager->insert($this->entity);
                 }

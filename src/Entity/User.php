@@ -3,7 +3,6 @@
     namespace jeyofdev\php\blog\Entity;
 
 
-    use jeyofdev\php\blog\Helpers\Helpers;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -72,7 +71,7 @@
          */ 
         public function getUsername () : ?string
         {
-            return Helpers::e($this->username);
+            return $this->username;
         }
 
 

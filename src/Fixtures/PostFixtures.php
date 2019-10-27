@@ -11,11 +11,11 @@
     class PostFixtures extends AbstractFixtures
     {
         /**
-         * The ids of each posts
+         * The ids of each post
          *
          * @var array
          */
-        private $postIds = [];
+        private $postsIds = [];
 
 
 
@@ -32,7 +32,7 @@
                     ->setCreated_at($this->faker->dateTimeBetween('-3 years', 'now')->format("Y-m-d H:i:s"));
 
                 $this->manager->insert($this->entity);
-                $this->postIds[] = $this->manager->lastInsertId();
+                $this->postsIds[] = $this->manager->lastInsertId();
             }
 
             return $this;
@@ -41,12 +41,12 @@
 
 
         /**
-         * Get the value of postIds
+         * Get the value of postsIds
          *
          * @return array
          */
-        public function getPostIds () : array 
+        public function getPostsIds () : array 
         {
-            return $this->postIds;
+            return $this->postsIds;
         }
     }

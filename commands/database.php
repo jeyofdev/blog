@@ -4,11 +4,17 @@
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostCategory;
+    use jeyofdev\php\blog\Entity\PostUser;
+    use jeyofdev\php\blog\Entity\Role;
     use jeyofdev\php\blog\Entity\User;
+    use jeyofdev\php\blog\Entity\UserRole;
     use jeyofdev\php\blog\Fixtures\CategoryFixtures;
     use jeyofdev\php\blog\Fixtures\PostCategoryFixtures;
     use jeyofdev\php\blog\Fixtures\PostFixtures;
+    use jeyofdev\php\blog\Fixtures\PostUserFixtures;
+    use jeyofdev\php\blog\Fixtures\RoleFixtures;
     use jeyofdev\php\blog\Fixtures\UserFixtures;
+    use jeyofdev\php\blog\Fixtures\UserRoleFixtures;
     use jeyofdev\php\blog\Manager\EntityManager;
 
 
@@ -45,9 +51,9 @@
         ->addTable();
 
 
-    // add the 'post_category' table
-    $post_category = new PostCategory();
-    $post_category
+    // add the 'role' table
+    $role = new Role();
+    $role
         ->createColumns($manager)
         ->addTable();
 
@@ -56,8 +62,29 @@
     $user = new User();
     $user
         ->createColumns($manager)
+        ->addTable();
+
+
+    // add the 'post_category' table
+    $post_category = new PostCategory();
+    $post_category
+        ->createColumns($manager)
+        ->addTable();
+
+
+    // add the 'user_role' table
+    $user_role = new UserRole();
+    $user_role
+        ->createColumns($manager)
+        ->addTable();
+
+
+    // add the 'post_user' table
+    $post_user = new PostUser();
+    $post_user
+        ->createColumns($manager)
         ->addTable()
-        ->emptyAllTable($post, $category, $post_category);
+        ->emptyAllTable($post, $category, $post_category, $user);
 
 
     // Add the fixtures on the 'post' table
@@ -68,10 +95,22 @@
     $categoryFixture = new CategoryFixtures($manager, $category, "en_US");
     $categoryFixture->add();
 
-    // Add the fixtures on the 'post_category' table
-    $post_categoryFixture = new PostCategoryFixtures($manager, $post_category, "en_US", $postFixture, $categoryFixture);
-    $post_categoryFixture->add();
+    // Add the fixtures on the 'role' table
+    $roleFixture = new RoleFixtures($manager, $role, "en_US");
+    $roleFixture->add();
 
     // Add the fixtures on the 'user' table
     $userFixture = new UserFixtures($manager, $user, "en_US", $postFixture);
     $userFixture->add();
+
+    // Add the fixtures on the 'post_category' table
+    $post_categoryFixture = new PostCategoryFixtures($manager, $post_category, "en_US", $postFixture, $categoryFixture);
+    $post_categoryFixture->add();
+
+    // Add the fixtures on the 'user_role' table
+    $user_roleFixture = new UserRoleFixtures($manager, $user_role, "en_US", $userFixture, $roleFixture);
+    $user_roleFixture->add();
+
+    // Add the fixtures on the 'post_user' table
+    $post_userFixture = new PostUserFixtures($manager, $post_user, "en_US", $postFixture, $userFixture);
+    $post_userFixture->add();

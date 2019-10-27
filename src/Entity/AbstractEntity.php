@@ -212,7 +212,7 @@
                     if (!empty($item[8])) {
                         $columnParts = explode("_", $item[0]);
 
-                        $constraintPart["constraint"] = "CONSTRAINT fk_$columnParts[0]";
+                        $constraintPart["constraint"] = "CONSTRAINT fk_$columnParts[0]_" . $this->getTableName();
                         $constraintPart["foreignKey"] = "FOREIGN KEY ($item[0])";
                         $constraintPart["references"] = "REFERENCES $columnParts[0] ($columnParts[1])";
                         $constraintPart["delete"] = "ON DELETE " . $item[8]["delete"];
