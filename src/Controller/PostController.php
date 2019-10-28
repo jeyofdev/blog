@@ -9,6 +9,7 @@
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
+    use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
 
 
@@ -64,6 +65,7 @@
             $tablePost = new PostTable($this->connection);
             $tableUser = new UserTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -81,7 +83,7 @@
 
             // hydrate the posts
             PostHydrate::addCategoriesToPost($tableCategory, $post);
-            PostHydrate::addUserToPost($tableUser, $post);
+            PostHydrate::addUserToPost($tableUser, $tableRole, $post);
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 

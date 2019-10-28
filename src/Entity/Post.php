@@ -291,9 +291,9 @@
          *
          * @return string
          */
-        public function getUser () : string
+        public function getUser ()
         {
-            return $this->user->getUserName();
+            return $this->user;
         }
 
 

@@ -25,7 +25,7 @@
         </div>
         <div class="card-footer mx-80 mt-30 pt-30">
             <p class="card-muted">
-                Written by <?= $post->getUser(); ?>
+                Written by <?= $post->getUser()->getUsername(); ?>
                 on <?= $post->getCreated_at()->format("d F Y"); ?>
             </p>
         </div>

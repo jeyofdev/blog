@@ -7,11 +7,14 @@
     use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Core\Auth;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Exception\UnauthorizedException;
     use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validator\PostValidator;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
+    use jeyofdev\php\blog\Hydrate\UserHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
+    use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
     use jeyofdev\php\blog\Url;
 
@@ -23,7 +26,6 @@
      */
     class PostController extends AbstractController
     {
-
         /**
          * List the posts
          *
@@ -111,6 +113,8 @@
 
             $tablePost = new PostTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
+            $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -126,6 +130,16 @@
 
             // the categories associated with the current post
             PostHydrate::addCategoriesToPostBy($tableCategory, $post, "name");
+            PostHydrate::addUserToPost($tableUser, $tableRole, $post);
+
+            if ($this->session->read("role") !== "admin") {
+                $currentUser = $tableUser->find(["id" => $this->session->read("auth")]);
+                UserHydrate::AddRole($tableRole, $currentUser);
+
+                if ($this->session->read("role") !== $post->getUser()->getRole()) {
+                    throw new UnauthorizedException("You are not authorized to access this page");
+                }
+            }
 
             // check that the form is valid and update the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
@@ -187,6 +201,7 @@
             $tablePost = new PostTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
             $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // the names of all categories
             $categories = $tableCategory->list("name");
@@ -206,7 +221,7 @@
                     $tableUser->addToPost($post->getId(), $this->session->read("auth"));
 
                     PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
-                    PostHydrate::addUserToPost($tableUser, $post);
+                    PostHydrate::addUserToPost($tableUser, $tableRole, $post);
                     
                     $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
 

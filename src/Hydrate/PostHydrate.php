@@ -7,6 +7,7 @@
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Table\CategoryTable;
+    use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
 
 
@@ -96,12 +97,13 @@
          * @param Post $post
          * @return void
          */
-        public static function addUserToPost (UserTable $tableUser, Post $post) : void
+        public static function addUserToPost (UserTable $tableUser, RoleTable $tableRole, Post $post) : void
         {
             /**
              * @var User
              */
             $user = $tableUser->findUser(['id' => $post->getId()]);
+            UserHydrate::AddRole($tableRole, $user);
             $post->addUser($user);
         }
 
