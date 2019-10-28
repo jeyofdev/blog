@@ -24,7 +24,10 @@
                 <h2><?= $post->getName(); ?></h2>
             </a>
             <p class="card-text"><?= $post->getExcerpt(); ?></p>
-            <p class="card-muted my-30">Written on <?= $post->getCreated_at()->format("d F Y"); ?></p>
+            <p class="card-muted my-30">
+                Written By <?= $post->getUser(); ?>
+                on <?= $post->getCreated_at()->format("d F Y"); ?>
+            </p>
             <a class="btn btn-primary pagination" href="<?= $router->url('post', ['id' => $post->getID(), 'slug' => $post->getSlug()]); ?>">see more</a>
         </div>
     </div>

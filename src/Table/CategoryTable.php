@@ -40,7 +40,8 @@
          */
         public function findCategories (array $params)
         {
-            extract($this->getTablesAndAlias()); // $table, $tableAlias, $joinAlias
+            $postCategory = new PostCategory();
+            extract($this->getTablesAndAlias($postCategory)); // $table, $tableAlias, $joinAlias
 
             $sql = "SELECT {$joinAlias}.*
                 FROM $table AS $tableAlias 
@@ -63,11 +64,12 @@
          */
         public function findCategoriesByPosts (string $ids)
         {
-            extract($this->getTablesAndAlias()); // $table, $tableAlias, $joinAlias
+            $postCategory = new PostCategory();
+            extract($this->getTablesAndAlias($postCategory)); // $table, $tableAlias, $joinAlias
 
             $sql = "SELECT {$joinAlias}.*, {$tableAlias}.post_id
             FROM $table AS $tableAlias
-            JOIN category AS {$joinAlias}
+            JOIN {$this->tableName} AS {$joinAlias}
             ON {$joinAlias}.id = {$tableAlias}.category_id
             WHERE {$tableAlias}.post_id IN ({$ids})
             ";
@@ -159,27 +161,5 @@
             }
 
             return $allCategories;
-        }
-
-
-
-        /**
-         * Set the names of the tables to use and their aliases for a join query
-         *
-         * @return array
-         */
-        private function getTablesAndAlias () : array
-        {
-            $table = (new PostCategory())->getTableName();
-            $pos = strpos($table, "_") + 1;
-            $tableAlias = strtolower(substr($table, 0, 1) . substr($table, $pos, 1));
-
-            $joinAlias = strtolower(substr($this->tableName, 0, 1));
-
-            return [
-                "table" => $table,
-                "tableAlias" => $tableAlias,
-                "joinAlias" => $joinAlias
-            ];
         }
     }

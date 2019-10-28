@@ -5,7 +5,9 @@
 
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Table\CategoryTable;
+    use jeyofdev\php\blog\Table\UserTable;
 
 
     /**
@@ -22,7 +24,7 @@
          * @param Post $post
          * @return void
          */
-        public static function hydratePost (CategoryTable $tableCategory, Post $post) : void
+        public static function addCategoriesToPost (CategoryTable $tableCategory, Post $post) : void
         {
             /**
              * @var Category[]
@@ -45,9 +47,9 @@
          * @param string $column A column of the table Category
          * @return void
          */
-        public static function hydratePostBy (CategoryTable $tableCategory, Post $post, string $column) : void
+        public static function addCategoriesToPostBy (CategoryTable $tableCategory, Post $post, string $column) : void
         {
-            self::hydratePost($tableCategory, $post);
+            self::addCategoriesToPost($tableCategory, $post);
 
             $method = "get" . ucfirst($column);
 
@@ -65,7 +67,7 @@
          * @param CategoryTable $tableCategory
          * @return void
          */
-        public static function hydrateAllPosts (CategoryTable $tableCategory, $posts) : void
+        public static function addCategoriesToAllPost (CategoryTable $tableCategory, array $posts) : void
         {
             // get the ids of each items
             $postsById = [];
@@ -76,12 +78,58 @@
             $ids = implode(", ", array_keys($postsById));
 
             /**
-             * @var Post[]
+             * @var Categories[]
              */
             $categories = $tableCategory->findCategoriesByPosts($ids);
 
             foreach ($categories as $category) {
                 $postsById[$category->getPost_Id()]->addCategory($category);
+            }
+        }
+
+
+
+        /**
+         * Add the associated user to a post
+         *
+         * @param UserTable $tableUser
+         * @param Post $post
+         * @return void
+         */
+        public static function addUserToPost (UserTable $tableUser, Post $post) : void
+        {
+            /**
+             * @var User
+             */
+            $user = $tableUser->findUser(['id' => $post->getId()]);
+            $post->addUser($user);
+        }
+
+
+
+        /**
+         * Add the associated user on each post
+         *
+         * @param UserTable $tableUser
+         * @param array $posts
+         * @return void
+         */
+        public static function addUserToAllPosts (UserTable $tableUser, array $posts)
+        {
+            // get the ids of each items
+            $postsById = [];
+            foreach ($posts as $post) {
+                $postsById[$post->getId()] = $post;
+            }
+            $ids = implode(", ", array_keys($postsById));
+
+            /**
+             * @var User[]
+             */
+            $users = $tableUser->findUserByPosts($ids);
+
+            foreach ($users as $user) {
+                $postsById[$user->getPost_Id()]->addUser($user);
             }
         }
     }

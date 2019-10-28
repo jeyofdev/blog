@@ -118,7 +118,7 @@
             $categories = $tableCategory->list("name");
 
             // the categories associated with the current post
-            PostHydrate::hydratePostBy($tableCategory, $post, "name");
+            PostHydrate::addCategoriesToPostBy($tableCategory, $post, "name");
 
             // check that the form is valid and update the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
@@ -131,7 +131,7 @@
 
                 if ($validator->isValid()) {
                     $tablePost->updatePost($post, "Europe/Paris", "post_category");
-                    PostHydrate::hydrateAllPosts($tableCategory, [$post]);
+                    PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
                     $success = true;
                 } else {
                     $errors = $validator->getErrors();
@@ -195,7 +195,7 @@
 
                 if ($validator->isValid()) {
                     $tablePost->createPost($post, "Europe/Paris");
-                    PostHydrate::hydrateAllPosts($tableCategory, [$post]);
+                    PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
                     
                     $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
 

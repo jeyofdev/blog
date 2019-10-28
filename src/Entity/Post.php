@@ -37,6 +37,15 @@
 
 
         /**
+         * The associated user of the post
+         *
+         * @var User
+         */
+        private $user;
+
+
+
+        /**
          * @param EntityManager $manager
          */
         public function createColumns(EntityManager $manager) : self
@@ -273,5 +282,31 @@
             }
 
             return $ids;
+        }
+
+
+
+        /**
+         * Get the associated user of the post
+         *
+         * @return string
+         */
+        public function getUser () : string
+        {
+            return $this->user->getUserName();
+        }
+
+
+
+        /**
+         * Add a user on the post
+         *
+         * @param User $user
+         * @return self
+         */
+        public function addUser (User $user) : self
+        {
+            $this->user = $user;
+            return $this;
         }
     }

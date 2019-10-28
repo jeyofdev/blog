@@ -24,7 +24,10 @@
             <p class="card-text"><?= $post->getFormattedContent(); ?></p>
         </div>
         <div class="card-footer mx-80 mt-30 pt-30">
-            <p class="card-muted">Written on <?= $post->getCreated_At()->format('d F Y'); ?></p>
+            <p class="card-muted">
+                Written by <?= $post->getUser(); ?>
+                on <?= $post->getCreated_at()->format("d F Y"); ?>
+            </p>
         </div>
     </div>
 </div>

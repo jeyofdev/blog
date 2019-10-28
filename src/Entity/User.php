@@ -31,6 +31,15 @@
 
 
         /**
+         * The id of the post associated with the current user
+         *
+         * @var int
+         */
+        private $post_id;
+
+
+
+        /**
          * @param EntityManager $manager
          */
         public function createColumns(EntityManager $manager) : self
@@ -144,5 +153,17 @@
         {
             $this->role = $role->getName();
             return $this;
+        }
+
+
+
+        /**
+         * Get the id of the post associated with the current user
+         *
+         * @return integer|null
+         */
+        public function getPost_Id () : ?int
+        {
+            return $this->post_id;
         }
     }

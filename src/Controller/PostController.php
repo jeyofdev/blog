@@ -9,6 +9,7 @@
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
+    use jeyofdev\php\blog\Table\UserTable;
 
 
     /**
@@ -26,6 +27,7 @@
         public function index () : void
         {
             $tablePost = new PostTable($this->connection);
+            $tableUser = new UserTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
 
             /**
@@ -34,7 +36,8 @@
             $posts = $tablePost->findAllPostsPaginated(6, "created_at", "asc");
 
             // hydrate the posts
-            PostHydrate::hydrateAllPosts($tableCategory, $posts);
+            PostHydrate::addCategoriesToAllPost($tableCategory, $posts);
+            PostHydrate::addUserToAllPosts($tableUser, $posts);
 
             /**
              * @var Pagination
@@ -59,6 +62,7 @@
         public function show () : void
         {
             $tablePost = new PostTable($this->connection);
+            $tableUser = new UserTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
 
             // url settings of the current page
@@ -76,7 +80,8 @@
             $this->checkSlugMatch($this->router, $post, $slug, $id);
 
             // hydrate the posts
-            PostHydrate::hydratePost($tableCategory, $post);
+            PostHydrate::addCategoriesToPost($tableCategory, $post);
+            PostHydrate::addUserToPost($tableUser, $post);
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
