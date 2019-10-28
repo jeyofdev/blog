@@ -12,6 +12,7 @@
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
+    use jeyofdev\php\blog\Table\UserTable;
     use jeyofdev\php\blog\Url;
 
 
@@ -34,11 +35,17 @@
             Auth::isConnect($this->router);
 
             $tablePost = new PostTable($this->connection);
+            $tableUser = new UserTable($this->connection);
 
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findAllPostsPaginated(10, "id", "desc");
+            if (Auth::isAdmin($this->session)) {
+                $posts = $tablePost->findAllPostsPaginated(5, "id", "desc");
+            } else {
+                $user = $tableUser->find(["id" => $this->session->read("auth")]);
+                $posts = $tablePost->findPostsPaginatedByUser($user, 5, "id", "desc");
+            }
 
             /**
              * @var Pagination
@@ -179,6 +186,7 @@
 
             $tablePost = new PostTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
+            $tableUser = new UserTable($this->connection);
 
             // the names of all categories
             $categories = $tableCategory->list("name");
@@ -195,7 +203,10 @@
 
                 if ($validator->isValid()) {
                     $tablePost->createPost($post, "Europe/Paris");
+                    $tableUser->addToPost($post->getId(), $this->session->read("auth"));
+
                     PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
+                    PostHydrate::addUserToPost($tableUser, $post);
                     
                     $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
 

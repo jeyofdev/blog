@@ -9,6 +9,7 @@
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostCategory;
+    use jeyofdev\php\blog\Entity\User;
     use PDO;
 
 
@@ -92,6 +93,36 @@
 
                     $sqlCount = "SELECT COUNT(category_id) FROM post_category WHERE category_id = {$category->getId()}";
                     
+                    $this->pagination = new Pagination($this->connection, $sqlPosts, $sqlCount, $this, $perPage);
+
+                    return $this->pagination->getItemsPaginated($sqlPosts);
+                }
+            }
+        }
+
+
+
+        /**
+         * Get the posts messages from a user
+         *
+         * @param User $user
+         * @return void
+         */
+        public function findPostsPaginatedByUser (User $user, int $perPage, string $orderBy = "id", string $direction = "ASC")
+        {
+            $direction = strtoupper($direction);
+
+            if ($this->checkIfValueIsAllowed("orderBy", $orderBy, $this->columns)) {
+                if ($this->checkIfValueIsAllowed("direction", $direction, self::DIRECTION_ALLOWED)) {
+                    $sqlPosts = "SELECT p.* 
+                        FROM post AS p
+                        JOIN post_user AS pu
+                        ON pu.post_id = p.id
+                        WHERE pu.user_id = {$user->getId()}
+                        ORDER BY $orderBy $direction
+                    ";
+                    $sqlCount = "SELECT COUNT(user_id) FROM post_user WHERE user_id = {$user->getId()}";
+
                     $this->pagination = new Pagination($this->connection, $sqlPosts, $sqlCount, $this, $perPage);
 
                     return $this->pagination->getItemsPaginated($sqlPosts);

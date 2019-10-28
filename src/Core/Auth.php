@@ -30,4 +30,17 @@
                 Url::redirect(301, $url);
             }
         }
+
+
+
+        /**
+         * Check that the user connected with the admin role
+         *
+         * @param Session $session
+         * @return boolean
+         */
+        public static function isAdmin (Session $session)
+        {
+            return ($session->read("role") === "admin") ? true : false;
+        }
     }

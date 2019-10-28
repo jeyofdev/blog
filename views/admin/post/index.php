@@ -47,4 +47,3 @@
     <?= $pagination->previousLink($link); ?>
     <?= $pagination->nextLink($link); ?>
 </div>
-</div>

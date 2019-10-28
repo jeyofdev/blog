@@ -381,9 +381,9 @@
         /**
          * Get the value of pagination
          *
-         * @return Pagination
+         * @return Pagination|null
          */
-        public function getPagination () : Pagination
+        public function getPagination () : ?Pagination
         {
             return $this->pagination;
         }

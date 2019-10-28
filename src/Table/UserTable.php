@@ -78,4 +78,23 @@
             
             return $this->fetchAll($query);
         }
+
+
+
+        /**
+         * Associate a user with a post
+         *
+         * @return void
+         */
+        public function addToPost (int $postId, int $userId) : void
+        {
+            $params = [
+                "post_id" => $postId,
+                "user_id" => $userId
+            ];
+            $set = $this->setQueryParams($params);
+
+            $sql = "INSERT INTO post_user SET $set[0]";
+            $this->prepare($sql, $set[1]);
+        }
     }
