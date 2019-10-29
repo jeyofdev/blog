@@ -85,3 +85,21 @@
 .blog-single .card-footer {
     border-top: 1px solid $gray-lighten;
 }
+
+
+
+/* ===================
+    RELATED POSTS
+=================== */
+.blog-related {
+    .bloc-title {
+        text-transform: uppercase;
+        font-family: $font-family-sans-serif;
+        font-size: rem(14);
+    }
+
+    .card .card-body .card-title h3 {
+        font-size: rem(20);
+        font-weight: bold;
+    }
+}

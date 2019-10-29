@@ -10,7 +10,7 @@
 
 
 <!-- view the current post -->
-<div class="blog-single my-75">
+<div class="blog-single mt-75">
     <div class="card">
         <div class="card-header mb-95">
             <img class="img-fluid" src="https://via.placeholder.com/1100x425" alt="">
@@ -34,20 +34,20 @@
 
 
 <!-- view the related posts -->
-<div class="blog-related mt-75">
+<div class="blog-related mt-125 mb-75 mx-80">
+    <h4 class="text-secondary bloc-title mb-35">You may also like</h4>
     <div class="row">
         <?php foreach ($relatedPosts as $post) : ?>
-            <div class="col-12 col-md-4 mb-5">
+            <div class="col-12 col-md-4 mb-0">
                 <div class="card">
-                    <div class="card-header">
-                        <img class="img-fluid" src="https://via.placeholder.com/1100x425" alt="">
+                    <div class="card-header mb-3">
+                        <img class="img-fluid" src="https://via.placeholder.com/500x275" alt="">
                     </div>
 
                     <div class="card-body">
                         <a class="d-block card-title" href="<?= $router->url('post', ['id' => $post->getID(), 'slug' => $post->getSlug()]); ?>">
                             <h3><?= $post->getName(); ?></h3>
                         </a>
-                        <p class="card-text"><?= $post->getExcerpt(); ?></p>
                     </div>
                 </div>
             </div>
