@@ -85,8 +85,11 @@
             PostHydrate::addCategoriesToPost($tableCategory, $post);
             PostHydrate::addUserToPost($tableUser, $tableRole, $post);
 
+            // related posts
+            $relatedPosts = $tablePost->findRandomPosts(3);
+
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
-            $this->render("post.show", $this->router, $this->session, compact("post", "title"));
+            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "title"));
         }
     }

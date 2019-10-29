@@ -133,6 +133,41 @@
 
 
         /**
+         * Get a number of random posts
+         *
+         * @return Post[]
+         */
+        public function findRandomPosts (int $limit, int $fetchMode = PDO::FETCH_CLASS)
+        {
+            $countPosts = $this->countAll("id");
+
+            $sql = "SELECT * FROM {$this->tableName} WHERE id > ($countPosts - 10)";
+            $query = $this->query($sql, $fetchMode);
+
+            /**
+             * @var Post[]
+             */
+            $lastPosts = $this->fetchAll($query);
+
+            // get the ids from each posts
+            $ids = [];
+            foreach ($lastPosts as $post) {
+                $ids[] = $post->getId();
+            }
+
+            // get a random posts
+            $relatedPosts = [];
+            for ($i = 0; $i < $limit; $i++) { 
+                $id = $ids[array_rand($ids)];
+                $relatedPosts[] =  $this->find(["id" => $id]);
+            }
+
+            return $relatedPosts;
+        }
+
+
+
+        /**
          * Create a new post
          *
          * @param Post $post

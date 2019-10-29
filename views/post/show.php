@@ -31,3 +31,26 @@
         </div>
     </div>
 </div>
+
+
+<!-- view the related posts -->
+<div class="blog-related mt-75">
+    <div class="row">
+        <?php foreach ($relatedPosts as $post) : ?>
+            <div class="col-12 col-md-4 mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <img class="img-fluid" src="https://via.placeholder.com/1100x425" alt="">
+                    </div>
+
+                    <div class="card-body">
+                        <a class="d-block card-title" href="<?= $router->url('post', ['id' => $post->getID(), 'slug' => $post->getSlug()]); ?>">
+                            <h3><?= $post->getName(); ?></h3>
+                        </a>
+                        <p class="card-text"><?= $post->getExcerpt(); ?></p>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
