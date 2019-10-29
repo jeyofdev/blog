@@ -4,7 +4,6 @@
 
 
     use jeyofdev\php\blog\App;
-    use jeyofdev\php\blog\Core\Pagination;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;
@@ -12,21 +11,21 @@
 
 
     /**
-     * Manage the controller of the categories
+     * Manage the controller of the authors pages
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */
-    class CategoryController extends AbstractController
+    class AuthorController extends AbstractController
     {
         /**
-         * Get posts by category
+         * Get posts by user
          *
          * @return void
          */
         public function show () : void
         {
-            $tableCategory = new CategoryTable($this->connection);
             $tableUser = new UserTable($this->connection);
+            $tableCategory = new CategoryTable($this->connection);
             $tablePost = new PostTable($this->connection);
 
             // url settings of the current page
@@ -35,22 +34,23 @@
             $slug = $params["slug"];
 
             /**
-             * @var Category|false
+             * @var User|false
              */
-            $category = $tableCategory->find(["id" => $id]);
+            $user = $tableUser->find(["id" => $id]);
 
             // check the category
-            $this->exists($category, "category", $id);
-            $this->checkSlugMatch($this->router, $category, $slug, $id);
+            $this->exists($user, "user", $id);
+            $this->checkSlugMatch($this->router, $user, $slug, $id);
             
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findPostsPaginatedByCategory($category, 6, "created_at", "desc");
+            $posts = $tablePost->findPostsPaginatedByUser($user, 6, "created_at", "desc");
 
             // hydrate the post
             PostHydrate::addCategoriesToAllPost($tableCategory, $posts);
             PostHydrate::addUserToAllPosts($tableUser, $posts);
+
 
             /**
              * @var Pagination
@@ -58,12 +58,12 @@
             $pagination = $tablePost->getPagination();
 
             // Get the route of the current page
-            $link = $this->router->url("category", ['id' => $category->getId(), "slug" => $category->getslug()]);
+            $link = $this->router->url("user", ['id' => $user->getId(), "slug" => $user->getslug()]);
 
             $title = App::getInstance()
-                ->setTitle($category->getName(), "List of posts of the category : ")
+                ->setTitle("List of posts of : " . $user->getUsername())
                 ->getTitle();
 
-            $this->render("category.show", $this->router, $this->session, compact("posts", "pagination", "link", "title"));
+            $this->render("author.show", $this->router, $this->session, compact("posts", "pagination", "link", "title"));
         }
     }

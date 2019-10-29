@@ -26,13 +26,15 @@
         {
             $this->entity
                 ->setUsername("admin")
-                ->setPassword("admin");
+                ->setPassword("admin")
+                ->setSlug("admin");
             $this->manager->insert($this->entity);
             $this->usersIds[] = $this->manager->lastInsertId();
 
             $this->entity
                 ->setUsername("author")
-                ->setPassword("author");
+                ->setPassword("author")
+                ->setSlug("author");
             $this->manager->insert($this->entity);
             $this->usersIds[] = $this->manager->lastInsertId();
 

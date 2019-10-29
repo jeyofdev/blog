@@ -19,6 +19,8 @@
         protected $id;
         protected $username;
         protected $password;
+        protected $slug;
+
 
 
         /**
@@ -50,6 +52,7 @@
             $this->setColumnsWithOptions("id", "int", 10, false, true, true, null, true);
             $this->setColumnsWithOptions("username", "varchar", 50);
             $this->setColumnsWithOptions("password", "varchar", 255);
+            $this->setColumnsWithOptions("slug", "varchar", 50);
 
             return $this;
         }
@@ -126,6 +129,31 @@
         public function setPassword(string $password) : self
         {
             $this->password = password_hash($password, PASSWORD_BCRYPT);
+            return $this;
+        }
+
+
+
+        /**
+         * Get the value of slug
+         * 
+         * @return string|null
+         */ 
+        public function getSlug () : ?string
+        {
+            return $this->slug;
+        }
+
+
+
+        /**
+         * Set the value of slug
+         *
+         * @return self
+         */ 
+        public function setSlug(string $slug) : self
+        {
+            $this->slug = $slug;
             return $this;
         }
 

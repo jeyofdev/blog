@@ -103,10 +103,10 @@
 
 
         /**
-         * Get the posts messages from a user
+         * Get the posts from a user
          *
          * @param User $user
-         * @return void
+         * @return Post[]
          */
         public function findPostsPaginatedByUser (User $user, int $perPage, string $orderBy = "id", string $direction = "ASC")
         {
