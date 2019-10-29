@@ -29,7 +29,8 @@
                     ->setName($this->faker->sentence(4, true))
                     ->setSlug($this->faker->slug)
                     ->setContent($this->faker->paragraphs(rand(5, 20), true))
-                    ->setCreated_at($this->faker->dateTimeBetween('-3 years', 'now')->format("Y-m-d H:i:s"));
+                    ->setCreated_at($this->faker->dateTimeBetween('-3 years', 'now')->format("Y-m-d H:i:s"))
+                    ->setPublished(rand(0, 1));
 
                 $this->manager->insert($this->entity);
                 $this->postsIds[] = $this->manager->lastInsertId();

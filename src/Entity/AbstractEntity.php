@@ -53,7 +53,7 @@
          */
         const TYPE_COLUMNS_ALLOWED = [
             "TEXT", "DATE",
-            "TININT", "SMALLINT", "INT", "MEDIUMINT", "BIGINT",
+            "TINYINT", "SMALLINT", "INT", "MEDIUMINT", "BIGINT",
             "DECIMAL", "FLOAT", "DOUBLE", "REAL",
             "DATE", "DATETIME", "TIME", "TIMESTAMP", "YEAR",
             "CHAR", "VARCHAR",

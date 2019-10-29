@@ -25,6 +25,7 @@
         protected $content;
         protected $created_at;
         protected $updated_at;
+        protected $published;
 
 
         /**
@@ -59,6 +60,7 @@
             $this->setColumnsWithOptions("content", "text", 650000);
             $this->setColumnsWithOptions("created_at", "datetime", null, false, false, false, "DEFAULT CURRENT_TIMESTAMP");
             $this->setColumnsWithOptions("updated_at", "datetime", null, false, false, false, "DEFAULT CURRENT_TIMESTAMP");
+            $this->setColumnsWithOptions("published", "tinyint", 1, false, false, false, "DEFAULT 0");
 
             return $this;
         }
@@ -222,6 +224,29 @@
         public function setUpdated_at(string $updated_at) : self
         {
             $this->updated_at = $updated_at;
+            return $this;
+        }
+
+
+
+        /**
+         * Get the value of published
+         */ 
+        public function getPublished() : int
+        {
+            return $this->published;
+        }
+
+
+
+        /**
+         * Set the value of published
+         *
+         * @return  self
+         */ 
+        public function setPublished(int $published) : self
+        {
+            $this->published = $published;
             return $this;
         }
 
