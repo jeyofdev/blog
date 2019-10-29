@@ -5,7 +5,7 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Controller\AbstractController;
-    use jeyofdev\php\blog\Core\Auth;
+    use jeyofdev\php\blog\Auth\Auth;
 
 
     /**

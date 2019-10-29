@@ -1,6 +1,6 @@
 <?php
 
-    namespace jeyofdev\php\blog\Core;
+    namespace jeyofdev\php\blog\Pagination;
 
 
     use jeyofdev\php\blog\Exception\NotFoundException;

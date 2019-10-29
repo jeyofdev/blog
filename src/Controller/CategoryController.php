@@ -4,7 +4,7 @@
 
 
     use jeyofdev\php\blog\App;
-    use jeyofdev\php\blog\Core\Pagination;
+    use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\PostTable;

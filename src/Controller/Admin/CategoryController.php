@@ -5,8 +5,8 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Controller\AbstractController;
-    use jeyofdev\php\blog\Core\Auth;
-    use jeyofdev\php\blog\Core\Pagination;
+    use jeyofdev\php\blog\Auth\Auth;
+    use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Form\CategoryForm;
     use jeyofdev\php\blog\Form\Validator\CategoryValidator;

@@ -4,8 +4,8 @@
 
 
     use jeyofdev\php\blog\App;
+    use jeyofdev\php\blog\Auth\Auth;
     use jeyofdev\php\blog\Controller\AbstractController;
-    use jeyofdev\php\blog\Core\Auth;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Exception\UnauthorizedException;
     use jeyofdev\php\blog\Form\PostForm;

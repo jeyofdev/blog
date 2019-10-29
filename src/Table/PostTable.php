@@ -5,7 +5,7 @@
 
     use DateTime;
     use DateTimeZone;
-    use jeyofdev\php\blog\Core\Pagination;
+    use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostCategory;

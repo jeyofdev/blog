@@ -1,6 +1,6 @@
 <?php
 
-    namespace jeyofdev\php\blog\Core;
+    namespace jeyofdev\php\blog\Auth;
 
 
     use jeyofdev\php\blog\Router\Router;
