@@ -50,17 +50,19 @@
          *
          * @return Post[]
          */
-        public function findAllPostsPaginated (int $perPage, string $orderBy = "id", string $direction = "ASC")
+        public function findAllPostsPaginated (int $perPage, string $orderBy = "id", string $direction = "ASC", array $params = [])
         {
             $direction = strtoupper($direction);
 
+            $where = !empty($params) ? "WHERE " . $this->setWhere($params) : null;
+
             if ($this->checkIfValueIsAllowed("orderBy", $orderBy, $this->columns)) {
                 if ($this->checkIfValueIsAllowed("direction", $direction, self::DIRECTION_ALLOWED)) {
-                    $sqlPosts = "SELECT * FROM {$this->tableName} ORDER BY $orderBy $direction";
-                    $sqlCount = "SELECT COUNT(id) FROM {$this->tableName}";
+                    $sqlPosts = "SELECT * FROM {$this->tableName} $where ORDER BY $orderBy $direction";
+                    $sqlCount = "SELECT COUNT(id) FROM {$this->tableName} $where";
                     $this->pagination = new Pagination($this->connection, $sqlPosts, $sqlCount, $this, $perPage);
 
-                    return $this->pagination->getItemsPaginated();
+                    return $this->pagination->getItemsPaginated($params);
                 }
             }
         }
@@ -188,7 +190,6 @@
 
             $this->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
 
-
             return $this;
         }
 
@@ -209,11 +210,24 @@
                     "name" => $post->getName(),
                     "slug" => $post->getSlug(),
                     "content" => $post->getContent(),
-                    "updated_at" => $updatedAt
+                    "updated_at" => $updatedAt,
+                    "published" => $post->getPublished()
                 ], ["id" => $post->getId()]);
 
-            $this->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
+            return $this;
+        }
 
+
+
+        /**
+         * Publish a post
+         *
+         * @param Post $post
+         * @return self
+         */
+        public function publishPost (Post $post, string $timeZone = "Europe/Paris") : self
+        {
+            $this->updatePost($post, $timeZone);
             return $this;
         }
 

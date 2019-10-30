@@ -42,6 +42,7 @@
 
         // posts
         ->get('/admin/post/', 'admin/post/index', 'admin_posts')
+        ->get('/admin/post/publish/[i:id]/', 'admin/post/publish', 'admin_posts_publish')
         ->match('/admin/post/new/', 'admin/post/new', 'admin_post_new')
         ->match('/admin/post/[i:id]/', 'admin/post/edit', 'admin_post')
         ->post('/admin/post/delete/[i:id]/', 'admin/post/delete', 'admin_post_delete')

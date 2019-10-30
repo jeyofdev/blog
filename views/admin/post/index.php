@@ -30,7 +30,11 @@
                 <td><?= $post->getCreated_at()->format("d F Y \a\\t H:i:s"); ?></td>
                 <td><?= $post->getUpdated_at()->format("d F Y \a\\t H:i:s"); ?></td>
                 <td>
-                    <a class="btn btn-outline-info rounded" href="<?= $router->url('post', ['id' => $post->getId()]); ?>">View</a>
+                    <?php if ($post->getPublished() === 1) : ?>
+                        <a class="btn btn-outline-info rounded" href="<?= $router->url('post', ['id' => $post->getId()]); ?>">View</a>
+                    <?php elseif ($post->getPublished() === 0) : ?>
+                        <a class="btn btn-outline-info rounded" href="<?= $router->url('admin_posts_publish', ['id' => $post->getId()]); ?>">Publish</a>
+                    <?php endif; ?>
                     <a class="btn btn-outline-success rounded" href="<?= $router->url('admin_post', ['id' => $post->getId()]); ?>">Edit</a>
                     <form style="display:inline;" action="<?= $router->url('admin_post_delete', ['id' => $post->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this post')">
                         <button type="submit" class="btn btn-outline-danger rounded">delete</button>

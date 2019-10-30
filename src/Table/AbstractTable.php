@@ -258,7 +258,7 @@
          *
          * @return string|null
          */
-        private function setWhere (array $params) : ?string
+        public function setWhere (array $params) : ?string
         {
             if (!is_null($params)) {
                 $items = [];

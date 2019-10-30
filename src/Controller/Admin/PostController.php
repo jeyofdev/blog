@@ -152,6 +152,7 @@
 
                 if ($validator->isValid()) {
                     $tablePost->updatePost($post, "Europe/Paris", "post_category");
+                    $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
                     PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
                     $success = true;
                 } else {
@@ -249,5 +250,50 @@
                 ->getTitle();
 
             $this->render("admin.post.new", $this->router, $this->session, compact("categories", "form", "url", "title", "flash"));
+        }
+
+
+
+        /**
+         * Publish a post
+         *
+         * @return void
+         */
+        public function publish () : void
+        {
+            // check that the user is logged in
+            Auth::isConnect($this->router);
+
+            $tablePost = new PostTable($this->connection);
+            $tableCategory = new CategoryTable($this->connection);
+
+            // url settings of the current page
+            $params = $this->router->getParams();
+            $id = (int)$params["id"];
+
+            /**
+             * @var Post|null
+             */
+            $post = $tablePost->find(["id" => $id]);
+
+            $post->setPublished(1);
+            PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
+
+            // get the ids of the categories to the post
+            $categoriesIds = [];
+            foreach ($post->getCategories() as $category) {
+                $categoriesIds[] = $category->getId();
+            }
+
+            // publish the post
+            $tablePost->publishPost($post, "Europe/Paris");
+            $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $categoriesIds]);
+
+            // flash message
+            $this->session->setFlash("The post has been published", "success", "my-5");
+
+            // redirect to the home of the admin
+            $url = $this->router->url("admin_posts") . "?publish=1";
+            Url::redirect(301, $url);
         }
     }

@@ -96,18 +96,18 @@
          *
          * @return array
          */
-        public function getItemsPaginated () : array
+        public function getItemsPaginated (array $params = []) : array
         {
             if (empty($this->items))
             {
                 $currentPage = $this->getCurrentPage();
-                $nbPages = $this->getPages();
+                $nbPages = $this->getPages($params);
 
                 $this->checkIfPageExists($currentPage, $nbPages);
                 
                 $offset = $this->perPage * ($currentPage -1);
 
-                $query = $this->table->query($this->queryDatas . " LIMIT {$this->perPage} OFFSET $offset");
+                $query = $this->table->prepare($this->queryDatas . " LIMIT {$this->perPage} OFFSET $offset", $params);
                 $this->items = $query->fetchAll();
             }
 
@@ -171,10 +171,10 @@
          *
          * @return integer
          */
-        private function getPages () : int
+        private function getPages (array $params = []) : int
         {
             if ($this->itemsCount === null) {
-                $query = $this->table->query($this->queryCount, PDO::FETCH_NUM);
+                $query = $this->table->prepare($this->queryCount, $params, PDO::FETCH_NUM);
                 $this->itemsCount = $query->fetch()[0];
             }
         

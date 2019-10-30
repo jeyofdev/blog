@@ -34,7 +34,7 @@
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findAllPostsPaginated(6, "created_at", "asc");
+            $posts = $tablePost->findAllPostsPaginated(6, "created_at", "desc", ["published" => 1]);
 
             // hydrate the posts
             PostHydrate::addCategoriesToAllPost($tableCategory, $posts);
