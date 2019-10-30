@@ -5,7 +5,6 @@
 
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Category;
-    use jeyofdev\php\blog\Entity\PostCategory;
 
 
     /**
@@ -40,13 +39,10 @@
          */
         public function findCategories (array $params)
         {
-            $postCategory = new PostCategory();
-            extract($this->getTablesAndAlias($postCategory)); // $table, $tableAlias, $joinAlias
-
-            $sql = "SELECT {$joinAlias}.*
-                FROM $table AS $tableAlias 
-                JOIN {$this->tableName} AS $joinAlias ON $tableAlias.category_id = {$joinAlias}.id
-                WHERE $tableAlias.post_id = :id
+            $sql = "SELECT c.*
+                FROM post_category AS pc
+                JOIN {$this->tableName} AS c ON pc.category_id = c.id
+                WHERE pc.post_id = :id
             ";
 
             $query = $this->prepare($sql, $params);
@@ -64,14 +60,11 @@
          */
         public function findCategoriesByPosts (string $ids)
         {
-            $postCategory = new PostCategory();
-            extract($this->getTablesAndAlias($postCategory)); // $table, $tableAlias, $joinAlias
-
-            $sql = "SELECT {$joinAlias}.*, {$tableAlias}.post_id
-            FROM $table AS $tableAlias
-            JOIN {$this->tableName} AS {$joinAlias}
-            ON {$joinAlias}.id = {$tableAlias}.category_id
-            WHERE {$tableAlias}.post_id IN ({$ids})
+            $sql = "SELECT c.*, pc.post_id
+                FROM post_category AS pc
+                JOIN {$this->tableName} AS c
+                ON c.id = pc.category_id
+                WHERE pc.post_id IN ({$ids})
             ";
 
             $query = $this->query($sql);

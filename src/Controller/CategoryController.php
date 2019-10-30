@@ -48,8 +48,8 @@
              */
             $posts = $tablePost->findPostsPaginatedByCategory($category, 6, "created_at", "desc");
 
-            // hydrate the post
-            PostHydrate::addCategoriesToAllPost($tableCategory, $posts);
+            // hydrate the posts
+            PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
             PostHydrate::addUserToAllPosts($tableUser, $posts);
 
             /**

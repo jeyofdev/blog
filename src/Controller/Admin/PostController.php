@@ -153,7 +153,7 @@
                 if ($validator->isValid()) {
                     $tablePost->updatePost($post, "Europe/Paris", "post_category");
                     $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
-                    PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
+                    PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
                     $success = true;
                 } else {
                     $errors = $validator->getErrors();
@@ -221,7 +221,7 @@
                     $tablePost->createPost($post, "Europe/Paris");
                     $tableUser->addToPost($post->getId(), $this->session->read("auth"));
 
-                    PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
+                    PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
                     PostHydrate::addUserToPost($tableUser, $tableRole, $post);
                     
                     $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
@@ -277,7 +277,7 @@
             $post = $tablePost->find(["id" => $id]);
 
             $post->setPublished(1);
-            PostHydrate::addCategoriesToAllPost($tableCategory, [$post]);
+            PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
 
             // get the ids of the categories to the post
             $categoriesIds = [];

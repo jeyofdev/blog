@@ -68,7 +68,7 @@
          * @param CategoryTable $tableCategory
          * @return void
          */
-        public static function addCategoriesToAllPost (CategoryTable $tableCategory, array $posts) : void
+        public static function addCategoriesToAllPosts (CategoryTable $tableCategory, array $posts) : void
         {
             // get the ids of each items
             $postsById = [];

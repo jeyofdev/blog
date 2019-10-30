@@ -8,7 +8,6 @@
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
-    use jeyofdev\php\blog\Entity\PostCategory;
     use jeyofdev\php\blog\Entity\User;
     use PDO;
 
@@ -81,23 +80,18 @@
 
             if ($this->checkIfValueIsAllowed("orderBy", $orderBy, $this->columns)) {
                 if ($this->checkIfValueIsAllowed("direction", $direction, self::DIRECTION_ALLOWED)) {
-                    $tableAlias = strtolower(substr($this->tableName, 0, 1));
-
-                    $pos = strpos("post_category", "_") + 1;
-                    $joinAlias = strtolower(substr("post_category", 0, 1) . substr("post_category", $pos, 1));
-
-                    $sqlPosts = "SELECT {$tableAlias}.* 
-                        FROM {$this->tableName} AS $tableAlias
-                        JOIN post_category AS $joinAlias ON {$joinAlias}.post_id = {$tableAlias}.id
-                        WHERE {$joinAlias}.category_id = {$category->getId()}
+                    $sqlPosts = "SELECT p.* 
+                        FROM {$this->tableName} AS p
+                        JOIN post_category AS pc
+                        ON pc.post_id = p.id
+                        WHERE pc.category_id = {$category->getId()}
                         ORDER BY $orderBy $direction
                     ";
-
                     $sqlCount = "SELECT COUNT(category_id) FROM post_category WHERE category_id = {$category->getId()}";
                     
                     $this->pagination = new Pagination($this->connection, $sqlPosts, $sqlCount, $this, $perPage);
 
-                    return $this->pagination->getItemsPaginated($sqlPosts);
+                    return $this->pagination->getItemsPaginated();
                 }
             }
         }
@@ -127,7 +121,7 @@
 
                     $this->pagination = new Pagination($this->connection, $sqlPosts, $sqlCount, $this, $perPage);
 
-                    return $this->pagination->getItemsPaginated($sqlPosts);
+                    return $this->pagination->getItemsPaginated();
                 }
             }
         }
@@ -241,13 +235,11 @@
          */
         public function attachCategories (int $postId, array $params, int $fetchMode = PDO::FETCH_CLASS) : self
         {
-            $tableName = (new PostCategory)->getTableName();
-
-            $this->delete(["post_id" => $postId], $tableName);
+            $this->delete(["post_id" => $postId], "post_category");
 
             $set = $this->setQueryParams($params);
 
-            $sql = "INSERT INTO $tableName SET $set[0]";
+            $sql = "INSERT INTO post_category SET $set[0]";
             $query = $this->connection->prepare($sql);
             foreach ($params["category_id"] as $category) {
                 $query->execute([

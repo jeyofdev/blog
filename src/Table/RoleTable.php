@@ -4,7 +4,6 @@
 
 
     use jeyofdev\php\blog\Entity\Role;
-    use jeyofdev\php\blog\Entity\UserRole;
 
 
     /**
@@ -41,7 +40,7 @@
         {
             $sql = "SELECT r.*, ur.user_id
                 FROM user_role AS ur
-                JOIN role AS r
+                JOIN {$this->tableName} AS r
                 ON r.id = ur.role_id
                 WHERE ur.user_id = :id
             ";

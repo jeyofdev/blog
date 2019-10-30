@@ -295,29 +295,6 @@
 
 
         /**
-         * Set the names of the tables to use and their aliases for a join query
-         *
-         * @return array
-         */
-        protected function getTablesAndAlias (object $entity) : array
-        {
-            $table = $entity->getTableName();
-
-            $pos = strpos($table, "_") + 1;
-            $tableAlias = strtolower(substr($table, 0, 1) . substr($table, $pos, 1));
-
-            $joinAlias = strtolower(substr($this->tableName, 0, 1));
-
-            return [
-                "table" => $table,
-                "tableAlias" => $tableAlias,
-                "joinAlias" => $joinAlias
-            ];
-        }
-
-
-
-        /**
          * {@inheritDoc}
          */
         public function query (string $sql, int $fetchMode = PDO::FETCH_CLASS) : PDOStatement

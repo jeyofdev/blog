@@ -3,7 +3,6 @@
     namespace jeyofdev\php\blog\Table;
 
 
-    use jeyofdev\php\blog\Entity\PostUser;
     use jeyofdev\php\blog\Entity\User;
 
 
@@ -39,14 +38,11 @@
          */
         public function findUser (array $params) : User
         {
-            $postUser = new PostUser();
-            extract($this->getTablesAndAlias($postUser)); // $table, $tableAlias, $joinAlias
-
-            $sql = "SELECT {$joinAlias}.*
-                FROM $table AS $tableAlias 
-                JOIN {$this->tableName} AS $joinAlias
-                ON $tableAlias.user_id = {$joinAlias}.id
-                WHERE $tableAlias.post_id = :id
+            $sql = "SELECT u.*
+                FROM post_user AS pu
+                JOIN {$this->tableName} AS u
+                ON pu.user_id = u.id
+                WHERE pu.post_id = :id
             ";
 
             $query = $this->prepare($sql, $params);
@@ -64,14 +60,11 @@
          */
         public function findUserByPosts (string $ids)
         {
-            $postUser = new PostUser();
-            extract($this->getTablesAndAlias($postUser)); // $table, $tableAlias, $joinAlias
-
-            $sql = "SELECT {$joinAlias}.*, {$tableAlias}.post_id
-            FROM $table AS $tableAlias
-            JOIN {$this->tableName} AS {$joinAlias}
-            ON {$joinAlias}.id = {$tableAlias}.user_id
-            WHERE {$tableAlias}.post_id IN ({$ids})
+            $sql = "SELECT u.*, pu.post_id
+                FROM post_user AS pu
+                JOIN {$this->tableName} AS u
+                ON u.id = pu.user_id
+                WHERE pu.post_id IN ({$ids})
             ";
 
             $query = $this->query($sql);
