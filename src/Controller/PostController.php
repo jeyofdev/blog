@@ -4,10 +4,12 @@
 
 
     use jeyofdev\php\blog\App;
+    use jeyofdev\php\blog\Entity\Comment;
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
+    use jeyofdev\php\blog\Table\CommentTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
@@ -66,6 +68,7 @@
             $tableUser = new UserTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
             $tableRole = new RoleTable($this->connection);
+            $tableComment = new CommentTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -81,15 +84,32 @@
             $this->exists($post, "post", $id);
             $this->checkSlugMatch($this->router, $post, $slug, $id);
 
-            // hydrate the posts
+            // hydrate the post
             PostHydrate::addCategoriesToPost($tableCategory, $post);
             PostHydrate::addUserToPost($tableUser, $tableRole, $post);
 
             // related posts
             $relatedPosts = $tablePost->findRandomPosts(3);
 
+            // comments of the post
+            $comments = $tableComment->findAll();
+            $countComments = count($tableComment->findCommentsByPost(["id" => $id]));
+
+            /**
+             * @var Comment[]
+             */
+            $postComments = $tableComment->findCommentsPaginated($post->getId(), 5);     
+
+            /**
+             * @var Pagination
+             */
+            $pagination = $tableComment->getPagination(); 
+
+            // Get the route of the current page
+            $link = $this->router->url("post", ["id" => $id, "slug" => $slug]);    
+
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
-            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "title"));
+            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "postComments", "countComments", "pagination", "link", "title"));
         }
     }

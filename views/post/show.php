@@ -54,3 +54,28 @@
         <?php endforeach; ?>
     </div>
 </div>
+
+
+<!-- view the comments of the post -->
+<div class="blog-comment">
+    <h4 class="text-secondary"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
+    <div class="row">
+        <?php foreach ($postComments as $comments) : ?>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text"><?= $comments->getUsername(); ?></p>
+                        <p class="card-text"><?= $comments->getContent(); ?></p>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+
+    <!-- pagination -->
+    <div class="d-flex justify-content-between my-4">
+        <?= $pagination->previousLink($link); ?>
+        <?= $pagination->nextLink($link); ?>
+    </div>
+</div>
