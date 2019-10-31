@@ -40,7 +40,7 @@
         /**
          * Get the value of rolesIds
          *
-         * @return void
+         * @return array
          */
         public function getRolesIds () : array
         {

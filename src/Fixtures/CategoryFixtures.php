@@ -41,7 +41,7 @@
         /**
          * Get the value of categoriesIds
          *
-         * @return void
+         * @return array
          */
         public function getCategoriesIds () : array
         {

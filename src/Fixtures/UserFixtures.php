@@ -46,7 +46,7 @@
         /**
          * Get the value of usersIds
          *
-         * @return void
+         * @return array
          */
         public function getUsersIds () : array
         {
