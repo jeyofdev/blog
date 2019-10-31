@@ -31,9 +31,12 @@
         // front
         ->get('/', 'home/index', 'home')
         ->get('/blog/', 'post/index', 'blog')
-        ->get('/blog/[*:slug]-[i:id]/', 'post/show', 'post')
+        ->match('/blog/[*:slug]-[i:id]/', 'post/show', 'post')
+
         ->get('/category/[*:slug]-[i:id]/', 'category/show', 'category')
+
         ->get('/author/[*:slug]-[i:id]/', 'author/show', 'user')
+
         ->match('/login/', 'security/auth/login', 'login')
         ->match('/logout/', 'security/auth/logout', 'logout')
 

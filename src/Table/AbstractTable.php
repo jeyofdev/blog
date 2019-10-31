@@ -164,11 +164,12 @@
         /**
          * {@inheritDoc}
          */
-        public function create (array $params) : self
+        public function create (array $params, ?string $tableName = null) : self
         {
+            $tableName = !is_null($tableName) ? $tableName : $this->tableName;
             $set = $this->setQueryParams($params);
 
-            $sql = "INSERT INTO {$this->tableName} SET $set[0]";
+            $sql = "INSERT INTO $tableName SET $set[0]";
             $query = $this->prepare($sql, $set[1]);
 
             if (!$query) {

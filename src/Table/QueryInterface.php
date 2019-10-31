@@ -42,7 +42,7 @@
          *
          * @return self
          */
-        public function create (array $params);
+        public function create (array $params, ?string $tableName = null);
 
 
 

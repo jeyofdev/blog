@@ -7,12 +7,15 @@
     use jeyofdev\php\blog\Entity\Comment;
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Form\CommentForm;
+    use jeyofdev\php\blog\Form\Validator\CommentValidator;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\CommentTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
+    use jeyofdev\php\blog\Url;
 
 
     /**
@@ -64,6 +67,9 @@
          */
         public function show () : void
         {
+            $errors = []; // form errors
+            $flash = null; // flash message
+
             $tablePost = new PostTable($this->connection);
             $tableUser = new UserTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
@@ -98,18 +104,51 @@
             /**
              * @var Comment[]
              */
-            $postComments = $tableComment->findCommentsPaginated($post->getId(), 5);     
+            $postComments = $tableComment->findCommentsPaginated($post->getId(), 50);     
 
             /**
              * @var Pagination
              */
-            $pagination = $tableComment->getPagination(); 
+            $pagination = $tableComment->getPagination();
+
+            // check that the form is valid and add a comment
+            $validator = new CommentValidator("en", $_POST);
+
+            if ($validator->isSubmit()) {
+                $comment = new Comment();
+                $comment
+                    ->setUsername($_POST["username"])
+                    ->setContent($_POST["content"]);
+
+                if ($validator->isValid()) {
+                    $tableComment->createComment($comment, $post);
+
+                    $this->session->setFlash("Your comment has been added", "success"); // flash message
+
+                    $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?create=1";
+                    Url::redirect(301, $url);
+                } else {
+                    $errors = $validator->getErrors();
+                }
+            }
+
+            // form
+            $form = new CommentForm($_POST, $errors);
+
+            // url of the current page
+            $url = $this->router->url("post", ["slug" => $slug, "id" => $id]);
+
+            // flash message
+            if (!empty($errors)) {
+                $this->session->setFlash("The form contains errors", "danger");
+            }
+            $flash = $this->session->generateFlash();
 
             // Get the route of the current page
             $link = $this->router->url("post", ["id" => $id, "slug" => $slug]);    
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
-            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "postComments", "countComments", "pagination", "link", "title"));
+            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "postComments", "countComments", "pagination", "form", "url", "link", "title", "flash"));
         }
     }

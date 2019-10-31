@@ -5,6 +5,7 @@
 
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Comment;
+    use jeyofdev\php\blog\Entity\Post;
 
 
     /**
@@ -82,5 +83,47 @@
                     return $this->pagination->getItemsPaginated($params);
                 }
             }
+        }
+
+
+
+        /**
+         * Create a new comment
+         *
+         * @param Comment $comment
+         * @param Post $post
+         * @return self
+         */
+        public function createComment (Comment $comment, Post $post) : self
+        {
+            $this->create([
+                "username" => $comment->getUsername(),
+                "content" => $comment->getContent()
+            ]);
+
+            $comment->setId((int)$this->connection->lastInsertId());
+
+            $this->attachPost($comment, $post);
+
+            return $this;
+        }
+
+
+
+        /**
+         * Associate a comment with the current post
+         *
+         * @param Comment $comment
+         * @param Post $post
+         * @return self
+         */
+        public function attachPost (Comment $comment, Post $post) : self
+        {
+            $this->create([
+                "comment_id" => $comment->getID(),
+                "post_id" => $post->getId()
+            ], "post_comment");
+
+            return $this;
         }
     }

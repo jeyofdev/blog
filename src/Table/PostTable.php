@@ -228,8 +228,8 @@
 
 
         /**
-         * Delete the categories related to the current article
-         * and add the new categories to the current article
+         * Delete the categories related to the current post
+         * and add the new categories to the current post
          *
          * @return self
          */

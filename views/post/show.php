@@ -72,6 +72,12 @@
         <?php endforeach; ?>
     </div>
 
+    <!-- flash message -->
+    <?= $flash; ?>
+
+    <!-- the form to add a new comment -->
+    <?= $form->build($url, "Add a comment"); ?>
+
 
     <!-- pagination -->
     <div class="d-flex justify-content-between my-4">
