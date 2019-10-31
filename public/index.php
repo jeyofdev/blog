@@ -33,6 +33,8 @@
         ->get('/blog/', 'post/index', 'blog')
         ->match('/blog/[*:slug]-[i:id]/', 'post/show', 'post')
 
+        ->match('/blog/comment/delete/[i:id]/', 'comment/delete', 'comment_delete')
+
         ->get('/category/[*:slug]-[i:id]/', 'category/show', 'category')
 
         ->get('/author/[*:slug]-[i:id]/', 'author/show', 'user')

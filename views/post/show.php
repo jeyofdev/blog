@@ -9,6 +9,10 @@
 ?>
 
 
+<!-- flash message -->
+<?= $flash; ?>
+
+
 <!-- view the current post -->
 <div class="blog-single mt-75">
     <div class="card">
@@ -59,24 +63,26 @@
 <!-- view the comments of the post -->
 <div class="blog-comment mt-125 mx-80">
     <h4 class="text-secondary bloc-title mb-35"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
-    <div class="row">
-        <?php foreach ($postComments as $comments) : ?>
-            <div class="col-12 comment mb-30">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-title"><?= $comments->getUsername(); ?></p>
-                        <p class="card-text"><?= $comments->getContent(); ?></p>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-
-    <!-- flash message -->
-    <?= $flash; ?>
 
     <!-- the form to add a new comment -->
     <?= $form->build($url, "Add a comment"); ?>
+
+    <div class="row">
+        <?php foreach ($postComments as $comment) : ?>
+            <div class="col-12 comment mb-30">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title"><?= $comment->getUsername(); ?></p>
+                        <p class="card-text"><?= $comment->getContent(); ?></p>
+                    </div>
+                </div>
+
+                <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
+                    <button type="submit" class="btn btn-outline-danger rounded">delete</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
 
     <!-- pagination -->

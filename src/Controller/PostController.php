@@ -94,6 +94,11 @@
             PostHydrate::addCategoriesToPost($tableCategory, $post);
             PostHydrate::addUserToPost($tableUser, $tableRole, $post);
 
+            $this->session->write("post", [
+                "id" => $post->getId(),
+                "slug" => $post->getSlug()
+            ]);
+
             // related posts
             $relatedPosts = $tablePost->findRandomPosts(3);
 
@@ -123,7 +128,7 @@
                 if ($validator->isValid()) {
                     $tableComment->createComment($comment, $post);
 
-                    $this->session->setFlash("Your comment has been added", "success"); // flash message
+                    $this->session->setFlash("Your comment has been added", "success", "mt-5"); // flash message
 
                     $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?create=1";
                     Url::redirect(301, $url);
@@ -140,7 +145,7 @@
 
             // flash message
             if (!empty($errors)) {
-                $this->session->setFlash("The form contains errors", "danger");
+                $this->session->setFlash("The form contains errors", "danger", "mt-5");
             }
             $flash = $this->session->generateFlash();
 
