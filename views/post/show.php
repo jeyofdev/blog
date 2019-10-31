@@ -34,7 +34,7 @@
 
 
 <!-- view the related posts -->
-<div class="blog-related mt-125 mb-75 mx-80">
+<div class="blog-related mt-125 mx-80">
     <h4 class="text-secondary bloc-title mb-35">You may also like</h4>
     <div class="row">
         <?php foreach ($relatedPosts as $post) : ?>
@@ -57,14 +57,14 @@
 
 
 <!-- view the comments of the post -->
-<div class="blog-comment">
-    <h4 class="text-secondary"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
+<div class="blog-comment mt-125 mx-80">
+    <h4 class="text-secondary bloc-title mb-35"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
     <div class="row">
         <?php foreach ($postComments as $comments) : ?>
-            <div class="col-12">
+            <div class="col-12 comment mb-30">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text"><?= $comments->getUsername(); ?></p>
+                        <p class="card-title"><?= $comments->getUsername(); ?></p>
                         <p class="card-text"><?= $comments->getContent(); ?></p>
                     </div>
                 </div>
