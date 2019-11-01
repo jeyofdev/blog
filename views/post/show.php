@@ -79,7 +79,9 @@
 
                 <form style="display:inline;" action="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]); ?>#formComment" method="post">
                     <input type="hidden" id="id" name="id" value="<?= $comment->getId(); ?>">
-                    <button type="submit" class="btn btn-outline-success rounded">edit</button>
+                    <input type="hidden" id="username" name="username" value="<?= $comment->getUsername(); ?>">
+                    <input type="hidden" id="content" name="content" value="<?= $comment->getContent(); ?>">
+                    <button type="submit" class="btn btn-outline-success rounded linkForm">edit</button>
                 </form>
 
                 <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
