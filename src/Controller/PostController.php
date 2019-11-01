@@ -69,6 +69,7 @@
         {
             $errors = []; // form errors
             $flash = null; // flash message
+            $buttonLabel = "Add a comment";
 
             $tablePost = new PostTable($this->connection);
             $tableUser = new UserTable($this->connection);
@@ -116,24 +117,41 @@
              */
             $pagination = $tableComment->getPagination();
 
-            // check that the form is valid and add a comment
+            // check that the form is valid and add or update a comment
             $validator = new CommentValidator("en", $_POST);
 
             if ($validator->isSubmit()) {
                 $comment = new Comment();
-                $comment
-                    ->setUsername($_POST["username"])
-                    ->setContent($_POST["content"]);
 
-                if ($validator->isValid()) {
-                    $tableComment->createComment($comment, $post);
+                if (isset($_POST["content"])) {
+                    $comment
+                        ->setId($_POST["id"])
+                        ->setUsername($_POST["username"])
+                        ->setContent($_POST["content"]);
 
-                    $this->session->setFlash("Your comment has been added", "success", "mt-5"); // flash message
+                    if ($validator->isValid()) {
+                        if ($_POST["id"] === "") {
+                            $tableComment->createComment($comment, $post);
+                            $this->session->setFlash("Your comment has been added", "success", "mt-5"); // flash message
+                        } else {
+                            $tableComment->updateComment($comment, $post);
+                            $this->session->setFlash("Your comment has been updated", "success", "mt-5"); // flash message
+                        }
 
-                    $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?create=1";
-                    Url::redirect(301, $url);
-                } else {
-                    $errors = $validator->getErrors();
+                        $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?create=1";
+                        Url::redirect(301, $url);
+                    } else {
+                        $errors = $validator->getErrors();
+                    }
+                } else if (isset($_POST["id"])) {
+                    $comment->setId($_POST["id"]);
+                    $comment = $tableComment->find(["id" => $_POST["id"]]);
+                    $_POST = [
+                        "id" => $comment->getId(),
+                        "username" => $comment->getUsername(),
+                        "content" => $comment->getContent()
+                    ];
+                    $buttonLabel = "Update a comment";
                 }
             }
 
@@ -154,6 +172,6 @@
 
             $title = App::getInstance()->setTitle($post->getName())->getTitle();
 
-            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "postComments", "countComments", "pagination", "form", "url", "link", "title", "flash"));
+            $this->render("post.show", $this->router, $this->session, compact("post", "relatedPosts", "postComments", "countComments", "pagination", "form", "buttonLabel", "url", "link", "title", "flash"));
         }
     }

@@ -41,7 +41,7 @@
 <div class="blog-related mt-125 mx-80">
     <h4 class="text-secondary bloc-title mb-35">You may also like</h4>
     <div class="row">
-        <?php foreach ($relatedPosts as $post) : ?>
+        <?php foreach ($relatedPosts as $relatedPost) : ?>
             <div class="col-12 col-md-4 mb-0">
                 <div class="card">
                     <div class="card-header mb-3">
@@ -49,8 +49,8 @@
                     </div>
 
                     <div class="card-body">
-                        <a class="d-block card-title" href="<?= $router->url('post', ['id' => $post->getID(), 'slug' => $post->getSlug()]); ?>">
-                            <h3><?= $post->getName(); ?></h3>
+                        <a class="d-block card-title" href="<?= $router->url('post', ['id' => $relatedPost->getID(), 'slug' => $relatedPost->getSlug()]); ?>">
+                            <h3><?= $relatedPost->getName(); ?></h3>
                         </a>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
     <h4 class="text-secondary bloc-title mb-35"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
 
     <!-- the form to add a new comment -->
-    <?= $form->build($url, "Add a comment"); ?>
+    <?= $form->build($url, $buttonLabel); ?>
 
     <div class="row">
         <?php foreach ($postComments as $comment) : ?>
@@ -76,6 +76,11 @@
                         <p class="card-text"><?= $comment->getContent(); ?></p>
                     </div>
                 </div>
+
+                <form style="display:inline;" action="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]); ?>#formComment" method="post">
+                    <input type="hidden" id="id" name="id" value="<?= $comment->getId(); ?>">
+                    <button type="submit" class="btn btn-outline-success rounded">edit</button>
+                </form>
 
                 <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
                     <button type="submit" class="btn btn-outline-danger rounded">delete</button>

@@ -111,6 +111,25 @@
 
 
         /**
+         * Update a comment
+         *
+         * @param Comment $comment
+         * @return self
+         */
+        public function updateComment (Comment $comment) : self
+        {
+            $this
+                ->update([
+                    "username" => $comment->getUsername(),
+                    "content" => $comment->getContent()
+                ], ["id" => $comment->getId()]);
+
+            return $this;
+        }
+
+
+
+        /**
          * Associate a comment with the current post
          *
          * @param Comment $comment

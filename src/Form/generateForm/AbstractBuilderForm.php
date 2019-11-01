@@ -82,14 +82,15 @@
         /**
          * {@inheritDoc}
          */
-        public function formStart (string $action = "#", string $method = "post", ?string $class = null)
+        public function formStart (string $action = "#", string $method = "post", ?string $class = null, ?string $id = null)
         {
             $method = strtolower($method);
             $this->checkValueIsInArray($method, self::METHOD_ALLOWED, "method");
 
             $class = !is_null($class) ? ' class="' . $class . '"' : null;
+            $id = !is_null($id) ? ' id="' . $id . '"' : null;
 
-            $start = '<form action="' . $action . '" method="' . $method . '"' . $class . '>';
+            $start = '<form action="' . $action . '" method="' . $method . '"' . $class . $id . '>';
             $this->form["start"] = $start;
 
             return $this;
@@ -112,7 +113,7 @@
         /**
          * @return self
          */
-        public function input (string $type, string $name, string $label, array $options, array $surround = [], ?string $errorClass = null)
+        public function input (string $type, string $name, ?string $label, array $options, array $surround = [], ?string $errorClass = null)
         {
             $type = strtolower($type);
             $this->checkValueIsInArray($type, self::INPUT_TYPE_ALLOWED, "type");

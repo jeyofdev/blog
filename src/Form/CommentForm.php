@@ -20,7 +20,8 @@
         public function build (string $url, string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false) : string
         {
             $this
-                ->formStart($url, "post", "my-5")
+                ->formStart($url, "post", "my-5", "formComment")
+                ->input("hidden", "id", null, [])
                 ->input("text", "username", "Username :", [], ["tag" => "div"])
                 ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"]);
 

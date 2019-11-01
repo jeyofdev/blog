@@ -13,7 +13,7 @@
         /**
          * {@inheritDoc}
          */
-        public function input (string $type, string $name, string $label, array $options, array $surround = [], ?string $errorClass = "invalid-feedback") : self
+        public function input (string $type, string $name, ?string $label, array $options, array $surround = [], ?string $errorClass = "invalid-feedback") : self
         {
             $bootstrapClass = $this->SetBootstrapClass($options, $surround);
             $options = $bootstrapClass[0];

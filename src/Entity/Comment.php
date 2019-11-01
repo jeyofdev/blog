@@ -52,9 +52,10 @@
         /**
          * Set the value of id
          *
+         * @param int|string $id
          * @return self
          */ 
-        public function setId(int $id) : self
+        public function setId($id) : self
         {
             $this->id = $id;
             return $this;
