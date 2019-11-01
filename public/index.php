@@ -28,6 +28,9 @@
     // router
     $router = new Router();
     $router
+        // 404
+        ->match('/404/', 'error/404', '404')
+
         // front
         ->get('/', 'home/index', 'home')
         ->get('/blog/', 'post/index', 'blog')
