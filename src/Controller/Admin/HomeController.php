@@ -20,10 +20,13 @@
             // check that the user is logged in
             Auth::isConnect($this->router);
 
+            // flash message
+            $flash = $this->session->generateFlash();
+
             $title = App::getInstance()
                 ->setTitle("Administration of the blog")
                 ->getTitle();
 
-            $this->render("admin.home.index", $this->router, $this->session, compact("title"));
+            $this->render("admin.home.index", $this->router, $this->session, compact("title", "flash"));
         }
     }

@@ -34,8 +34,8 @@
 
             // if the user is already logged in,
             // redirection to the previous page
-            if (isset($_SESSION["auth"])) {
-                $url = $_SESSION["URI"];
+            if ($this->session->exist("auth")) {
+                $url = $this->session->read("URI");
                 Url::redirect(301, $url);
             }
 
@@ -132,18 +132,45 @@
          */
         public function register () : void
         {
+            $this->getHttpReferer();
+
+            // if the user is already logged in,
+            // redirection to the previous page
+            if ($this->session->exist("auth")) {
+                $url = $this->router->url("admin");
+                Url::redirect(301, $url);
+            }
+
             $errors = []; // form errors
             $flash = null; // flash message
 
             $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // form validator
             $validator = new RegisterValidator("en", $_POST, $tableUser);
 
-            // check that the form is valid
+            // check that the form is valid and add the new user
             if ($validator->isSubmit()) {
                 if ($validator->isValid()) {
-                    
+                    $role = $tableRole->find(["name" => "author"]);
+
+                    $user = new User();
+                    $user
+                        ->setUsername($_POST["username"])
+                        ->setPassword($_POST["password"])
+                        ->setSlug(str_replace(" ", "-", $_POST["username"]))
+                        ->setRole($role);
+
+                    $tableUser->createUser($user, $role);
+
+                    $this->session->setFlash("Congratulations {$user->getUsername()}, you are now registered", "success", "my-5");
+                    $this->session
+                        ->write("auth", $user->getId())
+                        ->write("role", $user->getRole());
+
+                    $url = $this->router->url("admin") . "?user=1&create=1";
+                    Url::redirect(301, $url);
                 } else {
                     $errors = $validator->getErrors();
                     $errors["form"] = true;

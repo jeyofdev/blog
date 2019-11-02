@@ -3,6 +3,7 @@
     namespace jeyofdev\php\blog\Table;
 
 
+    use jeyofdev\php\blog\Entity\Role;
     use jeyofdev\php\blog\Entity\User;
 
 
@@ -70,6 +71,63 @@
             $query = $this->query($sql);
             
             return $this->fetchAll($query);
+        }
+
+
+
+        /**
+         * Create a new user
+         *
+         * @param User $user
+         * @param Role $role
+         * @return self
+         */
+        public function createUser (User $user, Role $role) : self
+        {
+            $this->addUser($user, $role);
+            $this->attachRole($user, $role);
+
+            return $this;
+        }
+
+
+
+        /**
+         * Add a new user
+         *
+         * @param User $user
+         * @return self
+         */
+        public function addUser (User $user) : self
+        {
+            $this->create([
+                "username" => $user->getUsername(),
+                "password" => $user->getPassword(),
+                "slug" => $user->getSlug()
+            ]);
+
+            $user->setId((int)$this->connection->lastInsertId());
+
+            return $this;
+        }
+
+
+
+        /**
+         * Associate a user with a role
+         *
+         * @param User $user
+         * @param Role $role
+         * @return self
+         */
+        public function attachRole (User $user, Role $role) : self
+        {
+            $this->create([
+                "user_id" => $user->getId(),
+                "role_id" => $role->getId()
+            ], "user_role");
+
+            return $this;
         }
 
 
