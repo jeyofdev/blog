@@ -80,7 +80,7 @@
                 $category = new Category();
                 $category
                     ->setName($_POST["name"])
-                    ->setSlug($_POST["slug"]);
+                    ->setSlug(str_replace(" ", "-", $_POST["slug"]));
 
                 if ($validator->isValid()) {
                     $tableCategory->createCategory($category);
@@ -147,7 +147,7 @@
             if ($validator->isSubmit()) {
                 $category
                     ->setName($_POST["name"])
-                    ->setSlug($_POST["slug"]);
+                    ->setSlug(str_replace(" ", "-", $_POST["slug"]));
 
                 if ($validator->isValid()) {
                     $tableCategory->updateCategory($category);

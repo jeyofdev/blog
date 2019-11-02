@@ -41,9 +41,11 @@
              */
             $posts = $tablePost->findAllPostsPaginated(6, "created_at", "desc", ["published" => 1]);
 
-            // hydrate the posts
-            PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
-            PostHydrate::addUserToAllPosts($tableUser, $posts);
+            if (!empty($posts)) {
+                // hydrate the posts
+                PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
+                PostHydrate::addUserToAllPosts($tableUser, $posts);
+            }
 
             /**
              * @var Pagination

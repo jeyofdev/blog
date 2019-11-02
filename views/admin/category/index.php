@@ -9,33 +9,36 @@
 
 
 <!-- list of categories -->
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <?php foreach ($categories as $category) : ?>
+<?php if (!empty($categories)) : ?>
+    <table class="table">
+        <thead class="thead-dark">
             <tr>
-                <th scope="row"><?= $category->getId(); ?></th>
-                <td>
-                    <a href="<?= $router->url('category', ["id" => $category->getId()]); ?>"><?= $category->getName(); ?></a>
-                </td>
-                <td>
-                    <a class="btn btn-outline-info rounded" href="<?= $router->url('category', ['id' => $category->getId()]); ?>">View</a>
-                    <a class="btn btn-outline-success rounded" href="<?= $router->url('admin_category', ['id' => $category->getId()]); ?>">Edit</a>
-                    <form style="display:inline;" action="<?= $router->url('admin_category_delete', ['id' => $category->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this category')">
-                        <button type="submit" class="btn btn-outline-danger rounded">delete</button>
-                    </form>
-                </td>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Action</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            <?php foreach ($categories as $category) : ?>
+                <tr>
+                    <th scope="row"><?= $category->getId(); ?></th>
+                    <td><?= $category->getName(); ?></td>
+                    <td>
+                        <a class="btn btn-outline-success rounded" href="<?= $router->url('admin_category', ['id' => $category->getId()]); ?>">Edit</a>
+                        <form style="display:inline;" action="<?= $router->url('admin_category_delete', ['id' => $category->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this category')">
+                            <button type="submit" class="btn btn-outline-danger rounded">delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else : ?>
+    <div class="text-center alert alert-danger">
+        <h4 class="text-center">No categories available</h4>
+    </div>
+<?php endif; ?>
 
 
 <!-- pagination -->

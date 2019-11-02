@@ -147,7 +147,7 @@
             if ($validator->isSubmit()) {
                 $post
                     ->setName($_POST["name"])
-                    ->setSlug($_POST["slug"])
+                    ->setSlug(str_replace(" ", "-", $_POST["slug"]))
                     ->setContent($_POST["content"]);
 
                 if ($validator->isValid()) {
@@ -214,7 +214,7 @@
                 $post = new Post();
                 $post
                     ->setName($_POST["name"])
-                    ->setSlug($_POST["slug"])
+                    ->setSlug(str_replace(" ", "-", $_POST["slug"]))
                     ->setContent($_POST["content"]);
 
                 if ($validator->isValid()) {

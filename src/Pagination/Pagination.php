@@ -178,7 +178,9 @@
                 $this->itemsCount = $query->fetch()[0];
             }
         
-            return (int)ceil($this->itemsCount / $this->perPage);
+            $nbPage = (int)ceil($this->itemsCount / $this->perPage);
+        
+            return ($nbPage !== 0) ? $nbPage : 1;
         }
 
 
