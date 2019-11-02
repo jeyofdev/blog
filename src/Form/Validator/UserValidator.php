@@ -4,7 +4,7 @@
 
 
     /**
-     * Validate the forms related to users
+     * Validation of the forms related to users
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */

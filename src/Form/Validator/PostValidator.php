@@ -7,7 +7,7 @@
 
 
     /**
-     * Validate the forms related to posts
+     * Validation of the forms related to posts
      * 
      * @author jeyofdev <jgregoire.pro@gmail.com>
      */

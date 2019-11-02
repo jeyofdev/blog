@@ -29,13 +29,18 @@
                 </ul>
 
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <?php if ($session->exist("auth")) : ?>
+                    <?php if ($session->exist("auth")) : ?>
+                        <li class="nav-item">
                             <a class="nav-link" href="<?= $router->url("logout"); ?>">Log out</a>
-                        <?php else : ?>
+                        </li>
+                    <?php else : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $router->url("register"); ?>">Register</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="<?= $router->url("login"); ?>">Log in</a>
-                        <?php endif; ?>
-                    </li>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </nav>

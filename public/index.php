@@ -42,6 +42,7 @@
 
         ->get('/author/[*:slug]-[i:id]/', 'author/show', 'user')
 
+        ->match('/register/', 'security/auth/register', 'register')
         ->match('/login/', 'security/auth/login', 'login')
         ->match('/logout/', 'security/auth/logout', 'logout')
 

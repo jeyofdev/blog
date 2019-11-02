@@ -7,6 +7,8 @@
     use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Form\LoginForm;
+    use jeyofdev\php\blog\Form\RegisterForm;
+    use jeyofdev\php\blog\Form\Validator\RegisterValidator;
     use jeyofdev\php\blog\Form\Validator\UserValidator;
     use jeyofdev\php\blog\Hydrate\UserHydrate;
     use jeyofdev\php\blog\Table\RoleTable;
@@ -119,6 +121,52 @@
             }
 
             Url::redirect(301, $url);
+        }
+
+
+
+        /**
+         * Register a new user
+         *
+         * @return void
+         */
+        public function register () : void
+        {
+            $errors = []; // form errors
+            $flash = null; // flash message
+
+            $tableUser = new UserTable($this->connection);
+
+            // form validator
+            $validator = new RegisterValidator("en", $_POST, $tableUser);
+
+            // check that the form is valid
+            if ($validator->isSubmit()) {
+                if ($validator->isValid()) {
+                    
+                } else {
+                    $errors = $validator->getErrors();
+                    $errors["form"] = true;
+                }
+            }
+
+            // form
+            $form = new RegisterForm($_POST, $errors);
+
+            // url of the current page
+            $url = $this->router->url("register");
+
+            // flash message
+            if (array_key_exists("form", $errors)) {
+                $this->session->setFlash("The form contains errors", "danger", "my-5");
+                $flash = $this->session->generateFlash();
+            }
+
+            $title = App::getInstance()
+                ->setTitle("Register")
+                ->getTitle();
+
+            $this->render("security.auth.register", $this->router, $this->session, compact("form", "url", "title", "flash"));
         }
 
 
