@@ -3,18 +3,22 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Comment;
+    use jeyofdev\php\blog\Entity\Image;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostCategory;
     use jeyofdev\php\blog\Entity\PostComment;
+    use jeyofdev\php\blog\Entity\PostImage;
     use jeyofdev\php\blog\Entity\PostUser;
     use jeyofdev\php\blog\Entity\Role;
     use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Entity\UserRole;
     use jeyofdev\php\blog\Fixtures\CategoryFixtures;
     use jeyofdev\php\blog\Fixtures\CommentFixtures;
+    use jeyofdev\php\blog\Fixtures\ImageFixtures;
     use jeyofdev\php\blog\Fixtures\PostCategoryFixtures;
     use jeyofdev\php\blog\Fixtures\PostCommentFixtures;
     use jeyofdev\php\blog\Fixtures\PostFixtures;
+    use jeyofdev\php\blog\Fixtures\PostImageFixtures;
     use jeyofdev\php\blog\Fixtures\PostUserFixtures;
     use jeyofdev\php\blog\Fixtures\RoleFixtures;
     use jeyofdev\php\blog\Fixtures\UserFixtures;
@@ -55,6 +59,13 @@
         ->addTable();
 
 
+    // add the 'image' table
+    $image = new Image();
+    $image
+        ->createColumns($manager)
+        ->addTable();
+    
+    
     // add the 'role' table
     $role = new Role();
     $role
@@ -90,6 +101,13 @@
         ->addTable();
 
 
+    // add the 'post_image' table
+    $post_image = new PostImage();
+    $post_image
+        ->createColumns($manager)
+        ->addTable();
+
+
     // add the 'user_role' table
     $user_role = new UserRole();
     $user_role
@@ -102,7 +120,7 @@
     $post_user
         ->createColumns($manager)
         ->addTable()
-        ->emptyAllTable($post, $category, $role, $user, $comment, $post_category, $post_comment, $user_role, $post_user);
+        ->emptyAllTable($post, $category, $image, $role, $user, $comment, $post_category, $post_comment, $post_image, $user_role, $post_user);
 
 
     // Add the fixtures on the 'post' table
@@ -113,6 +131,11 @@
     // Add the fixtures on the 'category' table
     $categoryFixture = new CategoryFixtures($manager, $category, "en_US");
     $categoryFixture->add();
+
+
+    // Add the fixtures on the 'image' table
+    $imageFixture = new ImageFixtures($manager, $image, "en_US");
+    $imageFixture->add();
 
 
     // Add the fixtures on the 'role' table
@@ -138,6 +161,11 @@
     // Add the fixtures on the 'post_comment' table
     $post_commentFixture = new PostCommentFixtures($manager, $post_comment, "en_US", $postFixture, $commentFixture);
     $post_commentFixture->add();
+
+
+    // Add the fixtures on the 'post_image' table
+    $post_imageFixture = new PostImageFixtures($manager, $post_image, "en_US", $postFixture, $imageFixture);
+    $post_imageFixture->add();
 
 
     // Add the fixtures on the 'user_role' table
