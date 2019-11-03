@@ -24,7 +24,7 @@
          */
         public function add () : self
         {
-            $this->entity->setName("default.jpg");
+            $this->entity->setName("default.png");
             $this->manager->insert($this->entity);
             $this->imageId = $this->manager->lastInsertId();
 

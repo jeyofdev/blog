@@ -16,9 +16,11 @@
 
 
     // constantes
+    define("DS", DIRECTORY_SEPARATOR);
     define("ROOT", dirname(__DIR__));
     define("DEBUG_TIME", microtime(true));
-    define("VIEW_PATH", ROOT . DIRECTORY_SEPARATOR . 'views');
+    define("VIEW_PATH", ROOT . DS . 'views');
+    define("IMAGE", ROOT . DS . "public" . DS . "img");
 
 
     // redirection if necessary

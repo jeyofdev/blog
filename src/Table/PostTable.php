@@ -7,6 +7,7 @@
     use DateTimeZone;
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Category;
+    use jeyofdev\php\blog\Entity\Image;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\User;
     use PDO;
@@ -169,7 +170,7 @@
          * @param Post $post
          * @return self
          */
-        public function createPost (Post $post, string $timeZone = "Europe/Paris") : self
+        public function createPost (Post $post, Image $image, string $timeZone = "Europe/Paris") : self
         {
             $createdAt = $this->getCurrentDate($post, $timeZone);
 
@@ -183,6 +184,7 @@
             $post->setId((int)$this->connection->lastInsertId());
 
             $this->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
+            $this->attachImage($post, $image);
 
             return $this;
         }
@@ -248,6 +250,28 @@
                 ]);
                 $this->setFetchMode($fetchMode);
             }
+
+            return $this;
+        }
+
+
+
+        /**
+         * Associate an image with a post
+         *
+         * @param Post $post
+         * @param Image $image
+         * @return self
+         */
+        public function attachImage (Post $post, Image $image) : self
+        {
+            $idImageDefault = 1;
+            $id = !is_null($image->getId()) ? $image->getId() : $idImageDefault;
+
+            $this->create([
+                "post_id" => $post->getId(),
+                "image_id" => $id
+            ], "post_image");
 
             return $this;
         }

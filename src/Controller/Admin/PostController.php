@@ -12,7 +12,9 @@
     use jeyofdev\php\blog\Form\Validator\PostValidator;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Hydrate\UserHydrate;
+    use jeyofdev\php\blog\Image\Image;
     use jeyofdev\php\blog\Table\CategoryTable;
+    use jeyofdev\php\blog\Table\ImageTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
@@ -203,9 +205,12 @@
             $tableCategory = new CategoryTable($this->connection);
             $tableUser = new UserTable($this->connection);
             $tableRole = new RoleTable($this->connection);
+            $tableImage = new ImageTable($this->connection);
 
             // the names of all categories
             $categories = $tableCategory->list("name");
+
+            $image = new Image();
 
             // check that the form is valid and create the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories);
@@ -218,16 +223,21 @@
                     ->setContent($_POST["content"]);
 
                 if ($validator->isValid()) {
-                    $tablePost->createPost($post, "Europe/Paris");
-                    $tableUser->addToPost($post->getId(), $this->session->read("auth"));
+                    $image->addImage($post, $tableImage);
+                    $entityImage = $image->getImage();
 
-                    PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
-                    PostHydrate::addUserToPost($tableUser, $tableRole, $post);
-                    
-                    $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
-
-                    $url = $this->router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
-                    Url::redirect(301, $url);
+                    if (!array_key_exists("extension", $image->getError())) {
+                        $tablePost->createPost($post, $entityImage, "Europe/Paris");
+                        $tableUser->addToPost($post->getId(), $this->session->read("auth"));
+    
+                        PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
+                        PostHydrate::addUserToPost($tableUser, $tableRole, $post);
+                        
+                        $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
+    
+                        $url = $this->router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
+                        Url::redirect(301, $url);
+                    }
                 } else {
                     $errors = $validator->getErrors();
                 }
@@ -242,6 +252,9 @@
             // flash message
             if (!empty($errors)) {
                 $this->session->setFlash("The post could not be created", "danger", "my-5");
+                $flash = $this->session->generateFlash();
+            } if (!empty($image->getError())) {
+                $this->session->setFlash("The uploaded image to an extension that is not valid. The authorized extensions are : {$image->getAllowedExtensions()}", "danger", "my-5");
                 $flash = $this->session->generateFlash();
             }
 
