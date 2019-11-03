@@ -20,11 +20,12 @@
         public function build (string $url, string $labelSubmit, array $categories = [], $createdAt = false, $updatedAt = false) : string
         {
             $this
-                ->formStart($url, "post", "my-5")
+                ->formStart($url, "post", "my-5", null, true)
                 ->input("text", "name", "Title :", [], ["tag" => "div"])
                 ->input("text", "slug", "Slug :", [], ["tag" => "div"])
                 ->select("categoriesIds", "Categories :", ["multiple" => true], $categories, ["tag" => "div"])
-                ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"]);
+                ->textarea("content", "Content :", ["rows" => 8], ["tag" => "div"])
+                ->file("image", "Image :", [], ["tag" => "div"]);
 
             if ($createdAt) {
                 $this->input("text", "created_at", "Creation date :", ["disabled" => true], ["tag" => "div"]);

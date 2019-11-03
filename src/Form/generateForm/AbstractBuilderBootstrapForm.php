@@ -25,6 +25,22 @@
 
 
         /**
+         * Set the input of type file
+         * 
+         * @return self
+         */
+        public function file (string $name, ?string $label, array $options = [], array $surround = [], ?string $errorClass = "invalid-feedback") : self
+        {
+            $bootstrapClass = $this->SetBootstrapClass($options, $surround, "file");
+            $options = $bootstrapClass[0];
+            $surround = $bootstrapClass[1];
+            
+            return parent::input("file", $name, $label, $options, $surround, $errorClass);
+        }
+
+
+
+        /**
          * {@inheritDoc}
          */
         public function textarea (string $name, string $label, array $options, array $surround = [], ?string $errorClass = "invalid-feedback") : self
@@ -87,12 +103,15 @@
          *
          * @return array
          */
-        private function SetBootstrapClass (array $options, array $surround) : array
+        private function SetBootstrapClass (array $options, array $surround, ?string $bootstrapClassSuffix = null) : array
         {
+            $bootstrapClass = "form-control";
+            $bootstrapClass .= !is_null($bootstrapClassSuffix) ? "-$bootstrapClassSuffix" : null;
+
             if (array_key_exists("class", $options)) {
-                $options["class"] = "form-control " . $options["class"];
+                $options["class"] = $bootstrapClass . " " . $options["class"];
             } else {
-                $options["class"] = "form-control";
+                $options["class"] = $bootstrapClass;
             }
 
             if (!empty($surround)) {

@@ -15,7 +15,7 @@
          *
          * @return self
          */
-        public function formStart (string $action = "#", string $method = "post", ?string $class = null, ?string $id = null);
+        public function formStart (string $action = "#", string $method = "post", ?string $class = null, ?string $id = null, bool $enctype = false);
 
 
 

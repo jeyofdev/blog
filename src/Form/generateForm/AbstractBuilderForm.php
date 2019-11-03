@@ -82,15 +82,16 @@
         /**
          * {@inheritDoc}
          */
-        public function formStart (string $action = "#", string $method = "post", ?string $class = null, ?string $id = null)
+        public function formStart (string $action = "#", string $method = "post", ?string $class = null, ?string $id = null, bool $enctype = false)
         {
             $method = strtolower($method);
             $this->checkValueIsInArray($method, self::METHOD_ALLOWED, "method");
 
             $class = !is_null($class) ? ' class="' . $class . '"' : null;
             $id = !is_null($id) ? ' id="' . $id . '"' : null;
+            $enctype = $enctype ? ' enctype="multipart/form-data"' : null;
 
-            $start = '<form action="' . $action . '" method="' . $method . '"' . $class . $id . '>';
+            $start = '<form action="' . $action . '" method="' . $method . '"' . $class . $id . $enctype . '>';
             $this->form["start"] = $start;
 
             return $this;
@@ -111,7 +112,7 @@
 
 
         /**
-         * @return self
+         * {@inheritDoc}
          */
         public function input (string $type, string $name, ?string $label, array $options, array $surround = [], ?string $errorClass = null)
         {
@@ -120,8 +121,8 @@
 
             $value = !is_null($this->getValue($name)) ? 'value="' . $this->getValue($name) . '"' : null;
             $class = array_key_exists("class", $options) ? $this->getClass($name, $options["class"]) : $this->getClass($name);
-
             $options = $this->getOptions($options);
+
 
             $input = '<label for="' . $name . '">' . $label . '</label>';
             $input .= '<input type="' . $type . '" class="' . $class . '" id="' . $name . '" name="' . $name . '" ' . $value . $options . '>';
@@ -137,7 +138,7 @@
 
 
         /**
-         * @return self
+         * {@inheritDoc}
          */
         public function textarea (string $name, string $label, array $options, array $surround = [], ?string $errorClass = null)
         {
@@ -302,7 +303,6 @@
                     } else {
                         $items[] = $k;
                     }
-                    
                 }
             }
 
