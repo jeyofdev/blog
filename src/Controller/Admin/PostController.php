@@ -15,6 +15,7 @@
     use jeyofdev\php\blog\Image\Image;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\ImageTable;
+    use jeyofdev\php\blog\Table\PostImageTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
@@ -82,11 +83,19 @@
             Auth::isConnect($this->router);
 
             $tablePost = new PostTable($this->connection);
+            $tableImage = new ImageTable($this->connection);
+            $tablePostImage = new PostImageTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
             $id = (int)$params["id"];
 
+            /**
+             * @var Post
+             */
+            $post = $tablePost->find(["id" => $id]);
+
+            Image::deleteImage($post, $tablePostImage, $tableImage);
             $tablePost->delete(["id" => $id]);
 
             // flash message

@@ -5,7 +5,9 @@
 
     use jeyofdev\php\blog\Entity\Image as EntityImage;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Entity\PostImage;
     use jeyofdev\php\blog\Table\ImageTable;
+    use jeyofdev\php\blog\Table\PostImageTable;
 
 
     /**
@@ -86,6 +88,36 @@
             } else {
                 $image = $tableImage->find(["id" => 1]);
                 $this->image->setName($image->getName());
+            }
+        }
+
+
+
+        /**
+         * Delete the image of a post from the server and the database
+         *
+         * @param Post $post
+         * @param PostImageTable $tablePostImage
+         * @param ImageTable $tableImage
+         * @return void
+         */
+        public static function deleteImage (Post $post, PostImageTable $tablePostImage, ImageTable $tableImage) : void
+        {
+            /**
+             * @var PostImage
+             */
+            $postImage = $tablePostImage->find(["post_id" => $post->getId()]);
+            
+            $imageId = $postImage->getImage_id();
+
+            if ($imageId !== 1) {
+                /**
+                 * @var Image
+                 */
+                $image = $tableImage->find(["id" => $imageId]);
+
+                unlink(IMAGE . DS . "posts" . DS . $image->getName());
+                $tableImage->delete(["id" => $imageId]);
             }
         }
 
