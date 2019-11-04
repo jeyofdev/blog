@@ -126,6 +126,8 @@
             $tableCategory = new CategoryTable($this->connection);
             $tableUser = new UserTable($this->connection);
             $tableRole = new RoleTable($this->connection);
+            $tableImage = new ImageTable($this->connection);
+            $tablePostImage = new PostImageTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -142,6 +144,16 @@
             // the categories associated with the current post
             PostHydrate::addCategoriesToPostBy($tableCategory, $post, "name");
             PostHydrate::addUserToPost($tableUser, $tableRole, $post);
+
+            // get the join between the current post and its associated image
+            $postImage = $tablePostImage->find(["post_id" => $post->getId()]);
+
+            // get the image associated with the current post
+            if ($postImage->getImage_id() !== 1) {
+                $image = $tableImage->find(["id" => $postImage->getImage_id()]);
+            } else {
+                $image = null;
+            }
 
             if ($this->session->read("role") !== "admin") {
                 $currentUser = $tableUser->find(["id" => $this->session->read("auth")]);
@@ -192,7 +204,7 @@
                 ->setTitle("Edit the post with the id : $id")
                 ->getTitle();
 
-            $this->render("admin.post.edit", $this->router, $this->session, compact("categories", "form", "url", "title", "flash"));
+            $this->render("admin.post.edit", $this->router, $this->session, compact("post", "image", "categories", "form", "url", "title", "flash"));
         }
 
 

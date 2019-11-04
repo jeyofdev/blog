@@ -119,7 +119,11 @@
             $type = strtolower($type);
             $this->checkValueIsInArray($type, self::INPUT_TYPE_ALLOWED, "type");
 
-            $value = !is_null($this->getValue($name)) ? 'value="' . $this->getValue($name) . '"' : null;
+            $value = null;
+            if ($type !== "file") {
+                $value = !is_null($this->getValue($name)) ? 'value="' . $this->getValue($name) . '"' : null;
+            }
+
             $class = array_key_exists("class", $options) ? $this->getClass($name, $options["class"]) : $this->getClass($name);
             $options = $this->getOptions($options);
 
