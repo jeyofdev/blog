@@ -10,6 +10,9 @@
     <?php if (!is_null($image)) : ?>
         <p>Image à la une</p>
         <img src="/img/posts/<?= $image->getName(); ?>" width="150" alt="">
+        <form style="display:inline;" action="<?= $router->url('admin_post', ['id' => $post->getId()]); ?>?delete=1" method="post" onsubmit="return confirm('Do you really want to delete this image')">
+            <button type="submit" class="btn btn-outline-danger rounded">delete</button>
+        </form>
     <?php endif; ?>
 </div>
 

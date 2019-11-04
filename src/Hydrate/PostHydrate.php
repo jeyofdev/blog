@@ -6,7 +6,10 @@
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\User;
+    use jeyofdev\php\blog\Image\Image;
     use jeyofdev\php\blog\Table\CategoryTable;
+    use jeyofdev\php\blog\Table\ImageTable;
+    use jeyofdev\php\blog\Table\PostImageTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
 
@@ -133,5 +136,22 @@
             foreach ($users as $user) {
                 $postsById[$user->getPost_Id()]->addUser($user);
             }
+        }
+
+
+
+        /**
+         * Add the associated image to a post
+         *
+         * @param PostImageTable $tablePostImage
+         * @param ImageTable $tableImage
+         * @param Post $post
+         * @return void
+         */
+        public static function addImageToPost (PostImageTable $tablePostImage, ImageTable $tableImage, Post $post) : void
+        {
+            $imageId = Image::getImageIdOfPost($tablePostImage, $post);
+            $image = $tableImage->find(["id" => $imageId]);
+            $post->addImage($image);
         }
     }

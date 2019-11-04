@@ -29,7 +29,7 @@
 
 
         /**
-         * The associated categories of the post
+         * The associated categories to the post
          *
          * @var array
          */
@@ -38,11 +38,20 @@
 
 
         /**
-         * The associated user of the post
+         * The associated user to the post
          *
          * @var User
          */
         private $user;
+
+
+
+        /**
+         * The associated image to the post
+         *
+         * @var Image
+         */
+        private $image;
 
 
 
@@ -253,7 +262,7 @@
 
 
         /**
-         * Get the associated categories of the post
+         * Get the associated categories to the post
          *
          * @return Category[]
          */
@@ -265,7 +274,7 @@
 
 
         /**
-         * Set the associated categories of the post
+         * Set the associated categories to the post
          *
          * @return self
          */
@@ -312,7 +321,7 @@
 
 
         /**
-         * Get the associated user of the post
+         * Get the associated user to the post
          *
          * @return string
          */
@@ -332,6 +341,32 @@
         public function addUser (User $user) : self
         {
             $this->user = $user;
+            return $this;
+        }
+
+
+
+        /**
+         * Get the associated image to the post
+         *
+         * @return string
+         */
+        public function getImage ()
+        {
+            return $this->image;
+        }
+
+
+
+        /**
+         * Add an image on the post
+         *
+         * @param Image $image
+         * @return self
+         */
+        public function addImage (Image $image) : self
+        {
+            $this->image = $image;
             return $this;
         }
     }

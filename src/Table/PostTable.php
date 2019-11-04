@@ -167,6 +167,7 @@
         /**
          * Create a new post
          *
+         * @param Image $image
          * @param Post $post
          * @return self
          */

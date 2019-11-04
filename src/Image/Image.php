@@ -142,6 +142,26 @@
 
 
         /**
+         * Get the id of the image from the post_image join table
+         *
+         * @param PostImageTable $tablePostImage
+         * @param Post $post
+         * @return int
+         */
+        public static function getImageIdOfPost (PostImageTable $tablePostImage, Post $post) : int
+        {
+            /**
+             * @var PostImage
+             */
+            $postImage = $tablePostImage->find(["post_id" => $post->getId()]);
+            $imageId = $postImage->getImage_id();
+
+            return $imageId;
+        }
+
+
+
+        /**
          * Get the current image
          *
          * @return EntityImage|null

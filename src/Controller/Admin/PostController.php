@@ -155,6 +155,25 @@
                 $image = null;
             }
 
+            PostHydrate::addImageToPost($tablePostImage, $tableImage, $post);
+            $currentImage = $post->getImage();
+
+            // delete the image if it is not the default image
+            if ($postImage->getImage_Id() !== 1) {
+                // delete the image associated with the current post
+                if (isset($_GET["delete"])) {
+                    $tableImage->delete(["id" => $currentImage->getId()]);
+                    unlink(IMAGE . DS . "posts" . DS . $currentImage->getName());
+
+                    // create a join with the default image
+                    $currentImage->setId(1);
+                    $tablePostImage->createPostImage($post, $currentImage);
+
+                    $url = $this->router->url("admin_post", ["id" => $post->getId()]) . "?delete=1";
+                    Url::redirect(301, $url);
+                }
+            }
+
             if ($this->session->read("role") !== "admin") {
                 $currentUser = $tableUser->find(["id" => $this->session->read("auth")]);
                 UserHydrate::AddRole($tableRole, $currentUser);
