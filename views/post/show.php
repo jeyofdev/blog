@@ -65,7 +65,13 @@
     <h4 class="text-secondary bloc-title mb-35"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
 
     <!-- the form to add a new comment -->
-    <?= $form->build($url, $buttonLabel); ?>
+    <?php if ($session->exist("auth")) : ?>
+        <?= $form->build($url, $buttonLabel); ?>
+    <?php else : ?>
+        <div class="alert alert-danger">
+            <a href="<?= $router->url('login'); ?>">Login to add a comment.</a> 
+        </div>
+    <?php endif; ?>
 
     <div class="row">
         <?php foreach ($postComments as $comment) : ?>
@@ -84,13 +90,9 @@
                         <input type="hidden" id="content" name="content" value="<?= $comment->getContent(); ?>">
                         <button type="submit" class="btn btn-outline-success rounded linkForm">edit</button>
                     </form>
-
-                    <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
-                        <button type="submit" class="btn btn-outline-danger rounded">delete</button>
-                    </form>
                 <?php endif; ?>
 
-                <?php if (jeyofdev\php\blog\Auth\Auth::isAdmin($this->session)) : ?>
+                <?php if (jeyofdev\php\blog\Auth\Auth::isAdmin($this->session) || ($session->read("auth") === $comment->getUser()->getId())) : ?>
                     <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
                         <button type="submit" class="btn btn-outline-danger rounded">delete</button>
                     </form>
