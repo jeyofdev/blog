@@ -2,8 +2,8 @@
 
     namespace jeyofdev\php\blog\Image;
 
-
-    use jeyofdev\php\blog\Entity\Image as EntityImage;
+use Gumlet\ImageResize;
+use jeyofdev\php\blog\Entity\Image as EntityImage;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostImage;
     use jeyofdev\php\blog\Table\ImageTable;
@@ -80,8 +80,18 @@
                 if ($this->checkExtensionIsValid()) {
                     $this->image->setName($post->getSlug() . "-001." . $this->extension);
                     $tableImage->addImage($this->image);
+
+                    $imagePath = IMAGE . DS . "posts" . DS;
     
-                    move_uploaded_file($this->upload["tmp_name"], IMAGE . DS . "posts" . DS . $this->image->getName());
+                    move_uploaded_file($this->upload["tmp_name"], $imagePath . $this->image->getName());
+
+                    $image = new ImageResize($imagePath . $this->image->getName());
+                    $image->crop(930, 450);
+                    $image->save($imagePath . DS . $this->image->getName());
+
+                    $imageThumbs = new ImageResize($imagePath . $this->image->getName());
+                    $imageThumbs->crop(500, 250);
+                    $imageThumbs->save($imagePath . "thumbs" . DS . $this->image->getName());
                 } else {
                     $this->error["extension"] = true;
                 }

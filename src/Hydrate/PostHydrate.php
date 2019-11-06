@@ -119,7 +119,7 @@
          * @param array $posts
          * @return void
          */
-        public static function addUserToAllPosts (UserTable $tableUser, array $posts)
+        public static function addUserToAllPosts (UserTable $tableUser, array $posts) : void
         {
             // get the ids of each items
             $postsById = [];
@@ -153,5 +153,32 @@
             $imageId = Image::getImageIdOfPost($tablePostImage, $post);
             $image = $tableImage->find(["id" => $imageId]);
             $post->addImage($image);
+        }
+
+
+
+        /**
+         * Add the associated image on each post
+         *
+         * @param ImageTable $tableImage
+         * @return void
+         */
+        public static function addImageToAllPosts (ImageTable $tableImage, array $posts) : void
+        {
+            // get the ids of each items
+            $postsById = [];
+            foreach ($posts as $post) {
+                $postsById[$post->getId()] = $post;
+            }
+            $ids = implode(", ", array_keys($postsById));
+
+            /**
+             * @var Image[]
+             */
+            $images = $tableImage->findImageByPosts($ids);
+
+            foreach ($images as $image) {
+                $postsById[$image->getPost_Id()]->addImage($image);
+            }
         }
     }

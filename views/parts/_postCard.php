@@ -13,7 +13,7 @@
 <div class="col-12 col-md-6 mb-100">
     <div class="card">
         <div class="card-header mb-35">
-            <img class="img-fluid" src="https://via.placeholder.com/500x225" alt="">
+            <img class="img-fluid" src="/img/posts/thumbs/<?= $post->getImage()->getName(); ?>" alt="">
         </div>
 
         <div class="card-body">

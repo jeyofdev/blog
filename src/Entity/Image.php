@@ -22,6 +22,15 @@
 
 
         /**
+         * The id of the post associated with the current image
+         *
+         * @var int
+         */
+        private $post_id;
+
+
+
+        /**
          * @param EntityManager $manager
          */
         public function createColumns(EntityManager $manager) : self
@@ -79,5 +88,17 @@
         {
             $this->name = $name;
             return $this;
+        }
+
+
+
+        /**
+         * Get the id of the post associated with the current image
+         *
+         * @return integer|null
+         */
+        public function getPost_Id () : ?int
+        {
+            return $this->post_id;
         }
     }

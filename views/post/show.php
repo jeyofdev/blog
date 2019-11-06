@@ -17,7 +17,7 @@
 <div class="blog-single mt-75">
     <div class="card">
         <div class="card-header mb-95">
-            <img class="img-fluid" src="https://via.placeholder.com/1100x425" alt="">
+            <img class="img-fluid" src="/img/posts/<?= $post->getImage()->getName(); ?>" alt="">
         </div>
 
         <div class="card-body mx-80">
@@ -45,7 +45,7 @@
             <div class="col-12 col-md-4 mb-0">
                 <div class="card">
                     <div class="card-header mb-3">
-                        <img class="img-fluid" src="https://via.placeholder.com/500x275" alt="">
+                        <img class="img-fluid" src="/img/posts/thumbs/<?= $relatedPost->getImage()->getName(); ?>" alt="">
                     </div>
 
                     <div class="card-body">

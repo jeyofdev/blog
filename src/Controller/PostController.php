@@ -13,6 +13,8 @@
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\CommentTable;
+    use jeyofdev\php\blog\Table\ImageTable;
+    use jeyofdev\php\blog\Table\PostImageTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
@@ -36,6 +38,7 @@
             $tablePost = new PostTable($this->connection);
             $tableUser = new UserTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
+            $tableImage = new ImageTable($this->connection);
 
             /**
              * @var Post[]
@@ -46,6 +49,7 @@
                 // hydrate the posts
                 PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
                 PostHydrate::addUserToAllPosts($tableUser, $posts);
+                PostHydrate::addImageToAllPosts($tableImage, $posts);
             }
 
             /**
@@ -79,6 +83,8 @@
             $tableCategory = new CategoryTable($this->connection);
             $tableRole = new RoleTable($this->connection);
             $tableComment = new CommentTable($this->connection);
+            $tableImage = new ImageTable($this->connection);
+            $tablePostImage = new PostImageTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -97,6 +103,7 @@
             // hydrate the post
             PostHydrate::addCategoriesToPost($tableCategory, $post);
             PostHydrate::addUserToPost($tableUser, $tableRole, $post);
+            PostHydrate::addImageToPost($tablePostImage, $tableImage, $post);
 
             $this->session->write("post", [
                 "id" => $post->getId(),
@@ -105,6 +112,7 @@
 
             // related posts
             $relatedPosts = $tablePost->findRandomPosts(3);
+            PostHydrate::addImageToAllPosts($tableImage, $relatedPosts);
 
             // comments of the post
             $comments = $tableComment->findAll();

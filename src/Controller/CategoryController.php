@@ -7,6 +7,7 @@
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
+    use jeyofdev\php\blog\Table\ImageTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\UserTable;
 
@@ -28,6 +29,7 @@
             $tableCategory = new CategoryTable($this->connection);
             $tableUser = new UserTable($this->connection);
             $tablePost = new PostTable($this->connection);
+            $tableImage = new ImageTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -51,6 +53,7 @@
             // hydrate the posts
             PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
             PostHydrate::addUserToAllPosts($tableUser, $posts);
+            PostHydrate::addImageToAllPosts($tableImage, $posts);
 
             /**
              * @var Pagination

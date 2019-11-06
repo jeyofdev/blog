@@ -47,4 +47,26 @@
 
             return $this;
         }
+
+
+
+        /**
+         * Get the image of each posts
+         *
+         * @param string $ids
+         * @return array
+         */
+        public function findImageByPosts (string $ids) : array
+        {
+            $sql = "SELECT i.*, pi.post_id
+                FROM post_image AS pi
+                JOIN {$this->tableName} AS i
+                ON i.id = pi.image_id
+                WHERE pi.post_id IN ({$ids})
+            ";
+
+            $query = $this->query($sql);
+            
+            return $this->fetchAll($query);
+        }
     }
