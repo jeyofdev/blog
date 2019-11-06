@@ -275,6 +275,7 @@
             $validator = new PostValidator("en", $_POST, $tablePost, $categories);
 
             if ($validator->isSubmit()) {
+                // $_POST[""];
                 $post = new Post();
                 $post
                     ->setName($_POST["name"])

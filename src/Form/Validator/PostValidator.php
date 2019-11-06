@@ -19,7 +19,7 @@
 
             $this->validator::lang($lang);
 
-            $this->validator->rule("required", ["name", "slug", "content"]);
+            $this->validator->rule("required", ["name", "slug", "categoriesIds", "content"]);
             $this->validator->rule("lengthBetween", ["name", "slug"], 3, 200);
             $this->validator->rule('lengthBetween', 'content', 10, 10000);
             $this->validator->rule("subset", "categoriesIds", array_keys($categories));
