@@ -23,6 +23,15 @@
 
 
         /**
+         * The associated user to the comment
+         *
+         * @var User
+         */
+        private $user;
+
+
+
+        /**
          * @param EntityManager $manager
          */
         public function createColumns(EntityManager $manager) : self
@@ -104,6 +113,32 @@
         public function setContent(string $content) : self
         {
             $this->content = $content;
+            return $this;
+        }
+
+
+
+        /**
+         * Get the associated user to the comment
+         *
+         * @return User
+         */
+        public function getUser ()
+        {
+            return $this->user;
+        }
+
+
+
+        /**
+         * Add a user on the comment
+         *
+         * @param User $user
+         * @return self
+         */
+        public function addUser (User $user) : self
+        {
+            $this->user = $user;
             return $this;
         }
     }

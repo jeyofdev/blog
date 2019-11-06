@@ -77,16 +77,24 @@
                     </div>
                 </div>
 
-                <form style="display:inline;" action="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]); ?>#formComment" method="post">
-                    <input type="hidden" id="id" name="id" value="<?= $comment->getId(); ?>">
-                    <input type="hidden" id="username" name="username" value="<?= $comment->getUsername(); ?>">
-                    <input type="hidden" id="content" name="content" value="<?= $comment->getContent(); ?>">
-                    <button type="submit" class="btn btn-outline-success rounded linkForm">edit</button>
-                </form>
+                <?php if ($session->read("auth") === $comment->getUser()->getId()) : ?>
+                    <form style="display:inline;" action="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]); ?>#formComment" method="post">
+                        <input type="hidden" id="id" name="id" value="<?= $comment->getId(); ?>">
+                        <input type="hidden" id="username" name="username" value="<?= $comment->getUsername(); ?>">
+                        <input type="hidden" id="content" name="content" value="<?= $comment->getContent(); ?>">
+                        <button type="submit" class="btn btn-outline-success rounded linkForm">edit</button>
+                    </form>
 
-                <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
-                    <button type="submit" class="btn btn-outline-danger rounded">delete</button>
-                </form>
+                    <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
+                        <button type="submit" class="btn btn-outline-danger rounded">delete</button>
+                    </form>
+                <?php endif; ?>
+
+                <?php if (jeyofdev\php\blog\Auth\Auth::isAdmin($this->session)) : ?>
+                    <form style="display:inline;" action="<?= $router->url('comment_delete', ['id' => $comment->getId()]); ?>" method="post" onsubmit="return confirm('Do you really want to delete this comment')">
+                        <button type="submit" class="btn btn-outline-danger rounded">delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>

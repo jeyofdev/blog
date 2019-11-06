@@ -9,6 +9,7 @@
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Form\CommentForm;
     use jeyofdev\php\blog\Form\Validator\CommentValidator;
+    use jeyofdev\php\blog\Hydrate\CommentHydrate;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\CommentTable;
@@ -112,7 +113,8 @@
             /**
              * @var Comment[]
              */
-            $postComments = $tableComment->findCommentsPaginated($post->getId(), 50);     
+            $postComments = $tableComment->findCommentsPaginated($post->getId(), 50);  
+            CommentHydrate::addUserToComment($tableUser, $tableRole, $postComments);   
 
             /**
              * @var Pagination
@@ -131,9 +133,12 @@
                         ->setUsername($_POST["username"])
                         ->setContent($_POST["content"]);
 
+                    CommentHydrate::addUserWhenAddComment($tableUser, $tableRole, $comment, $this->session);
+
                     if ($validator->isValid()) {
                         if ($_POST["id"] === "") {
-                            $tableComment->createComment($comment, $post);
+                            $user = $tableUser->find(["id" => $this->session->read("auth")]);
+                            $tableComment->createComment($comment, $post, $user);
                             $this->session->setFlash("Your comment has been added", "success", "mt-5"); // flash message
                         } else {
                             $tableComment->updateComment($comment, $post);

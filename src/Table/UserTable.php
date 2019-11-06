@@ -76,6 +76,27 @@
 
 
         /**
+         * Get the user associated with a comment
+         *
+         * @return User
+         */
+        public function findUserbyComment (array $params) : User
+        {
+            $sql = "SELECT u.*
+                FROM comment_user AS cu
+                JOIN {$this->tableName} AS u
+                ON cu.user_id = u.id
+                WHERE cu.comment_id = :id
+            ";
+
+            $query = $this->prepare($sql, $params);
+
+            return $this->fetch($query);
+        }
+
+
+
+        /**
          * Create a new user
          *
          * @param User $user

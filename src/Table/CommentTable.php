@@ -6,6 +6,7 @@
     use jeyofdev\php\blog\Pagination\Pagination;
     use jeyofdev\php\blog\Entity\Comment;
     use jeyofdev\php\blog\Entity\Post;
+    use jeyofdev\php\blog\Entity\User;
 
 
     /**
@@ -92,9 +93,10 @@
          *
          * @param Comment $comment
          * @param Post $post
+         * @param User $user
          * @return self
          */
-        public function createComment (Comment $comment, Post $post) : self
+        public function createComment (Comment $comment, Post $post, User $user) : self
         {
             $this->create([
                 "username" => $comment->getUsername(),
@@ -104,6 +106,7 @@
             $comment->setId((int)$this->connection->lastInsertId());
 
             $this->attachPost($comment, $post);
+            $this->attachUser($comment, $user);
 
             return $this;
         }
@@ -142,6 +145,25 @@
                 "comment_id" => $comment->getID(),
                 "post_id" => $post->getId()
             ], "post_comment");
+
+            return $this;
+        }
+
+
+
+        /**
+         * Associate a comment with the authenticated user
+         *
+         * @param Comment $comment
+         * @param User $user
+         * @return self
+         */
+        public function attachUser (Comment $comment, User $user) : self
+        {
+            $this->create([
+                "comment_id" => $comment->getID(),
+                "user_id" => $user->getId()
+            ], "comment_user");
 
             return $this;
         }
