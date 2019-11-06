@@ -99,7 +99,7 @@
             $tablePost->delete(["id" => $id]);
 
             // flash message
-            $this->session->setFlash("The post has been deleted", "success", "my-5");
+            $this->session->setFlash("The post has been deleted", "success", "mt-5");
 
             // redirect to the home of the admin
             $url = $this->router->url("admin_posts") . "?delete=1";
@@ -229,12 +229,12 @@
 
             // flash messages
             if ($success) {
-                $this->session->setFlash("The post has been updated", "success", "my-5");
+                $this->session->setFlash("The post has been updated", "success", "mt-5");
                 $flash = $this->session->generateFlash();
             }
 
             if (!empty($errors)) {
-                $this->session->setFlash("The post could not be updated", "danger", "my-5");
+                $this->session->setFlash("The post could not be updated", "danger", "mt-5");
                 $flash = $this->session->generateFlash();
             }
 
@@ -293,7 +293,7 @@
                         PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
                         PostHydrate::addUserToPost($tableUser, $tableRole, $post);
                         
-                        $this->session->setFlash("The post has been created", "success", "my-5"); // flash message
+                        $this->session->setFlash("The post has been created", "success", "mt-5"); // flash message
     
                         $url = $this->router->url("admin_posts", ["id" => $post->getId()]) . "?create=1";
                         Url::redirect(301, $url);
@@ -311,10 +311,10 @@
 
             // flash message
             if (!empty($errors)) {
-                $this->session->setFlash("The post could not be created", "danger", "my-5");
+                $this->session->setFlash("The post could not be created", "danger", "mt-5");
                 $flash = $this->session->generateFlash();
             } if (!empty($image->getError())) {
-                $this->session->setFlash("The uploaded image to an extension that is not valid. The authorized extensions are : {$image->getAllowedExtensions()}", "danger", "my-5");
+                $this->session->setFlash("The uploaded image to an extension that is not valid. The authorized extensions are : {$image->getAllowedExtensions()}", "danger", "mt-5");
                 $flash = $this->session->generateFlash();
             }
 
@@ -363,7 +363,7 @@
             $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $categoriesIds]);
 
             // flash message
-            $this->session->setFlash("The post has been published", "success", "my-5");
+            $this->session->setFlash("The post has been published", "success", "mt-5");
 
             // redirect to the home of the admin
             $url = $this->router->url("admin_posts") . "?publish=1";

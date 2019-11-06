@@ -28,8 +28,8 @@
                     <td>
                         <a href="<?= $router->url('post', ["id" => $post->getId()]); ?>"><?= $post->getName(); ?></a>
                     </td>
-                    <td><?= $post->getCreated_at()->format("d F Y \a\\t H:i:s"); ?></td>
-                    <td><?= $post->getUpdated_at()->format("d F Y \a\\t H:i:s"); ?></td>
+                    <td><?= $post->getCreated_at()->format("m/d/y \a\\t H:i:s"); ?></td>
+                    <td><?= $post->getUpdated_at()->format("m/d/y \a\\t H:i:s"); ?></td>
                     <td>
                         <?php if ($post->getPublished() === 1) : ?>
                             <a class="btn btn-outline-info rounded" href="<?= $router->url('post', ['id' => $post->getId()]); ?>">View</a>

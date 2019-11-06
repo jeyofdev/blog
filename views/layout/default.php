@@ -45,7 +45,7 @@
             </div>
         </nav>
 
-        <diV class="container mt-5">
+        <diV class="container mt-100">
             <?= $content; ?>
         </div>
 

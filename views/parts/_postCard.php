@@ -10,7 +10,7 @@
 
 
 <!-- cards for the list of posts  -->
-<div class="col-12 col-md-6 mb-100">
+<div class="col-12 col-md-6 mb-80">
     <div class="card">
         <div class="card-header mb-35">
             <img class="img-fluid" src="/img/posts/thumbs/<?= $post->getImage()->getName(); ?>" alt="">

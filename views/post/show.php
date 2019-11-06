@@ -14,13 +14,13 @@
 
 
 <!-- view the current post -->
-<div class="blog-single mt-75">
+<div class="blog-single mt-50">
     <div class="card">
-        <div class="card-header mb-95">
+        <div class="card-header mb-80">
             <img class="img-fluid" src="/img/posts/<?= $post->getImage()->getName(); ?>" alt="">
         </div>
 
-        <div class="card-body mx-80">
+        <div class="card-body mx-50">
             <?php if ($categories !== "") : ?>
                 <p class="mb-30 categories"><?= $categories; ?></p>
             <?php endif; ?>
@@ -38,7 +38,7 @@
 
 
 <!-- view the related posts -->
-<div class="blog-related mt-125 mx-80">
+<div class="blog-related mt-125 mx-50">
     <h4 class="text-secondary bloc-title mb-35">You may also like</h4>
     <div class="row">
         <?php foreach ($relatedPosts as $relatedPost) : ?>
@@ -61,7 +61,7 @@
 
 
 <!-- view the comments of the post -->
-<div class="blog-comment mt-125 mx-80">
+<div class="blog-comment mt-75 mx-50">
     <h4 class="text-secondary bloc-title mb-35"><?= $countComments <= 0 ? "No comments" : $countComments . " comments"; ?></h4>
 
     <!-- the form to add a new comment -->
