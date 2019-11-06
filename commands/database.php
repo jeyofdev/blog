@@ -3,6 +3,7 @@
     use jeyofdev\php\blog\Database\Database;
     use jeyofdev\php\blog\Entity\Category;
     use jeyofdev\php\blog\Entity\Comment;
+    use jeyofdev\php\blog\Entity\CommentUser;
     use jeyofdev\php\blog\Entity\Image;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostCategory;
@@ -14,6 +15,7 @@
     use jeyofdev\php\blog\Entity\UserRole;
     use jeyofdev\php\blog\Fixtures\CategoryFixtures;
     use jeyofdev\php\blog\Fixtures\CommentFixtures;
+    use jeyofdev\php\blog\Fixtures\CommentUserFixtures;
     use jeyofdev\php\blog\Fixtures\ImageFixtures;
     use jeyofdev\php\blog\Fixtures\PostCategoryFixtures;
     use jeyofdev\php\blog\Fixtures\PostCommentFixtures;
@@ -119,8 +121,15 @@
     $post_user = new PostUser();
     $post_user
         ->createColumns($manager)
+        ->addTable();
+
+
+    // add the 'comment_user' table
+    $comment_user = new CommentUser();
+    $comment_user
+        ->createColumns($manager)
         ->addTable()
-        ->emptyAllTable($post, $category, $image, $role, $user, $comment, $post_category, $post_comment, $post_image, $user_role, $post_user);
+        ->emptyAllTable($post, $category, $image, $role, $user, $comment, $post_category, $post_comment, $post_image, $user_role, $post_user, $comment_user);
 
 
     // Add the fixtures on the 'post' table
@@ -176,3 +185,8 @@
     // Add the fixtures on the 'post_user' table
     $post_userFixture = new PostUserFixtures($manager, $post_user, "en_US", $postFixture, $userFixture);
     $post_userFixture->add();
+
+
+    // Add the fixtures on the 'comment_user' table
+    $comment_userFixture = new CommentUserFixtures($manager, $comment_user, "en_US", $commentFixture, $userFixture);
+    $comment_userFixture->add();
