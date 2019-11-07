@@ -50,6 +50,21 @@
             </footer>
         <?php endif; ?>
 
+        <!-- add the WYSIWYG editor -->
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({ 
+                selector:'textarea',
+                height: 400,
+                theme: 'silver',
+                plugins: 'autolink lists link',
+                toolbar: [
+                    'formatselect | bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | link unlink image | removeformat'
+                ],
+                menubar: false,
+            });
+        </script>
+
         <script src="http://localhost:8080/assets/js/app.js"></script>
     </body>
 </html>

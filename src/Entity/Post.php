@@ -150,7 +150,7 @@
          */ 
         public function getContent() : ?string
         {
-            return Helpers::e($this->content);
+            return $this->content;
         }
 
 
@@ -162,7 +162,7 @@
          */
         public function getFormattedContent (): ?string
         {
-            return nl2br(Helpers::e($this->content));
+            return $this->content;
         }
 
 
@@ -174,7 +174,7 @@
          */
         public function getExcerpt () : string
         {
-            return Helpers::e(Text::excerpt($this->content, 250));
+            return Text::excerpt($this->content, 250);
         }
 
 
