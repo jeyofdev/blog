@@ -4,8 +4,9 @@
 <!-- list of posts -->
 <div class="blog-list mt-35">
     <div class="row mt-5">
+        <?php require VIEW_PATH . DS . "parts" . DS . "_firstPostCard.php"; ?>
         <?php foreach ($posts as $post) : ?>
-            <?php require VIEW_PATH . DIRECTORY_SEPARATOR . "parts" . DIRECTORY_SEPARATOR . "_postCard.php"; ?>
+            <?php require VIEW_PATH . DS . "parts" . DS . "_postCard.php"; ?>
         <?php endforeach; ?>
     </div>
 

@@ -1,14 +1,3 @@
-<?php
-    // get the categories of each posts
-    $categories = array_map(function ($category) use ($router) {
-        $url = $router->url('category', ['id' => $category->getId(), 'slug' => $category->getslug()]); 
-        return '<a href="' . $url . '">' . $category->getName() . '</a>';
-    }, $post->getCategories());
-
-    $categories = implode(", ", $categories);
-?>
-
-
 <!-- cards for the list of posts  -->
 <div class="col-12 col-md-6 mb-80">
     <div class="card">
@@ -17,8 +6,8 @@
         </div>
 
         <div class="card-body">
-            <?php if ($categories !== "") : ?>
-                <p class="mb-30 categories"><?= $categories; ?></p>
+            <?php if (jeyofdev\php\blog\Helpers\Categories::getCategories($router, $post) !== "") : ?>
+                <p class="mb-30 categories"><?= jeyofdev\php\blog\Helpers\Categories::getCategories($router, $post); ?></p>
             <?php endif; ?>
             <a class="d-block card-title mb-35" href="<?= $router->url('post', ['id' => $post->getID(), 'slug' => $post->getSlug()]); ?>">
                 <h2><?= $post->getName(); ?></h2>

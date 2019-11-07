@@ -5,8 +5,9 @@
 <div class="blog-list mt-75">
     <?php if (!empty($posts)) : ?>
         <div class="row">
+            <?php require VIEW_PATH . DS . "parts" . DS . "_firstPostCard.php"; ?>
             <?php foreach ($posts as $post) : ?>
-                <?php require VIEW_PATH . DIRECTORY_SEPARATOR . "parts" . DIRECTORY_SEPARATOR . "_postCard.php"; ?>
+                <?php require VIEW_PATH . DS . "parts" . DS . "_postCard.php"; ?>
             <?php endforeach; ?>
         </div>
     <?php else : ?>

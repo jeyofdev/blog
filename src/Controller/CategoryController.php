@@ -8,7 +8,9 @@
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\ImageTable;
+    use jeyofdev\php\blog\Table\PostImageTable;
     use jeyofdev\php\blog\Table\PostTable;
+    use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
 
 
@@ -28,8 +30,10 @@
         {
             $tableCategory = new CategoryTable($this->connection);
             $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
             $tablePost = new PostTable($this->connection);
             $tableImage = new ImageTable($this->connection);
+            $tablePostImage = new PostImageTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -50,10 +54,16 @@
              */
             $posts = $tablePost->findPostsPaginatedByCategory($category, 6, "created_at", "desc");
 
-            // hydrate the posts
-            PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
-            PostHydrate::addUserToAllPosts($tableUser, $posts);
-            PostHydrate::addImageToAllPosts($tableImage, $posts);
+            $firstPost = array_shift($posts);
+            PostHydrate::addCategoriesToPost($tableCategory, $firstPost);
+            PostHydrate::addUserToPost($tableUser, $tableRole, $firstPost);
+            PostHydrate::addImageToPost($tablePostImage, $tableImage, $firstPost);
+
+            if (!empty($posts)) {
+                PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
+                PostHydrate::addUserToAllPosts($tableUser, $posts);
+                PostHydrate::addImageToAllPosts($tableImage, $posts);
+            }
 
             /**
              * @var Pagination
@@ -67,6 +77,6 @@
                 ->setTitle($category->getName(), "List of posts of the category : ")
                 ->getTitle();
 
-            $this->render("category.show", $this->router, $this->session, compact("posts", "pagination", "link", "title"));
+            $this->render("category.show", $this->router, $this->session, compact("posts", "firstPost", "pagination", "link", "title"));
         }
     }

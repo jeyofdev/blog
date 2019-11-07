@@ -1,14 +1,3 @@
-<?php
-    // get the categories of the current post
-    $categories = array_map(function ($category) use ($router) {
-        $url = $router->url('category', ['id' => $category->getId(), 'slug' => $category->getslug()]); 
-        return '<a href="' . $url . '">' . $category->getName() . '</a>';
-    }, $post->getCategories());
-
-    $categories = implode(", ", $categories);
-?>
-
-
 <!-- flash message -->
 <?= $flash; ?>
 
@@ -21,13 +10,13 @@
         </div>
 
         <div class="card-body mx-50">
-            <?php if ($categories !== "") : ?>
-                <p class="mb-30 categories"><?= $categories; ?></p>
+            <?php if (jeyofdev\php\blog\Helpers\Categories::getCategories($router, $post) !== "") : ?>
+                <p class="mb-30 categories"><?= jeyofdev\php\blog\Helpers\Categories::getCategories($router, $post); ?></p>
             <?php endif; ?>
             <h1 class="card-title mb-35"><?= $post->getName(); ?></h1>            
             <p class="card-text"><?= $post->getFormattedContent(); ?></p>
         </div>
-        <div class="card-footer mx-80 mt-30 pt-30">
+        <div class="card-footer mx-50 mt-30 pt-30">
             <p class="card-muted">
                 Written by <a href="<?= $router->url("user", ["id" => $post->getUser()->getId(), "slug" => $post->getUser()->getSlug()]); ?>"><?= $post->getUser()->getUsername(); ?></a>
                 on <?= $post->getCreated_at()->format("d F Y"); ?>

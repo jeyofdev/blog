@@ -37,16 +37,22 @@
         {
             $tablePost = new PostTable($this->connection);
             $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
             $tableImage = new ImageTable($this->connection);
+            $tablePostImage = new PostImageTable($this->connection);
 
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findAllPostsPaginated(6, "created_at", "desc", ["published" => 1]);
+            $posts = $tablePost->findAllPostsPaginated(7, "created_at", "desc", ["published" => 1]);
+
+            $firstPost = array_shift($posts);
+            PostHydrate::addCategoriesToPost($tableCategory, $firstPost);
+            PostHydrate::addUserToPost($tableUser, $tableRole, $firstPost);
+            PostHydrate::addImageToPost($tablePostImage, $tableImage, $firstPost);
 
             if (!empty($posts)) {
-                // hydrate the posts
                 PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
                 PostHydrate::addUserToAllPosts($tableUser, $posts);
                 PostHydrate::addImageToAllPosts($tableImage, $posts);
@@ -62,7 +68,7 @@
 
             App::getInstance()->setTitle("List of posts");
 
-            $this->render("post.index", $this->router, $this->session, compact("posts", "pagination", "link"));
+            $this->render("post.index", $this->router, $this->session, compact("posts", "firstPost", "pagination", "link"));
         }
 
 
