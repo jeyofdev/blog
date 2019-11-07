@@ -2,8 +2,8 @@
 
     namespace jeyofdev\php\blog\Image;
 
-use Gumlet\ImageResize;
-use jeyofdev\php\blog\Entity\Image as EntityImage;
+    use Gumlet\ImageResize;
+    use jeyofdev\php\blog\Entity\Image as EntityImage;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Entity\PostImage;
     use jeyofdev\php\blog\Table\ImageTable;

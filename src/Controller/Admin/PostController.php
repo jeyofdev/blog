@@ -193,28 +193,31 @@
                     ->setContent($_POST["content"]);
 
                 if ($validator->isValid()) {
-                    // delete the image associated with the current article
-                    if ($postImage->getImage_id() !== 1) {
-                        $tableImage->delete(["id" => $postImage->getImage_id()]);
-                    } else {
-                        $tablePostImage->delete(["post_id" => $post->getId()]);
-                    }
+                    // if no new image is uploaded, keep the current image
+                    if ($_FILES["image"]["name"] !== "") {
+                        // delete the image associated with the current article
+                        if ($postImage->getImage_id() !== 1) {
+                            $tableImage->delete(["id" => $postImage->getImage_id()]);
+                        } else {
+                            $tablePostImage->delete(["post_id" => $post->getId()]);
+                        }
 
-                    // initialize a new image and the associated to the current post
-                    $newImage = new Image();
-                    $newImage->addImage($post, $tableImage);
-                    $currentImage = $newImage->getImage();
-                    $tablePostImage->createPostImage($post, $currentImage);
+                        // initialize a new image and the associated to the current post
+                        $newImage = new Image();
+                        $newImage->addImage($post, $tableImage);
+                        $currentImage = $newImage->getImage();
+                        $tablePostImage->createPostImage($post, $currentImage);
 
-                    // if the extension of the image is valid, edit the article
-                    if (!array_key_exists("extension", $newImage->getError())) {
-                        $tablePost->updatePost($post, "Europe/Paris", "post_category");
-                        $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
-                        PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
-                        $success = true;
+                        // if the extension of the image is valid, edit the article
+                        if (!array_key_exists("extension", $newImage->getError())) {
+                            $tablePost->updatePost($post, "Europe/Paris", "post_category");
+                            $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
+                            PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
+                            $success = true;
 
-                        $url = $this->router->url("admin_post", ["id" => $post->getId()]);
-                        Url::redirect(301, $url);
+                            $url = $this->router->url("admin_post", ["id" => $post->getId()]);
+                            Url::redirect(301, $url);
+                        }
                     }
                 } else {
                     $errors = $validator->getErrors();
