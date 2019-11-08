@@ -1,2 +1,1 @@
-# blog
-Personal project of a blog in php
+# Basic of a simple blog in php
