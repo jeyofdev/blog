@@ -16,6 +16,7 @@
     use jeyofdev\php\blog\Table\ImageTable;
     use jeyofdev\php\blog\Table\PostImageTable;
     use jeyofdev\php\blog\Table\PostTable;
+    use jeyofdev\php\blog\Table\PostUserTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
     use jeyofdev\php\blog\Url;
@@ -84,6 +85,9 @@
             $tablePost = new PostTable($this->connection);
             $tableImage = new ImageTable($this->connection);
             $tablePostImage = new PostImageTable($this->connection);
+            $tablePostUser = new PostUserTable($this->connection);
+            $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -93,6 +97,10 @@
              * @var Post
              */
             $post = $tablePost->find(["id" => $id]);
+
+            // check that the user is authorized to delete the post
+            $user = new User($this->router, $this->session, $tableUser, $tableRole);
+            $user->actionIsAuthorized($post, $tablePostUser, "admin_posts", "You do not have permission to delete this article", "delete");
 
             Image::deleteImage($post, $tablePostImage, $tableImage);
             $tablePost->delete(["id" => $id]);
@@ -167,8 +175,8 @@
                 }
             }
 
-            $user = new User($this->session, $tableUser, $tableRole);
-            $user->isAuthorized($post);
+            $user = new User($this->router, $this->session, $tableUser, $tableRole);
+            $user->isAuthorized($post, "admin_posts");
 
             // check that the form is valid and update the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
@@ -322,6 +330,9 @@
 
             $tablePost = new PostTable($this->connection);
             $tableCategory = new CategoryTable($this->connection);
+            $tablePostUser = new PostUserTable($this->connection);
+            $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -331,6 +342,10 @@
              * @var Post|null
              */
             $post = $tablePost->find(["id" => $id]);
+
+            // check that the user is authorized to publish the post
+            $user = new User($this->router, $this->session, $tableUser, $tableRole);
+            $user->actionIsAuthorized($post, $tablePostUser, "admin_posts", "You do not have permission to publish this article", "publish");
 
             $post->setPublished(1);
             PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);

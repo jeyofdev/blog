@@ -4,7 +4,8 @@
 
 
     use jeyofdev\php\blog\App;
-    use jeyofdev\php\blog\Controller\AbstractController;
+use jeyofdev\php\blog\Auth\Csrf;
+use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Entity\User;
     use jeyofdev\php\blog\Form\LoginForm;
     use jeyofdev\php\blog\Form\RegisterForm;
@@ -62,6 +63,12 @@
                             ->write("auth", $currentUser->getId())
                             ->write("role", $currentUser->getRole());
 
+                        // set the token csrf
+                        if (!$this->session->exist("token")) {
+                            $csrf = new Csrf($this->session);
+                            $csrf->setSessionToken(175, 658, 5);
+                        }
+
                         // redirection to the previous page
                         $url = $this->getHttpRefererRouteName();
 
@@ -87,11 +94,11 @@
 
             // flash message
             if (array_key_exists("form", $errors)) {
-                $this->session->setFlash("The form contains errors", "danger", "my-5");
+                $this->session->setFlash("The form contains errors", "danger", "mt-5");
             } else if (array_key_exists("connection", $errors)) {
-                $this->session->setFlash("Username or password is incorrect", "danger", "my-5");
+                $this->session->setFlash("Username or password is incorrect", "danger", "mt-5");
             } else if (isset($_GET["forbidden"])) {
-                $this->session->setFlash("To access the pages of the admin, you must identify yourself", "danger", "my-5");
+                $this->session->setFlash("To access the pages of the admin, you must identify yourself", "danger", "mt-5");
             }
 
             $flash = $this->session->generateFlash();
@@ -164,10 +171,16 @@
 
                     $tableUser->createUser($user, $role);
 
-                    $this->session->setFlash("Congratulations {$user->getUsername()}, you are now registered", "success", "my-5");
+                    $this->session->setFlash("Congratulations {$user->getUsername()}, you are now registered", "success", "mt-5");
                     $this->session
                         ->write("auth", $user->getId())
                         ->write("role", $user->getRole());
+
+                    // set the token csrf
+                    if (!$this->session->exist("token")) {
+                        $csrf = new Csrf($this->session);
+                        $csrf->setSessionToken(175, 658, 5);
+                    }
 
                     $url = $this->router->url("admin") . "?user=1&create=1";
                     Url::redirect(301, $url);
@@ -185,7 +198,7 @@
 
             // flash message
             if (array_key_exists("form", $errors)) {
-                $this->session->setFlash("The form contains errors", "danger", "my-5");
+                $this->session->setFlash("The form contains errors", "danger", "mt-5");
                 $flash = $this->session->generateFlash();
             }
 
