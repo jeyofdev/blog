@@ -5,13 +5,12 @@
 
     use jeyofdev\php\blog\App;
     use jeyofdev\php\blog\Auth\Auth;
+    use jeyofdev\php\blog\Auth\User;
     use jeyofdev\php\blog\Controller\AbstractController;
     use jeyofdev\php\blog\Entity\Post;
-    use jeyofdev\php\blog\Exception\UnauthorizedException;
     use jeyofdev\php\blog\Form\PostForm;
     use jeyofdev\php\blog\Form\Validator\PostValidator;
     use jeyofdev\php\blog\Hydrate\PostHydrate;
-    use jeyofdev\php\blog\Hydrate\UserHydrate;
     use jeyofdev\php\blog\Image\Image;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\ImageTable;
@@ -141,7 +140,7 @@
             // the names of all categories
             $categories = $tableCategory->list("name");
 
-            // the categories associated with the current post
+            // hydrate the post
             PostHydrate::addCategoriesToPostBy($tableCategory, $post, "name");
             PostHydrate::addUserToPost($tableUser, $tableRole, $post);
 
@@ -160,28 +159,16 @@
 
             // delete the image if it is not the default image
             if ($postImage->getImage_Id() !== 1) {
-                // delete the image associated with the current post
                 if (isset($_GET["delete"])) {
-                    $tableImage->delete(["id" => $currentImage->getId()]);
-                    unlink(IMAGE . DS . "posts" . DS . $currentImage->getName());
-
-                    // create a join with the default image
-                    $currentImage->setId(1);
-                    $tablePostImage->createPostImage($post, $currentImage);
+                    Image::deleteCurrentImage($currentImage, $post, $tableImage, $tablePostImage);
 
                     $url = $this->router->url("admin_post", ["id" => $post->getId()]) . "?delete=1";
                     Url::redirect(301, $url);
                 }
             }
 
-            if ($this->session->read("role") !== "admin") {
-                $currentUser = $tableUser->find(["id" => $this->session->read("auth")]);
-                UserHydrate::AddRole($tableRole, $currentUser);
-
-                if ($this->session->read("role") !== $post->getUser()->getRole()) {
-                    throw new UnauthorizedException("You are not authorized to access this page");
-                }
-            }
+            $user = new User($this->session, $tableUser, $tableRole);
+            $user->isAuthorized($post);
 
             // check that the form is valid and update the post
             $validator = new PostValidator("en", $_POST, $tablePost, $categories, $post->getId());
@@ -196,20 +183,14 @@
                     // if no new image is uploaded, keep the current image
                     if ($_FILES["image"]["name"] !== "") {
                         // delete the image associated with the current article
-                        if ($postImage->getImage_id() !== 1) {
-                            $tableImage->delete(["id" => $postImage->getImage_id()]);
-                        } else {
-                            $tablePostImage->delete(["post_id" => $post->getId()]);
-                        }
+                        Image::deletePostImage($post, $postImage, $tableImage, $tablePostImage);
 
                         // initialize a new image and the associated to the current post
                         $newImage = new Image();
-                        $newImage->addImage($post, $tableImage);
-                        $currentImage = $newImage->getImage();
-                        $tablePostImage->createPostImage($post, $currentImage);
+                        $newImage->createImage($post, $tableImage, $tablePostImage);
 
                         // if the extension of the image is valid, edit the article
-                        if (!array_key_exists("extension", $newImage->getError())) {
+                        if ($newImage->extensionIsValid()) {
                             $tablePost->updatePost($post, "Europe/Paris", "post_category");
                             $tablePost->attachCategories($post->getID(), ["post_id" => $post->getID(), "category_id" => $_POST["categoriesIds"]]);
                             PostHydrate::addCategoriesToAllPosts($tableCategory, [$post]);
@@ -278,7 +259,6 @@
             $validator = new PostValidator("en", $_POST, $tablePost, $categories);
 
             if ($validator->isSubmit()) {
-                // $_POST[""];
                 $post = new Post();
                 $post
                     ->setName($_POST["name"])
@@ -289,7 +269,7 @@
                     $image->addImage($post, $tableImage);
                     $entityImage = $image->getImage();
 
-                    if (!array_key_exists("extension", $image->getError())) {
+                    if ($image->extensionIsValid()) {
                         $tablePost->createPost($post, $entityImage, "Europe/Paris");
                         $tableUser->addToPost($post->getId(), $this->session->read("auth"));
     

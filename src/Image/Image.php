@@ -59,6 +59,23 @@
 
 
         /**
+         * Set a new image and associate it with the post
+         *
+         * @param Post $post
+         * @param ImageTable $tableImage
+         * @param PostImageTable $tablePostImage
+         * @return void
+         */
+        public function createImage (Post $post, ImageTable $tableImage, PostImageTable $tablePostImage) : void
+        {
+            $this->addImage($post, $tableImage);
+            $currentImage = $this->getImage();
+            $tablePostImage->createPostImage($post, $currentImage);
+        }
+
+
+
+        /**
          * Save the image on the server 
          * and add its name in the database
          *
@@ -98,6 +115,49 @@
             } else {
                 $image = $tableImage->find(["id" => 1]);
                 $this->image->setName($image->getName());
+            }
+        }
+
+
+
+        /**
+         * Delete the image associated with a post
+         * and set the default image as image associated with the post
+         *
+         * @param EntityImage $image
+         * @param Post $post
+         * @param ImageTable $tableImage
+         * @param PostImageTable $tablePostImage
+         * @return void
+         */
+        public static function deleteCurrentImage (EntityImage $image, Post $post, ImageTable $tableImage, PostImageTable $tablePostImage) : void
+        {
+            $tableImage->delete(["id" => $image->getId()]);
+            unlink(IMAGE . DS . "posts" . DS . $image->getName());
+            unlink(IMAGE . DS . "posts" . DS . "thumbs" . DS . $image->getName());
+
+            // create a join with the default image
+            $image->setId(1);
+            $tablePostImage->createPostImage($post, $image);
+        }
+
+
+
+        /**
+         * Delete the image associated with the current post in the database
+         *
+         * @param Post $post
+         * @param PostImage $postImage
+         * @param ImageTable $tableImage
+         * @param PostImageTable $tablePostImage
+         * @return void
+         */
+        public static function deletePostImage (Post $post, PostImage $postImage, ImageTable $tableImage, PostImageTable $tablePostImage) : void
+        {
+            if ($postImage->getImage_id() !== 1) {
+                $tableImage->delete(["id" => $postImage->getImage_id()]);
+            } else {
+                $tablePostImage->delete(["post_id" => $post->getId()]);
             }
         }
 
@@ -191,6 +251,22 @@
         public function getError () : array
         {
             return $this->error;
+        }
+
+
+
+        /**
+         * Check that the extension of the upload image is valid
+         *
+         * @return boolean
+         */
+        public function extensionIsValid () : bool
+        {
+            if (!array_key_exists("extension", $this->getError())) {
+                return true;
+            }
+
+            return false;
         }
 
 

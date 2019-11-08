@@ -21,6 +21,35 @@
      */
     class PostHydrate
     {
+
+        public static function hydrateAllPostsPaginated (array $posts, Post $firstPost, CategoryTable $tableCategory, UserTable $tableUser, RoleTable $tableRole, ImageTable $tableImage, PostImageTable $tablePostImage) : array
+        {
+            PostHydrate::addCategoriesToPost($tableCategory, $firstPost);
+            PostHydrate::addUserToPost($tableUser, $tableRole, $firstPost);
+            PostHydrate::addImageToPost($tablePostImage, $tableImage, $firstPost);
+
+            if (!empty($posts)) {
+                PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
+                PostHydrate::addUserToAllPosts($tableUser, $posts);
+                PostHydrate::addImageToAllPosts($tableImage, $posts);
+            }
+
+            return [$firstPost, $posts];
+        }
+
+
+
+        public static function hydratePost (Post $post, CategoryTable $tableCategory, UserTable $tableUser, RoleTable $tableRole, ImageTable $tableImage, PostImageTable $tablePostImage) : Post
+        {
+            PostHydrate::addCategoriesToPost($tableCategory, $post);
+            PostHydrate::addUserToPost($tableUser, $tableRole, $post);
+            PostHydrate::addImageToPost($tablePostImage, $tableImage, $post);
+
+            return $post;
+        }
+
+
+
         /**
          * Add the associated categories to a post
          *

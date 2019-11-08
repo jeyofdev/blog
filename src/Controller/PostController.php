@@ -46,17 +46,9 @@
              * @var Post[]
              */
             $posts = $tablePost->findAllPostsPaginated(7, "created_at", "desc", ["published" => 1]);
-
             $firstPost = array_shift($posts);
-            PostHydrate::addCategoriesToPost($tableCategory, $firstPost);
-            PostHydrate::addUserToPost($tableUser, $tableRole, $firstPost);
-            PostHydrate::addImageToPost($tablePostImage, $tableImage, $firstPost);
 
-            if (!empty($posts)) {
-                PostHydrate::addCategoriesToAllPosts($tableCategory, $posts);
-                PostHydrate::addUserToAllPosts($tableUser, $posts);
-                PostHydrate::addImageToAllPosts($tableImage, $posts);
-            }
+            PostHydrate::hydrateAllPostsPaginated($posts, $firstPost, $tableCategory, $tableUser, $tableRole, $tableImage, $tablePostImage);
 
             /**
              * @var Pagination
@@ -107,9 +99,7 @@
             $this->checkSlugMatch($this->router, $post, $slug, $id);
 
             // hydrate the post
-            PostHydrate::addCategoriesToPost($tableCategory, $post);
-            PostHydrate::addUserToPost($tableUser, $tableRole, $post);
-            PostHydrate::addImageToPost($tablePostImage, $tableImage, $post);
+            PostHydrate::hydratePost($post, $tableCategory, $tableUser, $tableRole, $tableImage, $tablePostImage);
 
             $this->session->write("post", [
                 "id" => $post->getId(),
