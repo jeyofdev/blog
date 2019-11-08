@@ -138,7 +138,7 @@
         {
             $countPosts = $this->countAll("id");
 
-            $sql = "SELECT * FROM {$this->tableName} WHERE id > ($countPosts - 10)";
+            $sql = "SELECT * FROM {$this->tableName} WHERE id > ($countPosts - 20) AND published = 1";
             $query = $this->query($sql, $fetchMode);
 
             /**
@@ -156,7 +156,9 @@
             $relatedPosts = [];
             for ($i = 0; $i < $limit; $i++) { 
                 $id = $ids[array_rand($ids)];
+                $key = array_search($id, $ids);
                 $relatedPosts[] =  $this->find(["id" => $id]);
+                unset($ids[$key]);
             }
 
             return $relatedPosts;
