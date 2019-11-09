@@ -26,7 +26,6 @@
         {
             for ($i = 0; $i < 30; $i++) { 
                 $this->entity
-                    ->setUsername($this->faker->firstName())
                     ->setContent($this->faker->sentence(20, true));
 
                 $this->manager->insert($this->entity);

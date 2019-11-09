@@ -99,7 +99,6 @@
         public function createComment (Comment $comment, Post $post, User $user) : self
         {
             $this->create([
-                "username" => $comment->getUsername(),
                 "content" => $comment->getContent()
             ]);
 
@@ -123,7 +122,6 @@
         {
             $this
                 ->update([
-                    "username" => $comment->getUsername(),
                     "content" => $comment->getContent()
                 ], ["id" => $comment->getId()]);
 

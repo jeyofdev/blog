@@ -3,7 +3,12 @@
     namespace jeyofdev\php\blog\Controller;
 
 
+    use jeyofdev\php\blog\Auth\User;
+    use jeyofdev\php\blog\Entity\Comment;
     use jeyofdev\php\blog\Table\CommentTable;
+    use jeyofdev\php\blog\Table\CommentUserTable;
+    use jeyofdev\php\blog\Table\RoleTable;
+    use jeyofdev\php\blog\Table\UserTable;
     use jeyofdev\php\blog\Url;
 
 
@@ -22,10 +27,22 @@
         public function delete () : void
         {
             $tableComment = new CommentTable($this->connection);
+            $tableCommentUser = new CommentUserTable($this->connection);
+            $tableUser = new UserTable($this->connection);
+            $tableRole = new RoleTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
             $id = (int)$params["id"];
+
+            /**
+             * @var Comment
+             */
+            $comment = $tableComment->find(["id" => $id]);
+
+            // check that the user is authorized to delete the comment
+            $user = new User($this->router, $this->session, $tableUser, $tableRole);
+            $user->actionIsAuthorizedForComment($comment, $tableCommentUser, "post", "You do not have permission to delete this comment", "delete");
 
             $tableComment->delete(["id" => $id]);
 

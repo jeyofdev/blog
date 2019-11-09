@@ -17,7 +17,6 @@
          * The columns of the table
          */
         protected $id;
-        protected $username;
         protected $content;
 
 
@@ -40,7 +39,6 @@
 
             // set the columns of the table
             $this->setColumnsWithOptions("id", "int", 10, false, true, true, null, true);
-            $this->setColumnsWithOptions("username", "varchar", 50);
             $this->setColumnsWithOptions("content", "text", 650000);
 
             return $this;
@@ -67,29 +65,6 @@
         public function setId($id) : self
         {
             $this->id = $id;
-            return $this;
-        }
-
-
-
-        /**
-         * Get the value of username
-         */ 
-        public function getUsername() : ?string
-        {
-            return $this->username;
-        }
-
-
-
-        /**
-         * Set the value of username
-         *
-         * @return  self
-         */ 
-        public function setUsername(string $username) : self
-        {
-            $this->username = $username;
             return $this;
         }
 

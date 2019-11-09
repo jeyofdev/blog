@@ -13,7 +13,8 @@
     use jeyofdev\php\blog\Hydrate\PostHydrate;
     use jeyofdev\php\blog\Table\CategoryTable;
     use jeyofdev\php\blog\Table\CommentTable;
-    use jeyofdev\php\blog\Table\ImageTable;
+use jeyofdev\php\blog\Table\CommentUserTable;
+use jeyofdev\php\blog\Table\ImageTable;
     use jeyofdev\php\blog\Table\PostImageTable;
     use jeyofdev\php\blog\Table\PostTable;
     use jeyofdev\php\blog\Table\RoleTable;
@@ -83,6 +84,7 @@
             $tableComment = new CommentTable($this->connection);
             $tableImage = new ImageTable($this->connection);
             $tablePostImage = new PostImageTable($this->connection);
+            $tableCommentUser = new CommentUserTable($this->connection);
 
             // url settings of the current page
             $params = $this->router->getParams();
@@ -118,7 +120,7 @@
              * @var Comment[]
              */
             $postComments = $tableComment->findCommentsPaginated($post->getId(), 50);  
-            CommentHydrate::addUserToComment($tableUser, $tableRole, $postComments);   
+            CommentHydrate::addUserToComment($tableUser, $tableRole, $postComments);
 
             /**
              * @var Pagination
@@ -134,7 +136,6 @@
                 if (isset($_POST["content"])) {
                     $comment
                         ->setId($_POST["id"])
-                        ->setUsername($_POST["username"])
                         ->setContent($_POST["content"]);
 
                     CommentHydrate::addUserWhenAddComment($tableUser, $tableRole, $comment, $this->session);
@@ -144,12 +145,20 @@
                             $user = $tableUser->find(["id" => $this->session->read("auth")]);
                             $tableComment->createComment($comment, $post, $user);
                             $this->session->setFlash("Your comment has been added", "success", "mt-5"); // flash message
+                            $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?comment=1&create=1";
                         } else {
-                            $tableComment->updateComment($comment, $post);
-                            $this->session->setFlash("Your comment has been updated", "success", "mt-5"); // flash message
+                            $commentUser = $tableCommentUser->find(["comment_id" => $_POST["id"]]);
+                            $user = $tableUser->find(["id" => $commentUser->getUser_id()]);
+                            
+                            if ($user->getUsername() === $_POST["username"]) {
+                                $tableComment->updateComment($comment, $post);
+                                $this->session->setFlash("Your comment has been updated", "success", "mt-5"); // flash message
+                            } else {
+                                $this->session->setFlash("You do not have permission to edit this comment", "danger", "mt-5"); // flash message
+                            }
                         }
 
-                        $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?create=1";
+                        $url = $this->router->url("post", ["id" => $id, "slug" => $slug]) . "?comment=1&update=1";
                         Url::redirect(301, $url);
                     } else {
                         $errors = $validator->getErrors();

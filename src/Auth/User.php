@@ -3,10 +3,12 @@
     namespace jeyofdev\php\blog\Auth;
 
 
+    use jeyofdev\php\blog\Entity\Comment;
     use jeyofdev\php\blog\Entity\Post;
     use jeyofdev\php\blog\Hydrate\UserHydrate;
     use jeyofdev\php\blog\Router\Router;
     use jeyofdev\php\blog\Session\Session;
+    use jeyofdev\php\blog\Table\CommentUserTable;
     use jeyofdev\php\blog\Table\PostUserTable;
     use jeyofdev\php\blog\Table\RoleTable;
     use jeyofdev\php\blog\Table\UserTable;
@@ -83,7 +85,7 @@
 
 
         /**
-         * Check that an action (delete, publish ...) is allowed
+         * Check that an action (delete, publish ...) is allowed on the posts
          *
          * @param Post $post
          * @param PostUserTable $tablePostUser
@@ -97,6 +99,32 @@
                 $this->session->setFlash($message, "danger", "mt-5");
 
                 $url = $this->router->url($route) . "?$action=1";
+                Url::redirect(301, $url);
+            }
+        }
+
+
+
+        /**
+         * Check that an action is allowed on the comments
+         *
+         * @param Comment $comment
+         * @param CommentUserTable $tableCommentUser
+         * @param string $route
+         * @param string $message
+         * @param string $action
+         * @return void
+         */
+        public function actionIsAuthorizedForComment(Comment $comment, CommentUserTable $tableCommentUser, string $route, string $message, string $action) : void
+        {
+            $commentUser = $tableCommentUser->find(["comment_id" => $comment->getId()])->getUser_id();
+
+            if ($this->session->read("role") !== "admin" && $commentUser !== $this->session->read("auth")) {
+                $this->session->setFlash($message, "danger", "mt-5");
+
+                $pos = strrpos($_SERVER["HTTP_REFERER"], "/");
+                $uri = substr($_SERVER["HTTP_REFERER"], 0, $pos + 1);
+                $url = $uri . "?comment=1&$action=1";
                 Url::redirect(301, $url);
             }
         }

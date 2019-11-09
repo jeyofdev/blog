@@ -51,7 +51,7 @@
             /**
              * @var Post[]
              */
-            $posts = $tablePost->findPostsPaginatedByUser($user, 6, "created_at", "desc");
+            $posts = $tablePost->findPostsPaginatedByUser($user, 7, "created_at", "desc");
             $firstPost = array_shift($posts);
 
             PostHydrate::hydrateAllPostsPaginated($posts, $firstPost, $tableCategory, $tableUser, $tableRole, $tableImage, $tablePostImage);            
