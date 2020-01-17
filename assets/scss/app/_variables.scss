@@ -49,10 +49,10 @@ $grid-row-columns:            6 !default;
     GRID CONTAINERS
 ===================== */
 $container-max-widths: (
-    sm: rem(540),
-    md: rem(720),
-    lg: rem(960),
-    xl: rem(1065)
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1065px
 ) !default;
 
 
