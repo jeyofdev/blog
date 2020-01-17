@@ -1,3 +1,6 @@
 /node_modules/
 /vendor/
 /public/img/posts/
+
+yarn.lock
+yarn-error.log
