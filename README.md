@@ -15,15 +15,23 @@ $ yarn -v
 ```
 
 
+### Install all dependencies
 
-### run webpack in dev mode
+```sh
+$ yarn install
+$ composer install
+```
+
+
+
+### Run webpack in dev mode
 
 ```sh
 $ yarn run dev
 ```
 
 
-### run the internal web server of php
+### Run the internal web server of php
 
 ```sh
 $ php -S localhost:8000 -t public
